@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use App\Models\Key;
+
+class App extends Model
+{
+    protected $table = 'apps';
+
+    protected $fillable = [
+        'edit_id',
+        'app_id',
+        'name',
+        'ppd_basic',
+        'ppd_premium',
+        'status',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $hidden = [
+        'id',
+    ];
+
+    protected static function booted()
+    {
+        static::creating(function ($app) {
+            if (empty($app->edit_id)) {
+                $app->edit_id = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
+    }
+
+    public function keys()
+    {
+        return $this->hasMany(Key::class, 'app_id', 'edit_id');
+    }
+}
