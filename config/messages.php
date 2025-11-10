@@ -16,7 +16,7 @@ return [
         // ? General
         'wrong_creds' => 'Invalid Credentials.',
         'register_fail' => 'Registed Failed, Please Try Again Later.',
-        'validation' => 'Something Went Wrong, Error Code :code',
+        'validation' => 'Something Went Wrong, :info.',
     ],
 
     'settings' => [

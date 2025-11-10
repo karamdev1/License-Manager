@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id');
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('password');
+            $table->string('name')->max(100);
+            $table->string('username')->unique()->max(50);
+            $table->string('password')->max(50)->min(8);
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->enum('permissions', ['Owner', 'Admin'])->default('Admin');
             $table->string('reff')->nullable();

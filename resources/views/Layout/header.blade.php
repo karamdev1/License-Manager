@@ -11,7 +11,7 @@
                         <a class="nav-link text-white" href=""><i class="bi bi-key"></i> Keys</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href=""><i class="bi bi-controller"></i> Games</a>
+                        <a class="nav-link text-white" href=""><i class="bi bi-terminal"></i> Apps</a>
                     </li>
                 </ul>
                 <div class="float-right">
@@ -23,7 +23,7 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                    <li class="dropdown-item text-muted">{{ auth()->user()->name }}</li>
+                                    <li class="dropdown-item text-muted">{{ auth()->user()->name }} ({{ auth()->user()->username }})</li>
                                     <li>
                                         <a class="dropdown-item" href="">
                                             <i class="bi bi-person"></i> Manage Users

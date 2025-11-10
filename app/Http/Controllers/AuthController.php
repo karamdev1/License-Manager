@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         $request->validate([
             'username' => 'required|string|max:50',
-            'password' => 'required|string|max:50|min:6',
+            'password' => 'required|string|min:8|max:50',
             'stay_log' => 'in:1,0',
         ]);
 
@@ -36,7 +36,7 @@ class AuthController extends Controller
         return back()->withErrors(['username' => $errorMessage,])->onlyInput('username');
     }
     
-    public function LogoutPost(Request $request) {
+    public function Logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -56,7 +56,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'username' => 'required|string|unique:users,username|max:50',
-            'password' => 'required|string|confirmed|max:50|min:6',
+            'password' => 'required|string|confirmed|min:8|max:50',
             'reff' => 'required|string|max:50',
         ]);
 

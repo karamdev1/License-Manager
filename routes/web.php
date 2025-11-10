@@ -8,7 +8,7 @@ use App\Http\Controllers\SettingController;
 // * Login
 Route::get('/login', [AuthController::class, 'LoginView'])->name('login');
 Route::post('/login', [AuthController::class, 'LoginPost'])->name('login.post')->middleware('throttle:10,5');
-Route::post('/logout', [AuthController::class, 'LogoutPost'])->name('logout')->middleware('throttle:10,5');
+Route::post('/logout', [AuthController::class, 'Logout'])->name('logout')->middleware('throttle:10,5');
 
 // * Register
 Route::get('/register', [AuthController::class, 'RegisterView'])->name('register');
@@ -20,6 +20,9 @@ Route::get('/dashboard', [DashController::class, 'Dashboard'])->name('dashboard'
 
 // * Settings
 Route::get('/settings', [SettingController::class, 'Settings'])->name('settings')->middleware('auth');
+Route::post('/settings/username-change', [SettingController::class, 'SettingsUsername'])->name('settings.username')->middleware('auth');
+Route::post('/settings/name-change', [SettingController::class, 'SettingsName'])->name('settings.name')->middleware('auth');
+Route::post('/settings/password-change', [SettingController::class, 'SettingsPassword'])->name('settings.password')->middleware('auth');
 
 // ! Fallback
 Route::fallback(function () {return view('errors.fallback');});
