@@ -35,7 +35,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="">
+                                        <a class="dropdown-item" href={{ route('settings') }}>
                                             <i class="bi bi-gear"></i> Settings
                                         </a>
                                     </li>

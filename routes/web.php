@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashController;
+use App\Http\Controllers\SettingController;
 
 // * Login
 Route::get('/login', [AuthController::class, 'LoginView'])->name('login');
@@ -16,6 +17,9 @@ Route::post('/register', [AuthController::class, 'RegisterPost'])->name('registe
 // * Dashboard
 Route::get('/', [DashController::class, 'Dashboard'])->middleware('auth');
 Route::get('/dashboard', [DashController::class, 'Dashboard'])->name('dashboard')->middleware('auth');
+
+// * Settings
+Route::get('/settings', [SettingController::class, 'Settings'])->name('settings')->middleware('auth');
 
 // ! Fallback
 Route::fallback(function () {return view('errors.fallback');});
