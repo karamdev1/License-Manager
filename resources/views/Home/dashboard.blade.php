@@ -13,7 +13,7 @@
             <div class="col-lg-5">
                 <div class="card mb-5">
                     <div class="card-header text-bg-dark">
-                        Keys Histroy
+                        Keys Registration
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -22,10 +22,10 @@
                                     @foreach ($keys as $key)
                                         <tr>
                                             <td><span class="align-middle badge text-dark">{{ $loop->iteration }}</span></td>
-                                            <td><span class="align-middle badge text-dark">{{ $key->app->name }}</span></td>
-                                            <td><span class="align-middle badge text-dark">{{ Controller::censorText($key->key) }}</span></td>
+                                            <td><span class="align-middle badge text-{{ Controller::statusColor($key->app->status) }}">{{ $key->app->name }}</span></td>
+                                            <td><span class="align-middle badge text-{{ Controller::statusColor($key->status) }}">{{ Controller::censorText($key->key) }}</span></td>
                                             <td><span class="align-middle badge text-dark">{{ $key->duration }} Days</span></td>
-                                            <td><span class="align-middle badge text-dark">{{ $key->rank }}</span></td>
+                                            <td><span class="align-middle badge text-dark">{{ Controller::timeElapsed($key->created_at) }}</span></td>
                                             <td><span class="align-middle badge text-primary">{{ $key->max_devices }} Devices</span></td>
                                         </tr>
                                     @endforeach
@@ -36,13 +36,17 @@
                                 @endif
                             </table>
                         </div>
+
+                        <div class="d-flex justify-content-end">
+                            {{ $keys->onEachSide(1)->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="card mb-5">
                     <div class="card-header text-bg-dark">
-                        Apps Histroy
+                        Apps Registration
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -51,18 +55,22 @@
                                     @foreach ($apps as $app)
                                         <tr>
                                             <td><span class="align-middle badge text-dark">{{ $loop->iteration }}</span></td>
-                                            <td><span class="align-middle badge text-dark">{{ Controller::censorText($app->app_id) }}</span></td>
-                                            <td><span class="align-middle badge text-dark">{{ $app->name }}</span></td>
+                                            <td><span class="align-middle badge text-{{ Controller::statusColor($app->status) }}">{{ $app->name }}</span></td>
                                             <td><span class="align-middle badge text-dark">{{ $app->ppd_basic }}</span></td>
                                             <td><span class="align-middle badge text-dark">{{ $app->ppd_premium }}</span></td>
+                                            <td><span class="align-middle badge text-dark">{{ Controller::timeElapsed($app->created_at) }}</span></td>
                                         </tr>
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="6"><span class="align-middle badge text-danger fs-6">No Apps Where Found</span></td>
+                                        <td colspan="5"><span class="align-middle badge text-danger fs-6">No Apps Where Found</span></td>
                                     </tr>
                                 @endif
                             </table>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            {{ $apps->onEachSide(1)->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

@@ -9,8 +9,8 @@ use App\Models\App;
 class DashController extends Controller
 {
     public function Dashboard() {
-        $keys = Key::orderBy('created_at', 'desc')->limit(5)->get();
-        $apps = App::orderBy('created_at', 'desc')->limit(5)->get();
+        $apps = App::paginate(10, ['*'], 'apps_page');
+        $keys = Key::paginate(10, ['*'], 'keys_page');
 
         return view('Home.dashboard', compact('keys', 'apps'));
     }

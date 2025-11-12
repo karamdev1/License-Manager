@@ -3,7 +3,6 @@
 @section('title', 'Apps')
 
 @php
-    use App\Http\Controllers\AppController;
     use App\Http\Controllers\Controller;
 @endphp
 
@@ -12,7 +11,14 @@
         @include('Layout.msgStatus')
         <div class="card mb-5">
             <div class="card-header text-bg-dark">
-                Apps List
+                <div class="row">
+                    <div class="col pt-1">
+                        Apps Registration
+                    </div>
+                    <div class="col text-end">
+                        <a class="btn btn-outline-light btn-sm" href={{ route('apps.generate') }}><i class="bi bi-terminal"></i> APP</a>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -23,7 +29,6 @@
                             <th><span class="align-middle badge text-dark fs-6">Name</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Basic</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Premium</span></th>
-                            <th><span class="align-middle badge text-dark fs-6">Status</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Created</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Action</span></th>
                         </tr>
@@ -32,11 +37,10 @@
                                 <tr>
                                     <td><span class="align-middle badge text-dark fs-6">{{ $loop->iteration }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ Controller::censorText($app->app_id) }}</span></td>
-                                    <td><span class="align-middle badge text-dark fs-6">{{ $app->name }}</span></td>
+                                    <td><span class="align-middle badge text-{{ Controller::statusColor($app->status) }} fs-6">{{ $app->name }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ $app->ppd_basic }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ $app->ppd_premium }}</span></td>
-                                    <td><span class="align-middle badge text-dark fs-6">{{ $app->status }}</span></td>
-                                    <td><span class="align-middle badge text-dark fs-6">{{ AppController::timeElapsed($app->created_at) }}</span></td>
+                                    <td><span class="align-middle badge text-dark fs-6">{{ Controller::timeElapsed($app->created_at) }}</span></td>
                                     <td>
                                         <a href={{ route('apps.edit', ['id' => $app->app_id]) }} class="btn btn-outline-dark">
                                             <i class="bi bi-person"></i>
@@ -46,7 +50,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="2"><span class="align-middle badge text-danger fs-6">No Keys Where Found</span></td>
+                                <td colspan="7"><span class="align-middle badge text-danger fs-6">No Apps Where Found</span></td>
                             </tr>
                         @endif
                     </table>

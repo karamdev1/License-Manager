@@ -3,42 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use App\Models\App;
-use DateTime;
 
 class AppController extends Controller
 {
-    static function timeElapsed($dateString) {
-        if (empty($dateString)) {
-            return 'N/A';
-        }
-
-        try {
-            $date = new DateTime($dateString);
-            $now = new DateTime();
-            $diff = $now->diff($date);
-
-            $years = $diff->y;
-            $months = $diff->m;
-            $days = $diff->days;
-
-            if ($years >= 1) {
-                return sprintf("%d year%s ago", $years, $years > 1 ? 's' : '');
-            }
-
-            if ($months >= 1) {
-                return sprintf("%d month%s ago", $months, $months > 1 ? 's' : '');
-            }
-
-            return sprintf("%d day%s ago", $days, $days > 1 ? 's' : '');
-        } catch (\Exception $e) {
-            return 'N/A';
-        }
-    }
-
     public function AppListView() {
         $apps = App::paginate(10);
 
         return view('App.list', compact('apps'));
+    }
+
+    public function AppGenerateView() {
+        return view('App.generate');
+    }
+
+    public function AppGeneratePost(Request $request) {
+        $successMessage = Config::get('messages.success.created');
+        $errorMessage = Config::get('messages.error.validation');
+
+        $request->validate([
+            'name' => 'required|string|unique:apps,name|min:6|max:50',
+            'basic' => 'required|integer|min:1|max:300000',
+            'premium' => 'required|integer|min:1|max:300000',
+            'status' => 'required|in:Active,Inactive',
+        ]);
+
+        try {
+            App::create([
+                'name'        => $request->input('name'),
+                'ppd_basic'   => $request->input('basic'),
+                'ppd_premium' => $request->input('premium'),
+                'status'      => $request->input('status'),
+            ]);
+
+            return redirect()->route('apps.generate')->with('msgSuccess', str_replace(':flag', "App " . $request->input('name'), $successMessage));
+        } catch (\Exception $e) {
+            return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+        }
     }
 }
