@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use App\Models\User;
+use App\Models\UserHistory;
 
 class AuthController extends Controller
 {
@@ -27,11 +29,39 @@ class AuthController extends Controller
 
         $remember = $request->has('stay_log');
 
+        $ip = $request->ip();
+        $userAgent = $request->header('User-Agent');
+        $payload = $request->all();
+        $username = $request->input('username');
+        $user_id = User::where('username', $request->input('username'))->first()->user_id ?? NULL;
+
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            Session::put('login_time', now());
+            $now = now();
+            Session::put('login_time', $now);
+            
+            User::where('username', $request->input('username'))->update(['last_login' => $now]);
+
+            UserHistory::create([
+                'user_id'    => $user_id,
+                'username'   => $username,
+                'status'     => 'Success',
+                'ip_address' => $ip,
+                'user_agent' => $userAgent,
+                'payload'    => json_encode($payload),
+            ]);
+
             return redirect()->intended('dashboard')->with('msgSuccess', $successMessage);
         }
+
+        UserHistory::create([
+                'user_id' => $user_id,
+                'username' => $username,
+                'status' => 'Fail',
+                'ip_address' => $ip,
+                'user_agent' => $userAgent,
+                'payload' => json_encode($payload),
+            ]);
 
         return back()->withErrors(['username' => $errorMessage,])->onlyInput('username');
     }

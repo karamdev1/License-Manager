@@ -18,7 +18,19 @@ return new class extends Migration
             $table->enum('permissions', ['Owner', 'Admin'])->default('Admin');
             $table->string('reff')->nullable();
             $table->string('created_by')->nullable();
+            $table->datetime('last_login')->nullable();
             $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('users_history', function (Blueprint $table) {
+            $table->id();
+            $table->string('user_id')->nullable();
+            $table->string('username')->max(50);
+            $table->enum('status', ['Success', 'Fail'])->default('Success');
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
             $table->timestamps();
         });
 
@@ -41,6 +53,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('users_history');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

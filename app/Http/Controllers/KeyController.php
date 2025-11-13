@@ -152,4 +152,84 @@ class KeyController extends Controller
 
         return view('Key.edit', compact('key', 'apps', 'currency'));
     }
+
+    public function KeyEditPost(Request $request) {
+        $successMessage = Config::get('messages.success.updated');
+        $errorMessage = Config::get('messages.error.validation');
+
+        $request->validate([
+            'edit_id'  => 'required|string|min:6|max:36',
+            'key'      => 'max:50',
+            'app'      => 'required|string|exists:apps,app_id|min:6|max:36',
+            'owner'    => 'max:50',
+            'rank'     => 'required|in:Basic,Premium',
+            'duration' => 'required|integer',
+            'status'   => 'required|in:Active,Inactive',
+            'devices'  => 'required|integer|min:1',
+        ]);
+
+        if (auth()->user()->permissions == "Owner") {
+            $key = Key::where('edit_id', $request->input('edit_id'))->first();
+
+            if (empty($key)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+            }
+        } else {
+            $key = Key::where('created_by', auth()->user()->username)->where('edit_id', $id)->first();
+
+            if (empty($key)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
+            }
+        }
+
+        if ($request->input('key') == '') {
+            do {
+                $keyName = parent::randomString(16);
+                $keyExists = Key::where('key', $keyName)->exists();
+            } while ($keyExists);
+        } else {
+            $keyName = $request->input('key');
+
+            $request->validate([
+                'key' => [
+                    'required',
+                    'string',
+                    'min:6',
+                    'max:50',
+                    Rule::unique('key_codes', 'key')->ignore($key->edit_id, 'edit_id')
+                ],
+            ]);
+        }
+
+        $now = Carbon::now();
+        $expire_date = $now->addDays((int) $request->input('duration'));
+
+        try {
+            if ($request->has('duration-update')) {
+                $key->update([
+                    'app_id'      => $request->input('app'),
+                    'owner'       => $request->input('owner') ?? "",
+                    'rank'        => $request->input('rank'),
+                    'duration'    => $request->input('duration'),
+                    'expire_date' => $expire_date,
+                    'key'         => $keyName,
+                    'status'      => $request->input('status'),
+                    'max_devices' => $request->input('devices'),
+                ]);
+            } else {
+                $key->update([
+                    'app_id'      => $request->input('app'),
+                    'owner'       => $request->input('owner') ?? "",
+                    'rank'        => $request->input('rank'),
+                    'key'         => $keyName,
+                    'status'      => $request->input('status'),
+                    'max_devices' => $request->input('devices'),
+                ]);
+            }
+
+            return redirect()->route('keys.edit', $request->input('edit_id'))->with('msgSuccess', str_replace(':flag', "Key " . $keyName, $successMessage));
+        } catch (\Exception $e) {
+            return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
+        }
+    }
 }

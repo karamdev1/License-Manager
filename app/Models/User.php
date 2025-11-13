@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use App\Models\UserHistory;
 
 class User extends Authenticatable
 {
@@ -23,6 +24,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
+        'id',
         'password',
         'remember_token',
         'created_at',
@@ -44,4 +46,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function histories() {
+        return $this->hasMany(UserHistory::class, 'user_id', 'user_id');
+    }
+
 }

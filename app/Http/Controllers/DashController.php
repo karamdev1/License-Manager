@@ -15,7 +15,7 @@ class DashController extends Controller
         } else {
             $keys = Key::where('created_by', auth()->user()->username)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'keys_page');
         }
-        $apps = App::paginate(10, ['*'], 'apps_page');
+        $apps = App::orderBy('created_at', 'desc')->paginate(10, ['*'], 'apps_page');
         $currency = Config::get('messages.settings.currency');
 
         return view('Home.dashboard', compact('keys', 'apps', 'currency'));

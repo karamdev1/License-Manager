@@ -133,6 +133,20 @@
     </div>
 
     <script>
+        function numberFormat(number, decimals = 0, decPoint = '.', thousandsSep = ',') {
+            number = parseFloat(number);
+
+            if (isNaN(number)) return '0';
+
+            let n = number.toFixed(decimals);
+
+            let parts = n.split('.');
+
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
+
+            return parts.join(decPoint);
+        }
+
         document.getElementById('confirmGenerateBtn').addEventListener('click', function() {
             document.getElementById('generateForm').submit();
         });
@@ -165,8 +179,9 @@
             const basePrice = (rankValue === 'Basic') ? appPrices[appId].basic : appPrices[appId].premium;
             const multiplier = duration / 30;
             const total = basePrice * multiplier * devices;
+            const totalFormatted = numberFormat(total)
 
-            estimationElem.value = `${total}{{ $currency }}`;
+            estimationElem.value = `${totalFormatted}{{ $currency }}`;
         }
 
         document.getElementById('app').addEventListener('change', updateKeyGenerateEstimation);
