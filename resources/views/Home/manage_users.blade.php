@@ -38,7 +38,7 @@
                         @if ($users->isNotEmpty())
                             @foreach ($users as $user)
                                 <tr>
-                                    <td><span class="align-middle badge text-dark fs-6">{{ $loop->iteration }}</span></td>
+                                    <td><span class="align-middle badge text-dark fs-6">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</span></td>
                                     <td><span class="align-middle badge text-{{ Controller::statusColor($user->status) }} fs-6">{{ $user->name }}</span></td>
                                     <td><span class="align-middle badge text-{{ Controller::statusColor($user->status) }} fs-6 copy-trigger" data-copy="{{ $user->username }}">{{ Controller::censorText($user->username, 2) }}</span></td>
                                     <td><span class="align-middle badge text-{{ Controller::permissionColor($user->permissions) }} fs-6">{{ $user->permissions }}</span></td>

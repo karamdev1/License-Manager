@@ -52,7 +52,7 @@
                                     <td><span class="align-middle badge text-{{ Controller::statusColor($key->app->status) }} fs-6">{{ $key->app->name ?? 'N/A' }}</span></td>
                                     <td><span class="align-middle badge text-{{ Controller::statusColor($key->status) }} fs-6 copy-trigger" data-copy="{{ $key->key }}">{{ Controller::censorText($key->key) ?? 'N/A'}}</span></td>
                                     <td><span class="align-middle badge text-{{ KeyController::RemainingDaysColor(KeyController::RemainingDays($key->expire_date)) }} fs-6">{{ KeyController::RemainingDays($key->expire_date) }}/{{ $key->duration ?? 'N/A' }} Days</span></td>
-                                    <td><span class="align-middle badge text-dark fs-6">0/{{ $key->max_devices ?? 'N/A' }}</span></td>
+                                    <td><span class="align-middle badge text-dark fs-6">{{ KeyController::DevicesHooked($key->edit_id) }}/{{ $key->max_devices ?? 'N/A' }}</span></td>
                                     <td><span class="align-middle badge text-{{ KeyController::RankColor($key->rank) }} fs-6">{{ $key->rank ?? 'N/A' }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ Controller::timeElapsed($key->created_at) ?? 'N/A' }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ $key->created_by ?? 'N/A' }}</span></td>
@@ -60,6 +60,9 @@
                                     <td>
                                         <a href={{ route('keys.edit', ['id' => $key->edit_id]) }} class="btn btn-outline-dark">
                                             <i class="bi bi-person"></i>
+                                        </a>
+                                        <a href={{ route('keys.history', ['id' => $key->edit_id]) }} class="btn btn-outline-danger">
+                                            <i class="bi bi-folder"></i>
                                         </a>
                                     </td>
                                 </tr>

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\KeyController;
+use App\Http\Controllers\ApiController;
 
 // * Login
 Route::get('/login', [AuthController::class, 'LoginView'])->name('login');
@@ -30,6 +31,9 @@ Route::post('/admin/users', [DashController::class, 'ManageUsersEditPost'])->whe
 Route::post('/admin/users/generate', [DashController::class, 'ManageUsersGeneratePost'])->name('admin.users.generate.post')->middleware('auth');
 Route::post('/admin/users/delete', [DashController::class, 'ManageUsersDeletePost'])->name('admin.users.delete')->middleware('auth');
 
+// * API
+Route::get('/API/connect', [ApiController::class, 'ApiConnect'])->name('api.connect');
+
 // * Settings
 Route::get('/settings', [SettingController::class, 'Settings'])->name('settings')->middleware('auth');
 Route::post('/settings/username-change', [SettingController::class, 'SettingsUsername'])->name('settings.username')->middleware('auth');
@@ -49,9 +53,12 @@ Route::post('/apps/generate', [AppController::class, 'AppGeneratePost'])->name('
 // * Keys
 Route::get('/keys', [KeyController::class, 'KeyListView'])->name('keys')->middleware('auth');
 Route::get('/keys/{id}', [KeyController::class, 'KeyEditView'])->where('id', '[0-9a-fA-F-]{36}')->name('keys.edit')->middleware('auth');
+Route::get('/keys/history/{id}', [KeyController::class, 'KeyHistoryView'])->where('id', '[0-9a-fA-F-]{36}')->name('keys.history')->middleware('auth');
 Route::get('/keys/generate', [KeyController::class, 'KeyGenerateView'])->name('keys.generate')->middleware('auth');
 Route::post('/keys/update', [KeyController::class, 'KeyEditPost'])->name('keys.edit.post')->middleware('auth');
 Route::post('/keys/delete', [KeyController::class, 'KeyDelete'])->name('keys.delete')->middleware('auth');
+Route::post('/keys/history/delete', [KeyController::class, 'KeyHistoryDelete'])->name('keys.history.delete')->middleware('auth');
+Route::post('/keys/history/delete/all', [KeyController::class, 'KeyHistoryDeleteAll'])->name('keys.history.delete.all')->middleware('auth');
 Route::post('/keys/generate', [KeyController::class, 'KeyGeneratePost'])->name('keys.generate.post')->middleware('auth');
 
 // ! Fallback

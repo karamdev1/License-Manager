@@ -32,31 +32,37 @@ abstract class Controller
         }
 
         try {
-            $date = new DateTime($dateString);
-            $now = new DateTime();
+            $date = new DateTime(substr($dateString, 0, 10));
+            $now = new DateTime(date('Y-m-d'));
             $diff = $now->diff($date);
 
-            $years = $diff->y;
-            $months = $diff->m;
-            $days = $diff->days;
+            $parts = [];
 
-            if ($years >= 1) {
-                return sprintf("%d year%s ago", $years, $years > 1 ? 's' : '');
+            if ($diff->y > 0) {
+                $parts[] = $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
             }
 
-            if ($months >= 1) {
-                return sprintf("%d month%s ago", $months, $months > 1 ? 's' : '');
+            if ($diff->m > 0) {
+                $parts[] = $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
             }
 
-            if ($days == 1) {
-                return sprintf('Yesterday');
+            if ($diff->d > 0) {
+                if ($diff->d == 1) {
+                    $parts[] = '1 day';
+                } else {
+                    $parts[] = $diff->d . ' days';
+                }
             }
 
-            if ($days == 0) {
-                return sprintf('Today');
+            if (empty($parts)) {
+                return 'Today';
             }
 
-            return sprintf("%d day%s ago", $days, $days > 1 ? 's' : '');
+            if ($diff->d == 1) {
+                return 'Yesterday';
+            }
+
+            return implode(', ', $parts) . ' ago';
         } catch (\Exception $e) {
             return 'N/A';
         }

@@ -8,6 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('referrable_codes', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('edit_id');
+            $table->string('code')->unique()->max(50);
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->string('created_by');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id');
@@ -52,6 +61,7 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('referrable_codes');
         Schema::dropIfExists('users');
         Schema::dropIfExists('users_history');
         Schema::dropIfExists('password_reset_tokens');

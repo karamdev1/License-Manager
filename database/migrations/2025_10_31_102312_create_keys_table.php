@@ -36,14 +36,14 @@ return new class extends Migration
 
         Schema::create('key_history', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('key_id')->nullable();
+            $table->string('key_id')->nullable();
             $table->string('key');
             $table->string('serial_number');
             $table->string('ip_address');
             $table->string('app_id');
             $table->enum('status', ['Success', 'Failed'])->default('Success');
+            $table->enum('type', ['New Device', 'Old Device'])->default('New Device');
             $table->timestamps();
-            $table->foreign('key_id')->references('id')->on('key_codes')->onDelete('set null');
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use App\Models\Key;
+use App\Models\KeyHistory;
 use App\Models\App;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
@@ -70,6 +71,14 @@ class KeyController extends Controller
             return "danger";
         }
     }
+
+    static function DevicesHooked($key_id) {
+        $key = Key::where('edit_id', $key_id)->first();
+        if (!$key) return "N/A";
+
+        return $key->histories->where('status', 'Success')->unique('serial_number')->count();
+    }
+
 
     public function KeyListView() {
         if (auth()->user()->permissions == "Owner") {
@@ -233,6 +242,93 @@ class KeyController extends Controller
         }
     }
 
+    public function KeyHistoryView($id) {
+        $errorMessage = Config::get('messages.error.validation');
+
+        if (auth()->user()->permissions == "Owner") {
+            $keyHistory = Key::where('edit_id', $id)->first()->histories()->paginate(10);
+
+            if (empty($keyHistory)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+            }
+        } else {
+            $keyHistory = Key::where('created_by', auth()->user()->username)->where('edit_id', $id)->first()->histories()->paginate(10);
+
+            if (empty($keyHistory)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
+            }
+        }
+
+        return view('Key.history', compact('keyHistory', 'id'));
+    }
+    
+    public function KeyHistoryDelete(Request $request) {
+        $successMessage = Config::get('messages.success.deleted');
+        $errorMessage = Config::get('messages.error.validation');
+
+        $request->validate([
+            'key_id'  => 'required|string|min:6|max:36',
+            'id'  => 'required|integer|min:1',
+        ]);
+
+        if (auth()->user()->permissions == "Owner") {
+            $key = Key::where('edit_id', $request->input('key_id'))->first();
+
+            if (empty($key)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+            }
+        } else {
+            $key = Key::where('created_by', auth()->user()->username)->where('key_id', $id)->first();
+
+            if (empty($key)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
+            }
+        }
+
+        $keyName = $key->key;
+
+        try {
+            $key->histories()->where('id', $request->input('id'))->first()->delete();
+
+            return redirect()->route('keys.history', ['id' => $request->input('key_id')])->with('msgSuccess', str_replace(':flag', "Key " . $keyName . " History", $successMessage));
+        } catch (\Exception $e) {
+            return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
+        }
+    }
+
+    public function KeyHistoryDeleteAll(Request $request) {
+        $successMessage = Config::get('messages.success.deleted');
+        $errorMessage = Config::get('messages.error.validation');
+
+        $request->validate([
+            'id'  => 'required|string|min:6|max:36',
+        ]);
+
+        if (auth()->user()->permissions == "Owner") {
+            $key = Key::where('edit_id', $request->input('id'))->first();
+
+            if (empty($key)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+            }
+        } else {
+            $key = Key::where('created_by', auth()->user()->username)->where('id', $id)->first();
+
+            if (empty($key)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
+            }
+        }
+
+        $keyName = $key->key;
+
+        try {
+            $key->histories()->delete();
+
+            return redirect()->route('keys.history', ['id' => $request->input('id')])->with('msgSuccess', str_replace(':flag', "Key " . $keyName . " History", $successMessage));
+        } catch (\Exception $e) {
+            return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
+        }
+    }
+
     public function KeyDelete(Request $request) {
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
@@ -258,7 +354,7 @@ class KeyController extends Controller
         $keyName = $key->key;
 
         try {
-            //$key->histories()->delete();
+            $key->histories()->delete();
             $key->delete();
 
             return redirect()->route('keys')->with('msgSuccess', str_replace(':flag', "Key " . $keyName, $successMessage));
