@@ -40,7 +40,7 @@ Route::post('/admin/referrables/generate', [DashController::class, 'ManageReferr
 Route::post('/admin/referrables/delete', [DashController::class, 'ManageReferrableDeletePost'])->name('admin.referrable.delete')->middleware('auth');
 
 // * API
-Route::get('/API/connect', [ApiController::class, 'ApiConnect'])->name('api.connect');
+Route::get('/API/connect', [ApiController::class, 'ApiConnect'])->name('api.connect')->middleware('throttle:10,5');
 
 // * Settings
 Route::get('/settings', [SettingController::class, 'Settings'])->name('settings')->middleware('auth');
