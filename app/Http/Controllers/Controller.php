@@ -36,41 +36,35 @@ abstract class Controller
             $now = new DateTime();
             $diff = $now->diff($date);
 
+            $units = [
+                'y' => 'year',
+                'm' => 'month',
+                'd' => 'day',
+                'h' => 'hour',
+                'i' => 'minute',
+                's' => 'second'
+            ];
+
             $parts = [];
-
-            if ($diff->y > 0) {
-                $parts[] = $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
-            }
-
-            if ($diff->m > 0) {
-                $parts[] = $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
-            }
-
-            if ($diff->d > 0) {
-                $parts[] = $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
-            }
-
-            if ($diff->h > 0) {
-                $parts[] = $diff->h . ' hour' . ($diff->h > 1 ? 's' : '');
-            }
-
-            if ($diff->i > 0) {
-                $parts[] = $diff->i . ' minute' . ($diff->i > 1 ? 's' : '');
-            }
-
-            if ($diff->s > 0) {
-                $parts[] = $diff->s . ' second' . ($diff->s > 1 ? 's' : '');
+            foreach ($units as $key => $label) {
+                $value = $diff->$key;
+                if ($value > 0) {
+                    $parts[] = $value . ' ' . $label . ($value > 1 ? 's' : '');
+                }
             }
 
             if (empty($parts)) {
                 return 'N/A';
             }
 
+            $parts = array_slice($parts, 0, 2);
+
             return implode(', ', $parts) . ' ago';
         } catch (\Exception $e) {
             return 'N/A';
         }
     }
+
 
     static function censorText($text, $visibleChars = 6, $asterisks = 2) {
         $visible = substr($text, 0, $visibleChars);
