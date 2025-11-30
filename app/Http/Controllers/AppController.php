@@ -40,16 +40,14 @@ class AppController extends Controller
 
         $request->validate([
             'name'    => 'required|string|unique:apps,name|min:6|max:50',
-            'basic'   => 'required|integer|min:1|max:300000',
-            'premium' => 'required|integer|min:1|max:300000',
+            'price'   => 'required|integer|min:1|max:300000',
             'status'  => 'required|in:Active,Inactive',
         ]);
 
         try {
             App::create([
                 'name'        => $request->input('name'),
-                'ppd_basic'   => $request->input('basic'),
-                'ppd_premium' => $request->input('premium'),
+                'price'       => $request->input('price'),
                 'status'      => $request->input('status'),
                 'created_by'  => auth()->user()->user_id,
             ]);

@@ -15,6 +15,7 @@
                 Keys Registered
                 <div class="d-flex align-items-center gap-2">
                     <a href="{{ route('keys.generate') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-key"></i> KEY</a>
+                    <button class="btn btn-secondary btn-sm ms-1" id="blur-out" data-bs-toggle="tooltip" data-bs-placement="top" title="Eye Protect"><i class="bi bi-eye-slash"></i></button>
                 </div>
             </div>
             <div class="card-body">
@@ -30,7 +31,7 @@
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Duration</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Devices</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Created</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Created By</span></th>
+                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Registrar</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Price</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Action</span></th>
                                 </tr>
@@ -47,12 +48,12 @@
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $loop->iteration }}</span></td>
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $owner }}</span></td>
                                     <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($key->app->status) }} fs-6">{{ $key->app->name ?? 'N/A' }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($key->status) }} fs-6">{{ $key->key }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($key->status) }} fs-6 key-sensi keyBlur">{{ $key->key }}</span></td>
                                     <td><i class="align-middle badge fw-semibold text-{{ KeyController::RemainingDaysColor(KeyController::RemainingDays($key->expire_date)) }} fs-6">{{ KeyController::RemainingDays($key->expire_date) }}/{{ $key->duration ?? 'N/A' }} Days</i></td>
                                     <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ KeyController::DevicesHooked($key->edit_id) }}/{{ $key->max_devices ?? 'N/A' }}</i></td>
                                     <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::timeElapsed($key->created_at) ?? 'N/A' }}</i></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::userUsername($key->created_by) }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ number_format(KeyController::keyPriceCalculator($key->rank, $key->app->ppd_basic, $key->app->ppd_premium, $key->max_devices, $key->duration)) }}{{ $currency }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::userUsername($key->registrar) }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ number_format(KeyController::keyPriceCalculator($key->app->price, $key->max_devices, $key->duration)) }}{{ $currency }}</span></td>
                                     <td>
                                         <a href={{ route('keys.resetApiKey', ['id' => $key->edit_id]) }} class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-bootstrap-reboot"></i>
@@ -89,6 +90,16 @@
                 columnDefs: [
                     { orderable: false, targets: -1 }
                 ]
+            });
+
+            $("#blur-out").click(function() {
+                if ($(".keyBlur").hasClass("key-sensi")) {
+                    $(".keyBlur").removeClass("key-sensi");
+                    $("#blur-out").html(`<i class="bi bi-eye"></i>`);
+                } else {
+                    $(".keyBlur").addClass("key-sensi");
+                    $("#blur-out").html(`<i class="bi bi-eye-slash"></i>`);
+                }
             });
         });
     </script>

@@ -26,7 +26,7 @@
                                     @if ($apps)
                                         @foreach ($apps as $app)
                                             @php $count + 1; @endphp
-                                            <option value="{{ $app->app_id }}" class="text-{{ Controller::statusColor($app->status) }}" @if ($app->status != 'Active') disabled @endif>{{ $app->name }} - {{ $app->ppd_basic }}, {{ $app->ppd_premium }}</option>
+                                            <option value="{{ $app->app_id }}" class="text-{{ Controller::statusColor($app->status) }}" @if ($app->status != 'Active') disabled @endif>{{ $app->name }} - {{ $app->price }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -44,11 +44,11 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
-                                <label for="rank" class="form-label">Rank</label>
-                                <select name="rank" id="rank" class="form-control">
-                                    <option value="">-- Select Rank --</option>
-                                    <option value="Basic" class="text-success" selected>Basic</option>
-                                    <option value="Premium" class="text-warning">Premium</option>
+                                <label for="status" class="form-label">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="">-- Select Status --</option>
+                                    <option value="Active" class="text-success" selected>Active</option>
+                                    <option value="Inactive" class="text-danger">Inactive</option>
                                 </select>
                             </div>
                         </div>
@@ -74,25 +74,11 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="">-- Select Status --</option>
-                                    <option value="Active" class="text-success" selected>Active</option>
-                                    <option value="Inactive" class="text-danger">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label for="devices" class="form-label">Max Devices</label>
-                                <input type="number" name="devices" id="devices" class="form-control" required placeholder="Max Devices" value="1">
-                            </div>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label for="devices" class="form-label">Max Devices</label>
+                        <input type="number" name="devices" id="devices" class="form-control" required placeholder="Max Devices" value="1">
                     </div>
+
 
                     <div class="form-group mb-3">
                         <label for="estimation" class="form-label">Estimation</label>
@@ -149,7 +135,7 @@
 
         const appPrices = {
             @foreach($apps as $app)
-                "{{ $app->app_id }}": { basic: {{ $app->ppd_basic }}, premium: {{ $app->ppd_premium }} }{{ !$loop->last ? ',' : '' }}
+                "{{ $app->app_id }}": { price: {{ $app->price }} }{{ !$loop->last ? ',' : '' }}
             @endforeach
         };
 
@@ -158,7 +144,6 @@
             if (!estimationElem) return;
 
             const appId = document.getElementById('app').value;
-            const rankValue = document.getElementById('rank').value;
             const duration = parseInt(document.getElementById('duration').value, 10);
             const devices = parseInt(document.getElementById('devices').value, 10);
 
@@ -167,12 +152,12 @@
                 return;
             }
 
-            if (!rankValue || isNaN(duration) || isNaN(devices)) {
+            if (isNaN(duration) || isNaN(devices)) {
                 estimationElem.value = "Fill all fields";
                 return;
             }
 
-            const basePrice = (rankValue === 'Basic') ? appPrices[appId].basic : appPrices[appId].premium;
+            const basePrice =appPrices[appId].price;
             const multiplier = duration / 30;
             const total = basePrice * multiplier * devices;
             const totalFormatted = numberFormat(total)
@@ -181,7 +166,6 @@
         }
 
         document.getElementById('app').addEventListener('change', updateKeyGenerateEstimation);
-        document.getElementById('rank').addEventListener('change', updateKeyGenerateEstimation);
         document.getElementById('duration').addEventListener('change', updateKeyGenerateEstimation);
         document.getElementById('devices').addEventListener('input', updateKeyGenerateEstimation);
 

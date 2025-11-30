@@ -39,20 +39,9 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label for="basic" class="form-label">Basic Price</label>
-                                <input type="text" name="basic" id="basic" class="form-control" required placeholder="Basic Price" value="{{ $app->ppd_basic }}">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label for="premium" class="form-label">Premium Price</label>
-                                <input type="text" name="premium" id="premium" class="form-control" required placeholder="Premium Price" value="{{ $app->ppd_premium }}">
-                            </div>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="text" name="price" id="price" class="form-control" required placeholder="Price Per Month" value="{{ $app->price }}">
                     </div>
 
                     <div class="form-group">

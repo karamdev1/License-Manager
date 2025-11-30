@@ -19,8 +19,7 @@ class Key extends Model
         'max_devices',
         'duration',
         'expire_date',
-        'rank',
-        'created_by',
+        'registrar',
         'created_at',
         'updated_at',
     ];

@@ -27,8 +27,7 @@
                             <th><span class="align-middle badge text-dark fs-6">#</span></th>
                             <th><span class="align-middle badge text-dark fs-6">App ID</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Name</span></th>
-                            <th><span class="align-middle badge text-dark fs-6">Basic</span></th>
-                            <th><span class="align-middle badge text-dark fs-6">Premium</span></th>
+                            <th><span class="align-middle badge text-dark fs-6">PPM</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Created</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Created By</span></th>
                             <th><span class="align-middle badge text-dark fs-6">Keys Count</span></th>
@@ -47,8 +46,7 @@
                                     <td><span class="align-middle badge text-dark fs-6">{{ ($apps->currentPage() - 1) * $apps->perPage() + $loop->iteration }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6 copy-trigger" data-copy="{{ $app->app_id }}">{{ Controller::censorText($app->app_id) }}</span></td>
                                     <td><span class="align-middle badge text-{{ Controller::statusColor($app->status) }} fs-6">{{ $app->name }}</span></td>
-                                    <td><span class="align-middle badge text-dark fs-6">{{ number_format($app->ppd_basic) }}{{ $currency }}</span></td>
-                                    <td><span class="align-middle badge text-dark fs-6">{{ number_format($app->ppd_premium) }}{{ $currency }}</span></td>
+                                    <td><span class="align-middle badge text-dark fs-6">{{ number_format($app->price) }}{{ $currency }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ Controller::timeElapsed($app->created_at) }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ Controller::userUsername($app->created_by) }}</span></td>
                                     <td><span class="align-middle badge text-dark fs-6">{{ number_format($keysCount) }}</span></td>

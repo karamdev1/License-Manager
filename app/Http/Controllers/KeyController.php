@@ -12,20 +12,10 @@ use Illuminate\Validation\Rule;
 
 class KeyController extends Controller
 {
-    static function keyPriceCalculator($rank, $basic, $premium, $devices, $duration) {
-        $rank = (string) $rank;
-        $basic = (int) $basic;
-        $premium = (int) $premium;
+    static function keyPriceCalculator($price, $devices, $duration) {
+        $price = (int) $price;
         $devices = (int) $devices;
         $duration = (int) $duration;
-
-        if ($rank == 'Basic' || $rank == 'basic') {
-            $price = $basic;
-        } elseif ($rank == 'Premium' || $rank == 'premium') {
-            $price = $premium;
-        } else {
-            return 'N/A';
-        }
 
         $duration = $duration / 30;
         $total = $price * $duration * $devices;
@@ -83,7 +73,7 @@ class KeyController extends Controller
         if (auth()->user()->permissions == "Owner") {
             $keys = Key::get();
         } else {
-            $keys = Key::where('created_by', auth()->user()->user_id)->get();
+            $keys = Key::where('registrar', auth()->user()->user_id)->get();
         }
         $currency = Config::get('messages.settings.currency');
 
@@ -104,7 +94,6 @@ class KeyController extends Controller
         $request->validate([
             'app'      => 'required|string|exists:apps,app_id|min:6|max:36',
             'owner'    => 'max:50',
-            'rank'     => 'required|in:Basic,Premium',
             'duration' => 'required|integer',
             'status'   => 'required|in:Active,Inactive',
             'devices'  => 'required|integer|min:1',
@@ -122,13 +111,12 @@ class KeyController extends Controller
             Key::create([
                 'app_id'      => $request->input('app'),
                 'owner'       => $request->input('owner') ?? "",
-                'rank'        => $request->input('rank'),
                 'duration'    => $request->input('duration'),
                 'expire_date' => $expire_date,
                 'key'         => $key,
                 'status'      => $request->input('status'),
                 'max_devices' => $request->input('devices'),
-                'created_by'  => auth()->user()->user_id,
+                'registrar'  => auth()->user()->user_id,
             ]);
 
             return redirect()->route('keys.generate')->with('msgSuccess', str_replace(':flag', "Key " . $key, $successMessage));
@@ -169,7 +157,6 @@ class KeyController extends Controller
             'key'      => 'max:50',
             'app'      => 'required|string|exists:apps,app_id|min:6|max:36',
             'owner'    => 'max:50',
-            'rank'     => 'required|in:Basic,Premium',
             'duration' => 'required|integer',
             'status'   => 'required|in:Active,Inactive',
             'devices'  => 'required|integer|min:1',
@@ -216,7 +203,6 @@ class KeyController extends Controller
                 $key->update([
                     'app_id'      => $request->input('app'),
                     'owner'       => $request->input('owner') ?? "",
-                    'rank'        => $request->input('rank'),
                     'duration'    => $request->input('duration'),
                     'expire_date' => $expire_date,
                     'key'         => $keyName,
@@ -227,7 +213,6 @@ class KeyController extends Controller
                 $key->update([
                     'app_id'      => $request->input('app'),
                     'owner'       => $request->input('owner') ?? "",
-                    'rank'        => $request->input('rank'),
                     'key'         => $keyName,
                     'status'      => $request->input('status'),
                     'max_devices' => $request->input('devices'),

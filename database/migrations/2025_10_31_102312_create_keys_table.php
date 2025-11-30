@@ -13,8 +13,7 @@ return new class extends Migration
             $table->uuid('edit_id')->unique();
             $table->uuid('app_id')->unique();
             $table->string('name')->unique();
-            $table->integer('ppd_basic');
-            $table->integer('ppd_premium');
+            $table->integer('price');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->string('created_by')->nullable();
             $table->timestamps();
@@ -30,8 +29,7 @@ return new class extends Migration
             $table->integer('duration')->default(30);
             $table->dateTime('expire_date')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
-            $table->enum('rank', ['Premium', 'Basic'])->default('Basic');
-            $table->string('created_by')->nullable();
+            $table->string('registrar')->nullable();
             $table->timestamps();
         });
 

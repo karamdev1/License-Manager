@@ -13,8 +13,7 @@ class App extends Model
     protected $fillable = [
         'app_id',
         'name',
-        'ppd_basic',
-        'ppd_premium',
+        'price',
         'status',
         'created_by',
         'created_at',
