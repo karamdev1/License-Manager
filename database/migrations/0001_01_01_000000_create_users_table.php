@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('edit_id');
             $table->string('code')->unique()->max(50);
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
-            $table->string('created_by');
+            $table->string('registrar');
             $table->timestamps();
         });
 
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->enum('permissions', ['Owner', 'Admin'])->default('Admin');
             $table->string('reff')->nullable();
-            $table->string('created_by')->nullable();
+            $table->string('registrar')->nullable();
             $table->datetime('last_login')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -15,7 +15,7 @@ class App extends Model
         'name',
         'price',
         'status',
-        'created_by',
+        'registrar',
         'created_at',
         'updated_at',
     ];

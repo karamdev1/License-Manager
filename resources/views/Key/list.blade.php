@@ -53,14 +53,14 @@
                                     <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ KeyController::DevicesHooked($key->edit_id) }}/{{ $key->max_devices ?? 'N/A' }}</i></td>
                                     <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::timeElapsed($key->created_at) ?? 'N/A' }}</i></td>
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::userUsername($key->registrar) }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ number_format(KeyController::keyPriceCalculator($key->app->price, $key->max_devices, $key->duration)) }}{{ $currency }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ number_format(KeyController::keyPriceCalculator($key->app->price, $key->max_devices, $key->duration)) . $currency }}</span></td>
                                     <td>
                                         <a href={{ route('keys.resetApiKey', ['id' => $key->edit_id]) }} class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-bootstrap-reboot"></i>
                                         </a>
 
                                         <a href={{ route('keys.edit', ['id' => $key->edit_id]) }} class="btn btn-outline-dark btn-sm">
-                                            <i class="bi bi-person"></i>
+                                            <i class="bi bi-pencil-square"></i>
                                         </a>
                                     </td>
                                 </tr>

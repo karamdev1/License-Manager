@@ -10,11 +10,7 @@ use Illuminate\Validation\Rule;
 class AppController extends Controller
 {
     public function applist(Request $request) {
-        if ($request->get('search')) {
-            $apps = App::where('name', $request->get('search'))->orderBy('created_at', 'desc')->paginate(10);
-        } else {
-            $apps = App::orderBy('created_at', 'desc')->paginate(10);
-        }
+        $apps = App::get();
         $currency = Config::get('messages.settings.currency');
 
         return view('App.list', compact('apps', 'currency'));
@@ -49,7 +45,7 @@ class AppController extends Controller
                 'name'        => $request->input('name'),
                 'price'       => $request->input('price'),
                 'status'      => $request->input('status'),
-                'created_by'  => auth()->user()->user_id,
+                'registrar'  => auth()->user()->user_id,
             ]);
 
             return redirect()->route('apps.generate')->with('msgSuccess', str_replace(':flag', "App " . $request->input('name'), $successMessage));

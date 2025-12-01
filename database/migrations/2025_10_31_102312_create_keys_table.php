@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->integer('price');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
-            $table->string('created_by')->nullable();
+            $table->string('registrar')->nullable();
             $table->timestamps();
         });
 

@@ -26,7 +26,7 @@
                                     @if ($apps)
                                         @foreach ($apps as $app)
                                             @php $count + 1; @endphp
-                                            <option value="{{ $app->app_id }}" class="text-{{ Controller::statusColor($app->status) }}" @if ($app->status != 'Active') disabled @endif>{{ $app->name }} - {{ $app->price }}</option>
+                                            <option value="{{ $app->app_id }}" class="text-{{ Controller::statusColor($app->status) }}" @if ($app->status != 'Active') disabled @endif>{{ $app->name }} - {{ number_format($app->price) . $currency }}</option>
                                         @endforeach
                                     @endif
                                 </select>
