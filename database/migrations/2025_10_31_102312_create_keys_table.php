@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('app_id');
             $table->string('owner');
             $table->string('key')->unique();
-            $table->integer('max_devices')->default(1);
-            $table->integer('duration')->default(30);
+            $table->biginteger('max_devices')->default(1);
+            $table->biginteger('duration')->default(30);
             $table->dateTime('expire_date')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->string('registrar')->nullable();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use app\Models\User;
+use Illuminate\Support\Facades\Config;
 
 abstract class Controller
 {
@@ -86,5 +87,26 @@ abstract class Controller
     static function userUsername($user_id) {
         $user = User::where('user_id', $user_id)->first();
         return $user?->username ?? 'N/A';
+    }
+
+    static function saldoData($userSaldo, $userRole) {
+        $currency = Config::get('messages.settings.currency');
+        if ($userSaldo >= 2000000000 || $userRole == "Owner") {
+            $saldo = "∾";
+            $saldo_color = "primary";
+        } else {
+            $saldo = number_format($userSaldo) . $currency;
+            if ($userSaldo <= 100) {
+                $saldo_color = "danger";
+            } else if ($userSaldo <= 1000) {
+                $saldo_color = "warning";
+            } else {
+                $saldo_color = "success";
+            }
+        }
+
+        $data = [$saldo, $saldo_color];
+
+        return $data;
     }
 }

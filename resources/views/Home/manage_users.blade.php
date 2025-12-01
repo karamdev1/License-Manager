@@ -7,7 +7,7 @@
 @endphp
 
 @section('content')
-    <div class="col-lg-12">
+    <div class="col-lg-10">
         @include('Layout.msgStatus')
         <div class="card mb-5">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
@@ -15,6 +15,7 @@
                 <div class="d-flex align-items-center gap-2">
                     <a class="btn btn-outline-light btn-sm" href={{ route('admin.users.history') }}><i class="bi bi-person"></i> HISTORY</a>
                     <a class="btn btn-outline-light btn-sm" href={{ route('admin.users.generate') }}><i class="bi bi-person"></i> USER</a>
+                    <button class="btn btn-secondary btn-sm ms-1" id="blur-out" data-bs-toggle="tooltip" data-bs-placement="top" title="Eye Protect"><i class="bi bi-eye-slash"></i></button>
                 </div>
             </div>
             <div class="card-body">
@@ -29,21 +30,32 @@
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Saldo</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Role</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Reff</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Created</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Registrar</span></th>
+                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Created</span></th>
                                     <th><span class="align-middle badge fw-semibold text-dark fs-6">Action</span></th>
                                 </tr>
                             </thead>
                             @foreach ($users as $item)
+                                @php
+                                    if ($item->referrable != NULL) {
+                                        $reff_status = Controller::statusColor($item->referrable->status);
+                                        $reff_code = Controller::censorText($item->referrable->code);
+                                    } else {
+                                        $reff_status = 'dark';
+                                        $reff_code = "N/A";
+                                    }
+
+                                    $saldo = Controller::saldoData($item->saldo, $item->permissions);
+                                @endphp
                                 <tr>
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $loop->iteration }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $item->name }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $item->username }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">0</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $item->permissions }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $item->reff }}</span></td>
-                                    <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->status) }} fs-6">{{ $item->name }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur">{{ $item->username }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ $saldo[1] }} fs-6">{{ $saldo[0] }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::permissionColor($item->permissions) }} fs-6">{{ $item->permissions }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ $reff_status }} fs-6">{{ $reff_code }}</span></td>
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::userUsername($item->registrar) }}</span></td>
+                                    <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
                                     <td>ACTION</td>
                                 </tr>
                             @endforeach
@@ -72,6 +84,16 @@
                 columnDefs: [
                     { orderable: false, targets: -1 }
                 ]
+            });
+
+            $("#blur-out").click(function() {
+                if ($(".Blur").hasClass("blur")) {
+                    $(".Blur").removeClass("blur");
+                    $("#blur-out").html(`<i class="bi bi-eye"></i>`);
+                } else {
+                    $(".Blur").addClass("blur");
+                    $("#blur-out").html(`<i class="bi bi-eye-slash"></i>`);
+                }
             });
         });
     </script>

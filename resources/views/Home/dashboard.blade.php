@@ -19,22 +19,22 @@
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered table-hover text-center">
                                 @if ($keys->isNotEmpty())
-                                    @foreach ($keys as $key)
+                                    @foreach ($keys as $item)
                                         <tbody>
                                             <tr>
-                                                <td><span class="align-middle badge text-dark fw-semibold">#{{ $loop->iteration }}</span></td>
-                                                <td>{{ $key->app->name }}</td>
-                                                <td><span class="align-middle badge text-dark fw-semibold">{{ Controller::censorText($key->key) }}</span></td>
-                                                <td><span class="align-middle badge text-dark fw-semibold">{{ $key->duration }} Days</span></td>
-                                                <td><span class="align-middle badge text-primary fw-semibold">{{ $key->max_devices }} Devices</span></td>
-                                                <td><i class="align-middle badge text-muted fw-semibold">{{ Controller::timeElapsed($key->created_at) }}</i></td>
+                                                <td><span class="align-middle badge text-dark fw-semibold">#{{ $item->id }}</span></td>
+                                                <td>{{ $item->app->name }}</td>
+                                                <td><span class="align-middle badge text-dark fw-semibold">{{ Controller::censorText($item->key) }}</span></td>
+                                                <td><span class="align-middle badge text-dark fw-semibold">{{ $item->duration }} Days</span></td>
+                                                <td><span class="align-middle badge text-primary fw-semibold">{{ $item->max_devices }} Devices</span></td>
+                                                <td><i class="align-middle badge text-muted fw-semibold">{{ Controller::timeElapsed($item->created_at) }}</i></td>
                                             </tr>
                                         </tbody>
                                     @endforeach
                                 @else
                                     <thead>
                                         <tr>
-                                            <th><span class="align-middle badge text-dark fw-normal">There are no <strong>keys</strong> to show</span></th>
+                                            <th><span class="align-middle badge text-dark fw-normal fs-6">There are no <strong>keys</strong> to show</span></th>
                                         </tr>
                                     </thead>
                                 @endif
@@ -60,7 +60,8 @@
                             </li>
                             <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 Saldo
-                                <span class="badge text-dark fw-bold">128453821436 {{ $currency }}</span>
+                                @php $saldo = Controller::saldoData(auth()->user()->saldo, auth()->user()->permissions); @endphp
+                                <span class="badge text-{{ $saldo[1] }} fw-bold">{{ $saldo[0] }}</span>
                             </li>
                         </ul>
                         <ul class="list-group">

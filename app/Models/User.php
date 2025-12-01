@@ -20,6 +20,7 @@ class User extends Authenticatable
         'password',
         'permissions',
         'status',
+        'saldo',
         'reff',
         'registrar',
         'created_at',
@@ -57,5 +58,13 @@ class User extends Authenticatable
 
     public function referrable() {
         return $this->belongsTo(Reff::class, 'reff', 'edit_id');
+    }
+
+    public function deductSaldo(int $amount): bool {
+        if ($this->role === 'Owner' || $this->saldo >= 2000000000) return true;
+
+        $updated = $this->where('id', $this->id)->where('saldo', '>=', $amount)->decrement('saldo', $amount);
+
+        return (bool)$updated;
     }
 }

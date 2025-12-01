@@ -96,7 +96,7 @@ class KeyController extends Controller
             'owner'    => 'max:50',
             'duration' => 'required|integer',
             'status'   => 'required|in:Active,Inactive',
-            'devices'  => 'required|integer|min:1',
+            'devices'  => 'required|integer|min:1|max:1000000',
         ]);
 
         do {
@@ -159,7 +159,7 @@ class KeyController extends Controller
             'owner'    => 'max:50',
             'duration' => 'required|integer',
             'status'   => 'required|in:Active,Inactive',
-            'devices'  => 'required|integer|min:1',
+            'devices'  => 'required|integer|min:1|max:1000000',
         ]);
 
         if (auth()->user()->permissions == "Owner") {

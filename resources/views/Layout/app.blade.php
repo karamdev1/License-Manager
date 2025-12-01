@@ -19,8 +19,13 @@
             font-family: 'Poppins', sans-serif !important;
         }
 
-        .key-sensi {
-            filter: blur(3px);
+        .blur {
+            filter: blur(6px);
+            transition: 0.2s ease-in-out filter;
+        }
+
+        .blur:hover {
+            filter: blur(0px);
         }
     </style>
 </head>

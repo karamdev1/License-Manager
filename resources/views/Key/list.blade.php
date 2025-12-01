@@ -38,22 +38,39 @@
                             </thead>
                             @foreach ($keys as $item)
                                 @php
-                                    if ($item->owner == "") {
+                                    if ($item->owner == NULL) {
                                         $owner = "N/A";
                                     } else {
                                         $owner = $item->owner;
                                     }
+
+                                    $price = number_format(KeyController::keyPriceCalculator($item->app->price, $item->max_devices, $item->duration));
+                                    $raw_price = KeyController::keyPriceCalculator($item->app->price, $item->max_devices, $item->duration);
+
+                                    if ($raw_price < 10000) {
+                                        $price = $price;
+                                    } else if ($raw_price >= 10000 && $raw_price < 1000000) {
+                                        $price = number_format($raw_price / 1000) . 'K';
+                                    } else if ($raw_price >= 1000000 && $raw_price < 1000000000) {
+                                        $price = number_format($raw_price / 1000000) . 'M';
+                                    } else if ($raw_price >= 1000000000 && $raw_price < 1000000000000) {
+                                        $price = number_format($raw_price / 1000000000) . 'B';
+                                    } else if ($raw_price >= 1000000000000) {
+                                        $price = number_format($raw_price / 1000000000000) . 'T';
+                                    } else {
+                                        $price = "N/A";
+                                    }
                                 @endphp
                                 <tr>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $loop->iteration }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $item->id }}</span></td>
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $owner }}</span></td>
                                     <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->app->status) }} fs-6">{{ $item->app->name ?? 'N/A' }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->status) }} fs-6 key-sensi keyBlur">{{ $item->key }}</span></td>
-                                    <td><i class="align-middle badge fw-semibold text-{{ KeyController::RemainingDaysColor(KeyController::RemainingDays($item->expire_date)) }} fs-6">{{ KeyController::RemainingDays($item->expire_date) }}/{{ $item->duration ?? 'N/A' }} Days</i></td>
-                                    <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ KeyController::DevicesHooked($item->edit_id) }}/{{ $item->max_devices ?? 'N/A' }}</i></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur">{{ $item->key }}</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-{{ KeyController::RemainingDaysColor(KeyController::RemainingDays($item->expire_date)) }} fs-6">{{ KeyController::RemainingDays($item->expire_date) }}/{{ $item->duration ?? 'N/A' }} Days</span></td>
+                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ KeyController::DevicesHooked($item->edit_id) }}/{{ $item->max_devices ?? 'N/A' }}</span></td>
                                     <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::timeElapsed($item->created_at) ?? 'N/A' }}</i></td>
                                     <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::userUsername($item->registrar) }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ number_format(KeyController::keyPriceCalculator($item->app->price, $item->max_devices, $item->duration)) . $currency }}</span></td>
+                                    <td title="{{ number_format($raw_price) . $currency }}"><span class="align-middle badge fw-semibold text-dark fs-6">{{ $price . $currency }}</span></td>
                                     <td>
                                         <a href={{ route('keys.resetApiKey', ['id' => $item->edit_id]) }} class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-bootstrap-reboot"></i>
@@ -88,16 +105,19 @@
                 ordering: true,
                 order: [[0,'desc']],
                 columnDefs: [
+                    { targets: [6, 9], searchable: false },
+                    { targets: [0, 1, 2, 3, 4, 5, 7, 8], searchable: true },
                     { orderable: false, targets: -1 }
                 ]
             });
 
+
             $("#blur-out").click(function() {
-                if ($(".keyBlur").hasClass("key-sensi")) {
-                    $(".keyBlur").removeClass("key-sensi");
+                if ($(".Blur").hasClass("blur")) {
+                    $(".Blur").removeClass("blur");
                     $("#blur-out").html(`<i class="bi bi-eye"></i>`);
                 } else {
-                    $(".keyBlur").addClass("key-sensi");
+                    $(".Blur").addClass("blur");
                     $("#blur-out").html(`<i class="bi bi-eye-slash"></i>`);
                 }
             });

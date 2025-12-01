@@ -21,19 +21,13 @@ class DashController extends Controller
     }
 
     public function dashboard() {
-        if (auth()->user()->permissions == "Owner") {
-            $keys = Key::orderBy('created_at', 'desc')->paginate(5, ['*'], 'keys_page');
-        } else {
-            $keys = Key::where('created_by', auth()->user()->user_id)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'keys_page');
-        }
-
-        $apps = App::orderBy('created_at', 'desc')->paginate(5, ['*'], 'apps_page');
+        $keys = Key::orderBy('created_at', 'desc')->limit(10)->get();
         $currency = Config::get('messages.settings.currency');
         $loginTime = session('login_time');
         $sessionLifetime = session('session_lifetime');
         $expiryTime = $loginTime ? $loginTime->copy()->addMinutes($sessionLifetime) : null;
 
-        return view('Home.dashboard', compact('keys', 'apps', 'currency', 'expiryTime', 'loginTime', 'sessionLifetime'));
+        return view('Home.dashboard', compact('keys', 'currency', 'expiryTime', 'loginTime', 'sessionLifetime'));
     }
 
     public function manageusers(Request $request) {

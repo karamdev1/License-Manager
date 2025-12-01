@@ -1,50 +1,56 @@
 @if($errors->any())
     <div class="alert alert-danger fade show" role="alert">
-        {{ $errors->first() }}
+        {!! $errors->first() !!}
     </div>
 @endif
 
 @if (session()->has('msgSuccess'))
     <div class="alert alert-success fade show" role="alert">
-        {{ session('msgSuccess') }}
+        {!! session('msgSuccess') !!}
     </div>
 @endif
 
 @if (session()->has('msgSuccess2'))
     <div class="alert alert-success fade show" role="alert">
-        {{ session('msgSuccess2') }}
+        {!! session('msgSuccess2') !!}
     </div>
 @endif
 
 @if (session()->has('msgWarning'))
     <div class="alert alert-warning fade show" role="alert">
-        {{ session('msgWarning') }}
+        {!! session('msgWarning') !!}
     </div>
 @endif
 
 @if (session()->has('msgWarning2'))
     <div class="alert alert-warning fade show" role="alert">
-        {{ session('msgWarning2') }}
+        {!! session('msgWarning2') !!}
     </div>
 @endif
 
 @if (session()->has('msgInfo'))
     <div class="alert alert-primary fade show" role="alert">
-        {{ session('msgInfo') }}
+        {!! session('msgInfo') !!}
     </div>
 @endif
 
 @if (session()->has('msgInfo2'))
     <div class="alert alert-primary fade show" role="alert">
-        {{ session('msgInfo2') }}
+        {!! session('msgInfo2') !!}
     </div>
 @endif
 
 @if (!$errors->any() && !session()->has('msgSuccess') && !session()->has('msgWarning') && !session()->has('msgInfo'))
     @auth
-        <div class="alert alert-secondary fade show" role="alert">
-            Welcome {{ auth()->user()->name }}
-        </div>
+        @if (Route::currentRouteName() === 'keys')
+            <div class="alert alert-primary fade show" role="alert">
+                <strong>INFO</strong> · Search specify key by their (id, owner, app, key, duration, devices, registrar or price).
+            </div>
+        @else
+            <div class="alert alert-secondary fade show" role="alert">
+                Welcome {{ auth()->user()->name }}
+            </div>
+        @endif
     @else
         <div class="alert alert-secondary fade show" role="alert">
             {{ config('app.name') }}
