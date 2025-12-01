@@ -5,15 +5,12 @@
 @section('content')
     <div class="col-lg-6">
         @include('Layout.msgStatus')
-        <div class="card mb-5">
-            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-                <span class="h6 mb-0">Reff Registering</span>
-                <div class="d-flex align-items-center gap-2">
-                    <a class="btn btn-outline-light btn-sm" href={{ route('admin.referrable') }}><i class="bi bi-person-add"></i> BACK</a>
-                </div>
+        <div class="card shadow-sm mb-5">
+            <div class="card-header text-center text-white bg-danger">
+                Reff Registering
             </div>
             <div class="card-body">
-                <form action={{ route('admin.referrable.generate.post') }} method="post" id="generateForm">
+                <form action={{ route('admin.referrable.generate.post') }} method="post" id="registerForm">
                     @csrf
                     <div class="form-group mb-3">
                         <label for="code" class="form-label">Code</label>
@@ -30,34 +27,31 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmGenerateModal"><i class="bi bi-plus-square"></i> Register Reff</button>
+                        <button type="button" class="btn btn-outline-danger" id="registerReff">Register Reff</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="confirmGenerateModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Register</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to register the referrable code?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmGenerateBtn">Yes, Register</button>
-                </div>
-            </div>
-        </div>
+        <p class="text-muted text-center">
+            <a href="{{ route('admin.referrable') }}" class="py-1 px-2 bg-white text-muted"><small><i class="bi bi-arrow-left"></i> Back to Referrables</small></a>
+        </p>
     </div>
 
     <script>
-        document.getElementById('confirmGenerateBtn').addEventListener('click', function() {
-            document.getElementById('generateForm').submit();
+        document.getElementById('registerReff').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to register the referrable?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Register'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('registerForm').submit();
+                }
+            });
         });
     </script>
 @endsection

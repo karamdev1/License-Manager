@@ -289,7 +289,7 @@ class DashController extends Controller
             Reff::create([
                 'code'        => $code,
                 'status'      => $request->input('status'),
-                'created_by'  => auth()->user()->user_id,
+                'registrar'   => auth()->user()->user_id,
             ]);
 
             return redirect()->route('admin.referrable.generate')->with('msgSuccess', str_replace(':flag', "Reff " . $code, $successMessage));

@@ -6,11 +6,8 @@
     <div class="col-lg-6">
         @include('Layout.msgStatus')
         <div class="card mb-5">
-            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-                <span class="h6 mb-0">Reff Editing</span>
-                <div class="d-flex align-items-center gap-2">
-                    <a class="btn btn-outline-light btn-sm" href={{ route('admin.referrable') }}><i class="bi bi-person-add"></i> BACK</a>
-                </div>
+            <div class="card-header text-center text-white bg-danger">
+                Reff Editing · {{ $reff->code }}
             </div>
             <div class="card-body">
                 <form action={{ route('admin.referrable.edit.post') }} method="post" id="updateForm">
@@ -32,9 +29,9 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmUpdateModal"><i class="bi bi-plus-square"></i> Update Reff</button>
+                        <button type="button" class="btn btn-outline-danger" id="updateBtn">Update Reff</button>
                     
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"><i class="bi bi-trash3"></i> Delete Reff</button>
+                        <button type="button" class="btn btn-outline-danger" id="deleteBtn"><i class="bi bi-trash3"></i> Delete Reff</button>
                     </div>
                 </form>
                 <form action="{{ route('admin.referrable.delete') }}" method="post" id="deleteForm">
@@ -43,51 +40,42 @@
                 </form>
             </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Update</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to update the referrable code?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmUpdateBtn">Yes, Update</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete the referrable?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
-                </div>
-            </div>
-        </div>
+        <p class="text-muted text-center">
+            <a href="{{ route('admin.referrable') }}" class="py-1 px-2 bg-white text-muted"><small><i class="bi bi-arrow-left"></i> Back to Referrables</small></a>
+        </p>
     </div>
 
     <script>
-        document.getElementById('confirmUpdateBtn').addEventListener('click', function() {
-            document.getElementById('updateForm').submit();
+        document.getElementById('updateBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to edit the referrable?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, edit'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('updateForm').submit();
+                }
+            });
         });
 
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            document.getElementById('deleteForm').submit();
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete the referrable?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm').submit();
+                }
+            });
         });
     </script>
 @endsection

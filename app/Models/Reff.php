@@ -15,7 +15,7 @@ class Reff extends Model
         'updated_at',
         'code',
         'status',
-        'created_by',
+        'registrar',
     ];
 
     protected $hidden = [
