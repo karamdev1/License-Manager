@@ -70,7 +70,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-dark" id="generateBtn">Register User</button>
+                        <button type="button" class="btn btn-outline-secondary" id="generateBtn">Register User</button>
                     </div>
                 </form>
             </div>

@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-dark" id="changeBtn">Change User's Saldo</button>
+                        <button type="button" class="btn btn-outline-secondary" id="changeBtn">Change User's Saldo</button>
                     </div>
                 </form>
             </div>

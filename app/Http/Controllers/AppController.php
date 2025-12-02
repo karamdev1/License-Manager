@@ -19,9 +19,7 @@ class AppController extends Controller
     public function appgenerate() {
         $errorMessage = Config::get('messages.error.validation');
 
-        if (auth()->user()->permissions == "Admin") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership(1);
 
         return view('App.generate');
     }
@@ -30,9 +28,7 @@ class AppController extends Controller
         $successMessage = Config::get('messages.success.created');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (auth()->user()->permissions == "Admin") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership(1);
 
         $request->validate([
             'name'    => 'required|string|unique:apps,name|min:6|max:50',
@@ -69,9 +65,7 @@ class AppController extends Controller
         $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (auth()->user()->permissions == "Admin") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership(1);
 
         $request->validate([
             'edit_id' => 'required|string|min:10|max:36',
@@ -122,9 +116,7 @@ class AppController extends Controller
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (auth()->user()->permissions == "Admin") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership(1);
 
         $request->validate([
             'edit_id' => 'required|string|min:10|max:36',
@@ -145,9 +137,7 @@ class AppController extends Controller
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (auth()->user()->permissions == "Admin") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership(1);
 
         $request->validate([
             'edit_id' => 'required|string|min:10|max:36',

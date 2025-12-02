@@ -6,8 +6,8 @@
     <div class="col-lg-7">
         @include('Layout.msgStatus')
         <div class="card mb-5">
-            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-                <span class="h6 mb-0">App Editing</span>
+            <div class="card-header text-center text-white bg-dark">
+                App Editing · {{ $app->name }}
             </div>
             <div class="card-body">
                 <form action={{ route('apps.edit.post') }} method="post" id="updateForm">
@@ -45,13 +45,13 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-danger mt-2" data-bs-toggle="modal" data-bs-target="#confirmUpdateModal"><i class="bi bi-plus-square"></i> Update</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="updateBtn">Update</button>
 
-                        <button type="button" class="btn btn-outline-danger mt-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"><i class="bi bi-trash3"></i> Delete</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteBtn">Delete</button>
 
-                        <button type="button" class="btn btn-outline-danger mt-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteKeysModal"><i class="bi bi-trash3"></i> Delete Only Keys</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteKeysBtn">Delete Keys</button>
                         
-                        <button type="button" class="btn btn-outline-danger mt-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteKeysMeModal"><i class="bi bi-trash3"></i> Delete Only User Keys</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteKeysMeBtn">Delete User Keys</button>
                     </div>
                 </form>
                 <form action={{ route('apps.delete') }} method="post" id="deleteForm">
@@ -73,93 +73,69 @@
         </p>
     </div>
 
-    <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Update</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to update the app?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmUpdateBtn">Yes, Update</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete the app?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteKeysModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Delete Keys</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete the app keys?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteKeysBtn">Yes, Delete Keys</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteKeysMeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-danger">
-                    <h5 class="modal-title">Confirm Delete Keys</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete the app keys that are created by your user?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteKeysMeBtn">Yes, Delete Keys</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        document.getElementById('confirmUpdateBtn').addEventListener('click', function() {
-            document.getElementById('updateForm').submit();
+        document.getElementById('updateBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to edit the app?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, edit'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('updateForm').submit();
+                }
+            });
         });
 
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            document.getElementById('deleteForm').submit();
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete the app?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteKeys').submit();
+                }
+            });
         });
 
-        document.getElementById('confirmDeleteKeysBtn').addEventListener('click', function() {
-            document.getElementById('deleteKeysForm').submit();
+        document.getElementById('deleteKeysBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete all the keys from the app?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteKeysForm').submit();
+                }
+            });
         });
 
-        document.getElementById('confirmDeleteKeysMeBtn').addEventListener('click', function() {
-            document.getElementById('deleteKeysMeForm').submit();
+        document.getElementById('deleteKeysMeBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete all your keys from the app?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteKeysMeForm').submit();
+                }
+            });
         });
     </script>
 @endsection

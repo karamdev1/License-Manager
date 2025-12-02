@@ -10,33 +10,15 @@
     </div>
 @endif
 
-@if (session()->has('msgSuccess2'))
-    <div class="alert alert-success fade show" role="alert">
-        {!! session('msgSuccess2') !!}
-    </div>
-@endif
-
 @if (session()->has('msgWarning'))
     <div class="alert alert-warning fade show" role="alert">
         {!! session('msgWarning') !!}
     </div>
 @endif
 
-@if (session()->has('msgWarning2'))
-    <div class="alert alert-warning fade show" role="alert">
-        {!! session('msgWarning2') !!}
-    </div>
-@endif
-
 @if (session()->has('msgInfo'))
     <div class="alert alert-primary fade show" role="alert">
         {!! session('msgInfo') !!}
-    </div>
-@endif
-
-@if (session()->has('msgInfo2'))
-    <div class="alert alert-primary fade show" role="alert">
-        {!! session('msgInfo2') !!}
     </div>
 @endif
 

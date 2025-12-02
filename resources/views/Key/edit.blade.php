@@ -99,9 +99,9 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-dark" id="updateBtn">Update</button>
+                        <button type="button" class="btn btn-outline-secondary" id="updateBtn">Update</button>
 
-                        <button type="button" class="btn btn-outline-dark" id="deleteBtn"><i class="bi bi-trash3"></i> Delete</button>
+                        <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete</button>
                     </div>
                 </form>
                 <form action="{{ route('keys.delete') }}" method="post" id="deleteForm">

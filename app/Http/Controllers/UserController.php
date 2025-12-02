@@ -54,8 +54,10 @@ class UserController extends Controller
                 'registrar'   => auth()->user()->user_id,
             ]);
 
-            return redirect()->route('admin.users.generate')->with('msgSuccess', str_replace(':flag', "<strong>User</strong>", $successMessage))->with('msgSuccess2', 
+            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
+            return redirect()->route('admin.users.generate')->with('msgSuccess',
                 "
+                $msg <br>
                 <b>Name: $name</b> <br>
                 <b>Username: $username</b> <br>
                 <b>Role: $role</b>
@@ -133,8 +135,10 @@ class UserController extends Controller
                 ]);
             }
 
-            return redirect()->route('admin.users.edit', $request->input('user_id'))->with('msgSuccess', str_replace(':flag', "<strong>User</strong>", $successMessage))->with('msgSuccess2', 
+            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
+            return redirect()->route('admin.users.edit', $request->input('user_id'))->with('msgSuccess',
                 "
+                $msg <br>
                 <b>Name: $name</b> <br>
                 <b>Username: $username</b> <br>
                 <b>Role: $role</b> <br>
@@ -185,8 +189,10 @@ class UserController extends Controller
                 'saldo' => $request->input('saldo'),
             ]);
 
-            return redirect()->route('admin.users.wallet', $request->input('user_id'))->with('msgSuccess', str_replace(':flag', "<strong>User</strong>", $successMessage))->with('msgSuccess2', 
+            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
+            return redirect()->route('admin.users.wallet', $request->input('user_id'))->with('msgSuccess', 
                 "
+                $msg <br>
                 <b>Name: $name</b> <br>
                 <b>Username: $username</b> <br>
                 <b>Old Saldo: $old_saldo</b> <br>
@@ -219,8 +225,12 @@ class UserController extends Controller
         try {
             $user->delete();
 
-            return redirect()->route('admin.users')->with('msgSuccess', str_replace(':flag', "<strong>User</strong>", $successMessage))->with('msgSuccess2',
-                "<b>User Deleted: $username</b>"
+            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
+            return redirect()->route('admin.users')->with('msgSuccess',
+                "
+                $msg <br>
+                <b>User Deleted: $username</b>
+                "
             );
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');

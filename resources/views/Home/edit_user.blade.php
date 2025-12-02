@@ -74,9 +74,9 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-dark" id="editBtn">Edit User</button>
+                        <button type="button" class="btn btn-outline-secondary" id="editBtn">Edit User</button>
 
-                        <button type="button" class="btn btn-outline-dark" id="deleteBtn"><i class="bi bi-trash3"></i> Delete User</button>
+                        <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete User</button>
                     </div>
                 </form>
                 <form action="{{ route('admin.users.delete') }}" method="post" id="deleteForm">
