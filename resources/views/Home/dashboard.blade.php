@@ -23,7 +23,6 @@
                                         <tbody>
                                             <tr>
                                                 <td><span class="align-middle badge text-dark">#{{ $item->id }}</span></td>
-                                                <td>{{ $item->app->name }}</td>
                                                 <td><span class="align-middle badge text-dark">{{ Controller::censorText($item->key) }}</span></td>
                                                 <td><span class="align-middle badge text-dark">{{ $item->duration }} Days</span></td>
                                                 <td><span class="align-middle badge text-primary">{{ Controller::userUsername($item->registrar) }}</span></td>

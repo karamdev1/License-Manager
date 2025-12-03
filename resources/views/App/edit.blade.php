@@ -111,7 +111,7 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('deleteKeys').submit();
+                    document.getElementById('deleteForm').submit();
                 }
             });
         });
