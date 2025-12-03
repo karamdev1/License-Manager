@@ -8,7 +8,7 @@
 @endphp
 
 @section('content')
-    <div class="col-lg-12">
+    <div class="col-lg-10">
         @include('Layout.msgStatus')
         <div class="card mb-5">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
@@ -21,26 +21,26 @@
             <div class="card-body">
                 <div class="table-responsive">
                     @if ($reffs->isNotEmpty())
-                        <table id="datatable" class="table table-sm table-bordered table-hover text-center" style="width:100%">
+                        <table id="datatable" class="table table-bordered table-hover text-center dataTable no-footer">
                             <thead>
                                 <tr>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">#</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Code</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Status</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Users Count</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Registrar</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Created</span></th>
-                                    <th><span class="align-middle badge fw-semibold text-dark fs-6">Action</span></th>
+                                    <th>#</th>
+                                    <th>Code</th>
+                                    <th>Status</th>
+                                    <th>Users Count</th>
+                                    <th>Registrar</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             @foreach ($reffs as $item)
                                 <tr>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ $item->id }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur">{{ $item->code }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-{{ Controller::statusColor($item->status) }} fs-6">{{ $item->status }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ DashController::UsersCreated($item->edit_id) }}</span></td>
-                                    <td><span class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::userUsername($item->registrar) }}</span></td>
-                                    <td><i class="align-middle badge fw-semibold text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
+                                    <td>{{ $item->id }}</td>
+                                    <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur copy-trigger" data-copy="{{ $item->code }}">{{ $item->code }}</span></td>
+                                    <td class="text-{{ Controller::statusColor($item->status) }}">{{ $item->status }}</td>
+                                    <td>{{ DashController::UsersCreated($item->edit_id) }}</td>
+                                    <td>{{ Controller::userUsername($item->registrar) }}</td>
+                                    <td><i class="align-middle badge fw-normal text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
                                     <td>
                                         <a href={{ route('admin.referrable.edit', ['id' => $item->edit_id]) }} class="btn btn-outline-dark btn-sm">
                                             <i class="bi bi-pencil-square"></i>
@@ -64,6 +64,37 @@
     </div>
 
     <script>
+        async function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return 0;
+                } catch (e) {
+                    return 1;
+                }
+            }
+
+            let exitCode = 3;
+
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+
+            try {
+                if (document.execCommand("copy")) {
+                    exitCode = 0;
+                } else {
+                    exitCode = 2;
+                }
+            } catch (e) {
+                exitCode = 2;
+            }
+
+            document.body.removeChild(temp);
+            return exitCode;
+        }
+
         $(document).ready(function() {
             $('#datatable').DataTable({
                 pageLength: 10,
@@ -85,6 +116,38 @@
                     $(".Blur").addClass("blur");
                     $("#blur-out").html(`<i class="bi bi-eye-slash"></i>`);
                 }
+            });
+
+            $('.copy-trigger').click(async function() {
+                const copy = $(this).data('copy');
+
+                const code = await copyToClipboard(copy);
+
+                let message = "";
+                let icon = "error";
+
+                switch (code) {
+                    case 0:
+                        message = `<b>Reff</b> ${copy} <b>Successfully Copied</b>`;
+                        icon = "success";
+                        break;
+                    case 1:
+                        message = "Clipboard API failed.";
+                        break;
+                    case 2:
+                        message = "Fallback copy failed.";
+                        break;
+                    case 3:
+                        message = "Clipboard API not available (HTTP or insecure context).";
+                        break;
+                }
+
+                Swal.fire({
+                    title: icon === "success" ? "Success" : "Failed",
+                    html: message,
+                    icon: icon,
+                    showConfirmButton: true,
+                });
             });
         });
     </script>

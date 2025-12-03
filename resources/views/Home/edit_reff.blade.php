@@ -6,7 +6,7 @@
     <div class="col-lg-6">
         @include('Layout.msgStatus')
         <div class="card mb-5">
-            <div class="card-header text-center text-white bg-danger">
+            <div class="card-header text-center text-white bg-dark">
                 Reff Editing · {{ $reff->code }}
             </div>
             <div class="card-body">
@@ -29,9 +29,9 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-danger" id="updateBtn">Update Reff</button>
+                        <button type="button" class="btn btn-outline-secondary" id="updateBtn">Update Reff</button>
                     
-                        <button type="button" class="btn btn-outline-danger" id="deleteBtn"><i class="bi bi-trash3"></i> Delete Reff</button>
+                        <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete Reff</button>
                     </div>
                 </form>
                 <form action="{{ route('admin.referrable.delete') }}" method="post" id="deleteForm">

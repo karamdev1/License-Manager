@@ -64,7 +64,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $owner }}</td>
                                     <td class="text-{{ Controller::statusColor($item->app->status) }}">{{ $item->app->name ?? 'N/A' }}</td>
-                                    <td title="{{ number_format($raw_price) . $currency }}"><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur px-3">{{ $item->key }}</span></td>
+                                    <td title="{{ number_format($raw_price) . $currency }}"><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur px-3 copy-trigger" data-copy="{{ $item->key }}">{{ $item->key }}</span></td>
                                     <td><span class="align-middle badge fw-normal text-white bg-dark fs-6">{{ KeyController::DevicesHooked($item->devices) }}/{{ $item->max_devices ?? 'N/A' }}</span></td>
                                     <td class="text-{{ KeyController::RemainingDaysColor(KeyController::RemainingDays($item->expire_date)) }}">{{ KeyController::RemainingDays($item->expire_date) }}/{{ $item->duration ?? 'N/A' }} Days</td>
                                     <td><i class="align-middle badge fw-normal text-dark fs-6">{{ Controller::timeElapsed($item->created_at) ?? 'N/A' }}</i></td>
@@ -96,6 +96,37 @@
     </div>
 
     <script>
+        async function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return 0;
+                } catch (e) {
+                    return 1;
+                }
+            }
+
+            let exitCode = 3;
+
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+
+            try {
+                if (document.execCommand("copy")) {
+                    exitCode = 0;
+                } else {
+                    exitCode = 2;
+                }
+            } catch (e) {
+                exitCode = 2;
+            }
+
+            document.body.removeChild(temp);
+            return exitCode;
+        }
+
         $(document).ready(function() {
             $('#datatable').DataTable({
                 pageLength: 10,
@@ -139,6 +170,38 @@
 
                         window.location.href = `/keys/resetApiKey/${id}`;
                     }
+                });
+            });
+
+            $('.copy-trigger').click(async function() {
+                const copy = $(this).data('copy');
+
+                const code = await copyToClipboard(copy);
+
+                let message = "";
+                let icon = "error";
+
+                switch (code) {
+                    case 0:
+                        message = `<b>Key</b> ${copy} <b>Successfully Copied</b>`;
+                        icon = "success";
+                        break;
+                    case 1:
+                        message = "Clipboard API failed.";
+                        break;
+                    case 2:
+                        message = "Fallback copy failed.";
+                        break;
+                    case 3:
+                        message = "Clipboard API not available (HTTP or insecure context).";
+                        break;
+                }
+
+                Swal.fire({
+                    title: icon === "success" ? "Success" : "Failed",
+                    html: message,
+                    icon: icon,
+                    showConfirmButton: true,
                 });
             });
         });

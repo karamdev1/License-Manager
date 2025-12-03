@@ -34,30 +34,24 @@ class DashController extends Controller
         $errorMessage = Config::get('messages.error.validation');
         $reffs = Reff::get();
 
-        if (auth()->user()->permissions == "Owner") {
-            return view('Home.manage_reff', compact('reffs'));
-        }
-
-        return back()->withErrors(['name' => str_replace(':info', 'Error Code 201, Access Forbidden', $errorMessage),])->onlyInput('name');
+        parent::require_ownership();
+        
+        return view('Home.manage_reff', compact('reffs'));
     }
 
     public function managereferrablegenerate() {
         $errorMessage = Config::get('messages.error.validation');
 
-        if (auth()->user()->permissions == "Owner") {
-            return view('Home.generate_reff');
-        }
+        parent::require_ownership();
 
-        return back()->withErrors(['name' => str_replace(':info', 'Error Code 201, Access Forbidden', $errorMessage),])->onlyInput('name');
+        return view('Home.generate_reff');
     }
 
     public function managereferrablegenerate_action(Request $request) {
         $successMessage = Config::get('messages.success.created');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (!auth()->user()->permissions == "Owner") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 201, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership();
 
         $request->validate([
             'status'   => 'required|in:Active,Inactive',
@@ -89,7 +83,7 @@ class DashController extends Controller
                 'registrar'   => auth()->user()->user_id,
             ]);
 
-            return redirect()->route('admin.referrable.generate')->with('msgSuccess', str_replace(':flag', "Reff " . $code, $successMessage));
+            return redirect()->route('admin.referrable.generate')->with('msgSuccess', str_replace(':flag', "<b>Reff</b> " . $code, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
@@ -99,24 +93,20 @@ class DashController extends Controller
         $errorMessage = Config::get('messages.error.validation');
         $reff = Reff::where('edit_id', $id)->first();
 
+        parent::require_ownership();
+
         if (empty($reff)) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
 
-        if (auth()->user()->permissions == "Owner") {
-            return view('Home.edit_reff', compact('reff'));
-        }
-
-        return back()->withErrors(['name' => str_replace(':info', 'Error Code 201, Access Forbidden', $errorMessage),])->onlyInput('name');
+        return view('Home.edit_reff', compact('reff'));
     }
 
     public function managereferrableedit_action(Request $request) {
         $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (!auth()->user()->permissions == "Owner") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 201, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership();
 
         $request->validate([
             'edit_id'  => 'required|string|min:4|max:36|exists:referrable_codes,edit_id',
@@ -154,7 +144,7 @@ class DashController extends Controller
                 'status' => $request->input('status'),
             ]);
 
-            return redirect()->route('admin.referrable.edit', $request->input('edit_id'))->with('msgSuccess', str_replace(':flag', "Reff " . $code, $successMessage));
+            return redirect()->route('admin.referrable.edit', $request->input('edit_id'))->with('msgSuccess', str_replace(':flag', "<b>Reff</b> " . $code, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
@@ -164,9 +154,7 @@ class DashController extends Controller
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (!auth()->user()->permissions == "Owner") {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 201, Access Forbidden', $errorMessage),])->onlyInput('name');
-        }
+        parent::require_ownership();
 
         $request->validate([
             'edit_id'  => 'required|string|min:4|max:36|exists:referrable_codes,edit_id',
@@ -183,7 +171,7 @@ class DashController extends Controller
         try {
             $reff->delete();
 
-            return redirect()->route('admin.referrable')->with('msgSuccess', str_replace(':flag', "Reff " . $code, $successMessage));
+            return redirect()->route('admin.referrable')->with('msgSuccess', str_replace(':flag', "<b>Reff</b> " . $code, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }

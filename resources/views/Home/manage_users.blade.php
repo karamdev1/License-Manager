@@ -50,7 +50,7 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td class="text-{{ Controller::statusColor($item->status) }}">{{ $item->name }}</td>
-                                    <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur">{{ $item->username }}</span></td>
+                                    <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur copy-trigger" data-copy="{{ $item->username }}">{{ $item->username }}</span></td>
                                     <td class="text-{{ $saldo[1] }}">{{ $saldo[0] }}</td>
                                     <td class="text-{{ Controller::permissionColor($item->role) }}">{{ $item->role }}</td>
                                     <td class="text-{{ $reff_status }}">{{ $reff_code }}</td>
@@ -87,6 +87,37 @@
     </div>
 
     <script>
+        async function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return 0;
+                } catch (e) {
+                    return 1;
+                }
+            }
+
+            let exitCode = 3;
+
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+
+            try {
+                if (document.execCommand("copy")) {
+                    exitCode = 0;
+                } else {
+                    exitCode = 2;
+                }
+            } catch (e) {
+                exitCode = 2;
+            }
+
+            document.body.removeChild(temp);
+            return exitCode;
+        }
+
         $(document).ready(function() {
             $('#datatable').DataTable({
                 pageLength: 10,
@@ -108,6 +139,38 @@
                     $(".Blur").addClass("blur");
                     $("#blur-out").html(`<i class="bi bi-eye-slash"></i>`);
                 }
+            });
+
+            $('.copy-trigger').click(async function() {
+                const copy = $(this).data('copy');
+
+                const code = await copyToClipboard(copy);
+
+                let message = "";
+                let icon = "error";
+
+                switch (code) {
+                    case 0:
+                        message = `<b>User</b> ${copy} <b>Successfully Copied</b>`;
+                        icon = "success";
+                        break;
+                    case 1:
+                        message = "Clipboard API failed.";
+                        break;
+                    case 2:
+                        message = "Fallback copy failed.";
+                        break;
+                    case 3:
+                        message = "Clipboard API not available (HTTP or insecure context).";
+                        break;
+                }
+
+                Swal.fire({
+                    title: icon === "success" ? "Success" : "Failed",
+                    html: message,
+                    icon: icon,
+                    showConfirmButton: true,
+                });
             });
         });
     </script>

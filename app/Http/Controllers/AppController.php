@@ -44,7 +44,7 @@ class AppController extends Controller
                 'registrar'  => auth()->user()->user_id,
             ]);
 
-            return redirect()->route('apps.generate')->with('msgSuccess', str_replace(':flag', "App " . $request->input('name'), $successMessage));
+            return redirect()->route('apps.generate')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $request->input('name'), $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }
@@ -106,7 +106,7 @@ class AppController extends Controller
                 'status'      => $request->input('status'),
             ]);
 
-            return redirect()->route('apps.edit', $request->input('edit_id'))->with('msgSuccess', str_replace(':flag', "App " . $request->input('name'), $successMessage));
+            return redirect()->route('apps.edit', $request->input('edit_id'))->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $request->input('name'), $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }
@@ -127,7 +127,7 @@ class AppController extends Controller
             $name = $app->name;
             $app->delete();
 
-            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "App " . $name, $successMessage));
+            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }
@@ -148,7 +148,7 @@ class AppController extends Controller
             $name = $app->name;
             $app->keys()->delete();
 
-            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "App " . $name . "'s Keys", $successMessage));
+            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name . "<b>'s Keys</b>", $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }
@@ -165,9 +165,9 @@ class AppController extends Controller
         try {
             $app = App::where('edit_id', $request->input('edit_id'))->firstOrFail();
             $name = $app->name;
-            $app->keys()->where('created_by', auth()->user()->user_id)->delete();
+            $app->keys()->where('registrar', auth()->user()->user_id)->delete();
 
-            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "App " . $name . "'s Keys", $successMessage));
+            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name . "<b>'s Keys</b>", $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }

@@ -26,7 +26,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-outline-danger" id="usernameUpdateBtn">Change Username</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="usernameUpdateBtn">Change Username</button>
                                 </div>
                             </form>
                         </div>
@@ -53,7 +53,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-outline-dark" id="nameUpdateBtn">Change Name</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="nameUpdateBtn">Change Name</button>
                                 </div>
                             </form>
                         </div>
@@ -85,7 +85,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-outline-danger" id="passwordUpdateBtn">Change Password</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="passwordUpdateBtn">Change Password</button>
                                 </div>
                             </form>
                         </div>

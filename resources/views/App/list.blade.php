@@ -7,7 +7,7 @@
 @endphp
 
 @section('content')
-    <div class="col-lg-10">
+    <div class="col-lg-11">
         @include('Layout.msgStatus')
         <div class="card shadow-sm">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
@@ -59,11 +59,15 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 px-3">{{ $item->name }}</span></td>
-                                    <td>{{ $price . $currency }}</td>
+                                    <td title="{{ number_format($raw_price) }}">{{ $price . $currency }}</td>
                                     <td>{{ number_format($keysCount) }} Key</td>
                                     <td><i class="align-middle badge fw-normal text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
                                     <td>{{ Controller::userUsername($item->registrar) }}</td>
                                     <td>
+                                        <button type="button" class="btn btn-outline-dark btn-sm copy-trigger" data-name="{{ $item->name }}" data-copy="{{ $item->app_id }}">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+
                                         <a href={{ route('apps.edit', ['id' => $item->edit_id]) }} class="btn btn-outline-dark btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
@@ -86,6 +90,37 @@
     </div>
 
     <script>
+        async function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return 0;
+                } catch (e) {
+                    return 1;
+                }
+            }
+
+            let exitCode = 3;
+
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+
+            try {
+                if (document.execCommand("copy")) {
+                    exitCode = 0;
+                } else {
+                    exitCode = 2;
+                }
+            } catch (e) {
+                exitCode = 2;
+            }
+
+            document.body.removeChild(temp);
+            return exitCode;
+        }
+
         $(document).ready(function() {
             $('#datatable').DataTable({
                 pageLength: 10,
@@ -97,6 +132,39 @@
                     { targets: [0, 1, 2, 4], searchable: true },
                     { orderable: false, targets: -1 }
                 ]
+            });
+
+            $('.copy-trigger').click(async function() {
+                const copy = $(this).data('copy');
+                const name = $(this).data('name');
+
+                const code = await copyToClipboard(copy);
+
+                let message = "";
+                let icon = "error";
+
+                switch (code) {
+                    case 0:
+                        message = `<b>App</b> ${name} <b>App ID Successfully Copied</b>`;
+                        icon = "success";
+                        break;
+                    case 1:
+                        message = "Clipboard API failed.";
+                        break;
+                    case 2:
+                        message = "Fallback copy failed.";
+                        break;
+                    case 3:
+                        message = "Clipboard API not available (HTTP or insecure context).";
+                        break;
+                }
+
+                Swal.fire({
+                    title: icon === "success" ? "Success" : "Failed",
+                    html: message,
+                    icon: icon,
+                    showConfirmButton: true,
+                });
             });
         });
     </script>

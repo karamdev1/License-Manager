@@ -9,7 +9,7 @@
 @section('content')
     <div class="col-lg-12">
         @include('Layout.msgStatus')
-        <div class="card shadow-sm mb-5">
+        <div class="card shadow-sm">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 Users Registration
                 <div class="d-flex align-items-center gap-2">
@@ -20,17 +20,17 @@
             <div class="card-body">
                 <div class="table-responsive">
                     @if ($histories->isNotEmpty())
-                        <table id="datatable" class="table table-sm table-bordered table-hover text-center" style="width:100%">
+                        <table id="datatable" class="table table-bordered table-hover text-center dataTable no-footer">
                             <thead>
                                 <tr>
-                                    <th><span class="align-middle badge text-dark fs-6">#</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">User ID</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">Username</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">Status</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">Type</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">IP Address</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">User Agent</span></th>
-                                    <th><span class="align-middle badge text-dark fs-6">Created At</span></th>
+                                    <th>#</th>
+                                    <th>User ID</th>
+                                    <th>Username</th>
+                                    <th>Status</th>
+                                    <th>Type</th>
+                                    <th>IP Address</th>
+                                    <th>User Agent</th>
+                                    <th>Created At</th>
                                 </tr>
                             </thead>
                                 @foreach ($histories as $item)
@@ -42,14 +42,14 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ $item->id }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ $user_id }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6 blur Blur">{{ $item->username }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ $item->status }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ $item->type }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ $item->ip_address }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ Controller::censorText($item->user_agent, 10) }}</span></td>
-                                        <td><span class="align-middle badge text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</span></td>
+                                        <td>{{ $item->id }}</td>
+                                        <td>{{ $user_id }}</td>
+                                        <td><span class="align-middle badge fw-normal text-dark fs-6 blur Blur">{{ $item->username }}</span></td>
+                                        <td>{{ $item->status }}</td>
+                                        <td>{{ $item->type }}</td>
+                                        <td>{{ $item->ip_address }}</td>
+                                        <td>{{ Controller::censorText($item->user_agent, 10) }}</td>
+                                        <td>{{ Controller::timeElapsed($item->created_at) }}</td>
                                     </tr>
                                 @endforeach
                         </table>
