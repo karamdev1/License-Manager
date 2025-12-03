@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use App\Models\Key;
+use App\Models\License;
 use App\Models\App;
 use App\Models\User;
 use App\Models\UserHistory;
@@ -21,13 +21,13 @@ class DashController extends Controller
     }
 
     public function dashboard() {
-        $keys = Key::orderBy('created_at', 'desc')->limit(10)->get();
+        $licenses = License::orderBy('created_at', 'desc')->limit(10)->get();
         $currency = Config::get('messages.settings.currency');
         $loginTime = session('login_time');
         $sessionLifetime = session('session_lifetime');
         $expiryTime = $loginTime ? $loginTime->copy()->addMinutes($sessionLifetime) : null;
 
-        return view('Home.dashboard', compact('keys', 'currency', 'expiryTime', 'loginTime', 'sessionLifetime'));
+        return view('Home.dashboard', compact('licenses', 'currency', 'expiryTime', 'loginTime', 'sessionLifetime'));
     }
 
     public function managereferrable() {

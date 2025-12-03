@@ -13,17 +13,17 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-header text-white bg-dark">
-                        Keys Registration History
+                        Licenses Registration History
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered table-hover text-center">
-                                @if ($keys->isNotEmpty())
-                                    @foreach ($keys as $item)
+                                @if ($licenses->isNotEmpty())
+                                    @foreach ($licenses as $item)
                                         <tbody>
                                             <tr>
                                                 <td><span class="align-middle badge text-dark">#{{ $item->id }}</span></td>
-                                                <td><span class="align-middle badge text-dark">{{ Controller::censorText($item->key) }}</span></td>
+                                                <td><span class="align-middle badge text-dark">{{ Controller::censorText($item->license) }}</span></td>
                                                 <td><span class="align-middle badge text-dark">{{ $item->duration }} Days</span></td>
                                                 <td><span class="align-middle badge text-primary">{{ Controller::userUsername($item->registrar) }}</span></td>
                                                 <td><span class="align-middle badge text-primary">{{ $item->max_devices }} Devices</span></td>
@@ -34,7 +34,7 @@
                                 @else
                                     <thead>
                                         <tr>
-                                            <th><span class="align-middle badge text-dark fw-normal fs-6">There are no <strong>keys</strong> to show</span></th>
+                                            <th><span class="align-middle badge text-dark fw-normal fs-6">There are no <strong>licenses</strong> to show</span></th>
                                         </tr>
                                     </thead>
                                 @endif

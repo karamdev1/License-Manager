@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Models\App;
-use App\Models\KeyHistory;
+use App\Models\LicenseHistory;
 
-class Key extends Model
+class License extends Model
 {
-    protected $table = 'key_codes';
+    protected $table = 'licenses';
 
     protected $fillable = [
         'app_id',
         'owner',
-        'key',
+        'license',
         'status',
         'max_devices',
         'devices',
@@ -32,14 +32,14 @@ class Key extends Model
 
     protected static function booted()
     {
-        static::creating(function ($key) {
-            if (empty($key->edit_id)) {
-                $key->edit_id = (string) Str::uuid();
+        static::creating(function ($license) {
+            if (empty($license->edit_id)) {
+                $license->edit_id = (string) Str::uuid();
             }
         });
 
-        static::deleting(function ($key) {
-            $key->histories()->delete();
+        static::deleting(function ($license) {
+            $license->histories()->delete();
         });
     }
     
@@ -50,6 +50,6 @@ class Key extends Model
 
     public function histories()
     {
-        return $this->hasMany(KeyHistory::class, 'key_id', 'edit_id');
+        return $this->hasMany(LicenseHistory::class, 'license_id', 'edit_id');
     }
 }

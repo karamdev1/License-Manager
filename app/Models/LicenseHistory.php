@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class KeyHistory extends Model
+class LicenseHistory extends Model
 {
-    protected $table = 'key_history';
+    protected $table = 'licenses_history';
 
     protected $fillable = [
-        'key_id',
+        'license_id',
         'type',
         'user',
         'created_at',

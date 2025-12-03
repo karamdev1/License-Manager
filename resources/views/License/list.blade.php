@@ -1,9 +1,9 @@
 @extends('Layout.app')
 
-@section('title', 'Keys')
+@section('title', 'Licenses')
 
 @php
-    use App\Http\Controllers\KeyController;
+    use App\Http\Controllers\LicenseController;
     use App\Http\Controllers\Controller;
 @endphp
 
@@ -12,22 +12,22 @@
         @include('Layout.msgStatus')
         <div class="card shadow-sm">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                Keys Registered
+                Licenses Registered
                 <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('keys.generate') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-key"></i> KEY</a>
+                    <a href="{{ route('licenses.generate') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-key"></i> LICENSE</a>
                     <button class="btn btn-secondary btn-sm ms-1" id="blur-out" data-bs-toggle="tooltip" data-bs-placement="top" title="Eye Protect"><i class="bi bi-eye-slash"></i></button>
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    @if ($keys->isNotEmpty())
+                    @if ($licenses->isNotEmpty())
                         <table id="datatable" class="table table-bordered table-hover text-center dataTable no-footer" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Owner</th>
                                     <th>App</th>
-                                    <th>User Keys</th>
+                                    <th>User Licenses</th>
                                     <th>Devices</th>
                                     <th>Duration</th>
                                     <th>Created</th>
@@ -36,7 +36,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            @foreach ($keys as $item)
+                            @foreach ($licenses as $item)
                                 @php
                                     if ($item->owner == NULL) {
                                         $owner = "N/A";
@@ -44,8 +44,8 @@
                                         $owner = $item->owner;
                                     }
 
-                                    $price = number_format(KeyController::keyPriceCalculator($item->app->price, $item->max_devices, $item->duration));
-                                    $raw_price = KeyController::keyPriceCalculator($item->app->price, $item->max_devices, $item->duration);
+                                    $price = number_format(LicenseController::licensePriceCalculator($item->app->price, $item->max_devices, $item->duration));
+                                    $raw_price = LicenseController::licensePriceCalculator($item->app->price, $item->max_devices, $item->duration);
 
                                     if ($raw_price < 10000) {
                                         $price = $price;
@@ -65,9 +65,9 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $owner }}</td>
                                     <td>{{ $item->app->name ?? 'N/A' }}</td>
-                                    <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur px-3 copy-trigger" data-copy="{{ $item->key }}">{{ $item->key }}</span></td>
-                                    <td><span class="align-middle badge fw-normal text-white bg-dark fs-6">{{ KeyController::DevicesHooked($item->devices) }}/{{ $item->max_devices ?? 'N/A' }}</span></td>
-                                    <td class="text-{{ KeyController::RemainingDaysColor(KeyController::RemainingDays($item->expire_date)) }}">{{ KeyController::RemainingDays($item->expire_date) }}/{{ $item->duration ?? 'N/A' }} Days</td>
+                                    <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur px-3 copy-trigger" data-copy="{{ $item->license }}">{{ $item->license }}</span></td>
+                                    <td><span class="align-middle badge fw-normal text-white bg-dark fs-6">{{ LicenseController::DevicesHooked($item->devices) }}/{{ $item->max_devices ?? 'N/A' }}</span></td>
+                                    <td class="text-{{ LicenseController::RemainingDaysColor(LicenseController::RemainingDays($item->expire_date)) }}">{{ LicenseController::RemainingDays($item->expire_date) }}/{{ $item->duration ?? 'N/A' }} Days</td>
                                     <td><i class="align-middle badge fw-normal text-dark fs-6">{{ Controller::timeElapsed($item->created_at) ?? 'N/A' }}</i></td>
                                     <td>{{ Controller::userUsername($item->registrar) }}</td>
                                     <td title="{{ $raw_price . $currency }}">{{ $price . $currency }}</td>
@@ -76,7 +76,7 @@
                                             <i class="bi bi-bootstrap-reboot"></i>
                                         </button>
 
-                                        <a href={{ route('keys.edit', ['id' => $item->edit_id]) }} class="btn btn-outline-dark btn-sm">
+                                        <a href={{ route('licenses.edit', ['id' => $item->edit_id]) }} class="btn btn-outline-dark btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                     </td>
@@ -87,7 +87,7 @@
                         <table class="table table-sm table-bordered table-hover text-center">
                             <thead>
                                 <tr>
-                                    <th colspan="10"><span class="align-middle badge text-dark fs-6 fw-normal">There are no <strong>keys</strong> to show</span></th>
+                                    <th colspan="10"><span class="align-middle badge text-dark fs-6 fw-normal">There are no <strong>licenses</strong> to show</span></th>
                                 </tr>
                             </thead>
                         </table>
@@ -158,7 +158,7 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Are you sure you want to reset the key?",
+                    text: "Are you sure you want to reset the license?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -171,7 +171,7 @@
                             title: 'Please wait...'
                         })
 
-                        window.location.href = `/keys/resetApiKey/${id}`;
+                        window.location.href = `/licenses/resetApiKey/${id}`;
                     }
                 });
             });
@@ -186,7 +186,7 @@
 
                 switch (code) {
                     case 0:
-                        message = `<b>Key</b> ${copy} <b>Successfully Copied</b>`;
+                        message = `<b>License</b> ${copy} <b>Successfully Copied</b>`;
                         icon = "success";
                         break;
                     case 1:

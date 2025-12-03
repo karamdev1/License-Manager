@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use App\Models\Key;
+use App\Models\License;
 use App\Models\AppHistory;
 
 class App extends Model
@@ -39,14 +39,14 @@ class App extends Model
         });
 
         static::deleting(function ($app) {
-            $app->keys()->delete();
+            $app->licenses()->delete();
             $app->histories()->delete();
         });
     }
 
-    public function keys()
+    public function licenses()
     {
-        return $this->hasMany(Key::class, 'app_id', 'app_id');
+        return $this->hasMany(License::class, 'app_id', 'app_id');
     }
 
     public function histories()

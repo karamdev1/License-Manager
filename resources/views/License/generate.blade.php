@@ -1,6 +1,6 @@
 @extends('Layout.app')
 
-@section('title', 'Keys')
+@section('title', 'Licenses')
 
 @php
     use App\Http\Controllers\Controller;
@@ -9,12 +9,12 @@
 @section('content')
     <div class="col-lg-6">
         @include('Layout.msgStatus')
-        <div class="card mb-5">
+        <div class="card shadow-sm mb-5">
             <div class="card-header text-center text-white bg-dark">
-                Keys Registering
+                License Registering
             </div>
             <div class="card-body">
-                <form action={{ route('keys.generate.post') }} method="post" id="generateForm">
+                <form action={{ route('licenses.generate.post') }} method="post" id="generateForm">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">
@@ -97,7 +97,7 @@
             </div>
         </div>
         <p class="text-muted text-center">
-            <a href="{{ route('keys') }}" class="py-1 px-2 bg-white text-muted"><small><i class="bi bi-arrow-left"></i> Back to Keys</small></a>
+            <a href="{{ route('licenses') }}" class="py-1 px-2 bg-white text-muted"><small><i class="bi bi-arrow-left"></i> Back to Licenses</small></a>
         </p>
     </div>
 
@@ -105,7 +105,7 @@
         document.getElementById('generateBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Are you sure you want to register a key?",
+                text: "Are you sure you want to register a license?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',

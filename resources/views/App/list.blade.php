@@ -25,7 +25,7 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Price</th>
-                                    <th>Key Count</th>
+                                    <th>Licenses Count</th>
                                     <th>Created</th>
                                     <th>Registrar</th>
                                     <th>Action</th>
@@ -50,17 +50,17 @@
                                         $price = "N/A";
                                     }
 
-                                    $keysCount = 0;
+                                    $licensesCount = 0;
 
-                                    foreach($item->keys as $key) {
-                                        $keysCount += 1;
+                                    foreach($item->licenses as $license) {
+                                        $licensesCount += 1;
                                     }
                                 @endphp
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 px-3">{{ $item->name }}</span></td>
                                     <td title="{{ number_format($raw_price) }}">{{ $price . $currency }}</td>
-                                    <td>{{ number_format($keysCount) }} Key</td>
+                                    <td>{{ number_format($licensesCount) }} License</td>
                                     <td><i class="align-middle badge fw-normal text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
                                     <td>{{ Controller::userUsername($item->registrar) }}</td>
                                     <td>

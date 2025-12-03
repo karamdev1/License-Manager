@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use App\Models\Key;
-use App\Models\KeyHistory;
+use App\Models\License;
+use App\Models\LicenseHistory;
 use App\Models\App;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 
-class KeyController extends Controller
+class LicenseController extends Controller
 {
-    static function keyPriceCalculator($price, $devices, $duration) {
+    static function licensePriceCalculator($price, $devices, $duration) {
         $price = (int) $price;
         $devices = (int) $devices;
         $duration = (int) $duration;
@@ -68,25 +68,25 @@ class KeyController extends Controller
         return $count;
     }
 
-    public function keylist(Request $request) {
+    public function licenselist(Request $request) {
         if (parent::require_ownership(1, 0)) {
-            $keys = Key::get();
+            $licenses = License::get();
         } else {
-            $keys = Key::where('registrar', auth()->user()->user_id)->get();
+            $licenses = License::where('registrar', auth()->user()->user_id)->get();
         }
         $currency = Config::get('messages.settings.currency');
 
-        return view('Key.list', compact('keys', 'currency'));
+        return view('License.list', compact('licenses', 'currency'));
     }
 
-    public function keygenerate() {
+    public function licensegenerate() {
         $apps = App::where('status', 'Active')->orderBy('created_at', 'desc')->get();
         $currency = Config::get('messages.settings.currency');
 
-        return view('Key.generate', compact('apps', 'currency'));
+        return view('License.generate', compact('apps', 'currency'));
     }
 
-    public function keygenerate_action(Request $request) {
+    public function licensegenerate_action(Request $request) {
         $successMessage = Config::get('messages.success.created');
         $errorMessage = Config::get('messages.error.validation');
 
@@ -99,9 +99,9 @@ class KeyController extends Controller
         ]);
 
         do {
-            $key = parent::randomString(16);
-            $keyExists = Key::where('key', $key)->exists();
-        } while ($keyExists);
+            $license = parent::randomString(16);
+            $licenseExists = License::where('license', $license)->exists();
+        } while ($licenseExists);
 
         $now = Carbon::now();
         $expire_date = $now->addDays((int) $request->input('duration'));
@@ -122,27 +122,27 @@ class KeyController extends Controller
         }
 
         try {
-            Key::create([
+            License::create([
                 'app_id'      => $request->input('app'),
                 'owner'       => $owner,
                 'duration'    => $duration,
                 'expire_date' => $expire_date,
-                'key'         => $key,
+                'license'     => $license,
                 'status'      => $status,
                 'max_devices' => $devices,
                 'registrar'   => auth()->user()->user_id,
             ]);
 
-            $keys = Key::where('key', $key)->where('duration', $duration)->where('max_devices', $devices)->first();
+            $licenses = License::where('license', $license)->where('duration', $duration)->where('max_devices', $devices)->first();
 
-            KeyHistory::create([
-                'key_id' => $keys->edit_id,
+            LicenseHistory::create([
+                'license_id' => $licenses->edit_id,
                 'user'   => auth()->user()->user_id,
                 'type'   => 'Create',
             ]);
 
-            $msg = str_replace(':flag', "<b>Key</b> " . $key, $successMessage);
-            return redirect()->route('keys.generate')->with('msgSuccess',
+            $msg = str_replace(':flag', "<b>License</b> " . $license, $successMessage);
+            return redirect()->route('licenses.generate')->with('msgSuccess',
                 "
                 $msg <br>
                 <b>Saldo: $saldo_ext</b>
@@ -153,19 +153,19 @@ class KeyController extends Controller
         }
     }
 
-    public function keyedit($id) {
+    public function licenseedit($id) {
         $errorMessage = Config::get('messages.error.validation');
 
         if (parent::require_ownership(1, 0)) {
-            $key = Key::where('edit_id', $id)->first();
+            $license = License::where('edit_id', $id)->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
             }
         } else {
-            $key = Key::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
+            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
             }
         }
@@ -173,16 +173,16 @@ class KeyController extends Controller
         $apps = App::orderBy('created_at', 'desc')->get();
         $currency = Config::get('messages.settings.currency');
 
-        return view('Key.edit', compact('key', 'apps', 'currency'));
+        return view('License.edit', compact('license', 'apps', 'currency'));
     }
 
-    public function keyedit_action(Request $request) {
+    public function licenseedit_action(Request $request) {
         $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
 
         $request->validate([
             'edit_id'  => 'required|string|min:6|max:36',
-            'key'      => 'max:50',
+            'license'  => 'max:50',
             'app'      => 'required|string|exists:apps,app_id|min:6|max:36',
             'owner'    => 'max:50',
             'duration' => 'required|integer',
@@ -191,34 +191,34 @@ class KeyController extends Controller
         ]);
 
         if (parent::require_ownership(1, 0)) {
-            $key = Key::where('edit_id', $request->input('edit_id'))->first();
+            $license = License::where('edit_id', $request->input('edit_id'))->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
             }
         } else {
-            $key = Key::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
+            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
             }
         }
 
-        if ($request->input('key') == '') {
+        if ($request->input('license') == '') {
             do {
-                $keyName = parent::randomString(16);
-                $keyExists = Key::where('key', $keyName)->exists();
-            } while ($keyExists);
+                $licenseName = parent::randomString(16);
+                $licenseExists = License::where('license', $keyName)->exists();
+            } while ($licenseExists);
         } else {
-            $keyName = $request->input('key');
+            $licenseName = $request->input('license');
 
             $request->validate([
-                'key' => [
+                'license' => [
                     'required',
                     'string',
                     'min:6',
                     'max:50',
-                    Rule::unique('key_codes', 'key')->ignore($key->edit_id, 'edit_id')
+                    Rule::unique('licenses', 'license')->ignore($license->edit_id, 'edit_id')
                 ],
             ]);
         }
@@ -228,38 +228,38 @@ class KeyController extends Controller
 
         try {
             if ($request->has('duration-update')) {
-                $key->update([
+                $license->update([
                     'app_id'      => $request->input('app'),
                     'owner'       => $request->input('owner') ?? "",
                     'duration'    => $request->input('duration'),
                     'expire_date' => $expire_date,
-                    'key'         => $keyName,
+                    'license'     => $licenseName,
                     'status'      => $request->input('status'),
                     'max_devices' => $request->input('devices'),
                 ]);
             } else {
-                $key->update([
+                $license->update([
                     'app_id'      => $request->input('app'),
                     'owner'       => $request->input('owner') ?? "",
-                    'key'         => $keyName,
+                    'license'     => $licenseName,
                     'status'      => $request->input('status'),
                     'max_devices' => $request->input('devices'),
                 ]);
             }
 
-            KeyHistory::create([
-                'key_id' => $key->edit_id,
-                'user'   => auth()->user()->user_id,
-                'type'   => 'Update',
+            LicenseHistory::create([
+                'license_id' => $license->edit_id,
+                'user'       => auth()->user()->user_id,
+                'type'       => 'Update',
             ]);
 
-            return redirect()->route('keys')->with('msgSuccess', str_replace(':flag', "<b>Key</b> " . $keyName, $successMessage));
+            return redirect()->route('licenses')->with('msgSuccess', str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
         }
     }
 
-    public function keydelete(Request $request) {
+    public function licensedelete(Request $request) {
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
@@ -268,56 +268,56 @@ class KeyController extends Controller
         ]);
 
         if (parent::require_ownership(1, 0)) {
-            $key = Key::where('edit_id', $request->input('edit_id'))->first();
+            $license = License::where('edit_id', $request->input('edit_id'))->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
             }
         } else {
-            $key = Key::where('registrar', auth()->user()->user_id)->where('edit_id', $request->input('edit_id'))->first();
+            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $request->input('edit_id'))->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
             }
         }
 
-        $keyName = $key->key;
+        $licenseName = $license->license;
 
         try {
-            $key->delete();
+            $license->delete();
 
-            return redirect()->route('keys')->with('msgSuccess', str_replace(':flag', "<b>Key</b> " . $keyName, $successMessage));
+            return redirect()->route('licenses')->with('msgSuccess', str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
     }
 
-    public function keyresetapi($id) {
+    public function licenseresetapi($id) {
         $successMessage = Config::get('messages.success.reseted');
         $errorMessage = Config::get('messages.error.validation');
 
         if (parent::require_ownership(1, 0)) {
-            $key = Key::where('edit_id', $id)->first();
+            $license = License::where('edit_id', $id)->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
             }
         } else {
-            $key = Key::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
+            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
 
-            if (empty($key)) {
+            if (empty($license)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
             }
         }
 
-        $keyName = $key->key;
+        $licenseName = $license->license;
 
         try {
-            $key->update([
+            $license->update([
                 'devices' => "",
             ]);
 
-            return redirect()->route('keys')->with('msgSuccess', str_replace(':flag', "<b>Key</b> " . $keyName, $successMessage));
+            return redirect()->route('licenses')->with('msgSuccess', str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }

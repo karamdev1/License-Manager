@@ -19,12 +19,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('key_codes', function (Blueprint $table) {
+        Schema::create('licenses', function (Blueprint $table) {
             $table->id();
             $table->uuid('edit_id');
             $table->string('app_id');
             $table->string('owner');
-            $table->string('key')->unique();
+            $table->string('license')->unique();
             $table->biginteger('max_devices')->default(1);
             $table->mediumtext('devices')->nullable();
             $table->biginteger('duration')->default(30);
@@ -34,9 +34,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('key_history', function(Blueprint $table) {
+        Schema::create('licenses_history', function(Blueprint $table) {
             $table->id();
-            $table->string('key_id');
+            $table->string('license_id');
             $table->string('user');
             $table->enum('type', ['Create', 'Update'])->default('Create');
             $table->timestamps();
@@ -55,7 +55,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('app_history');
         Schema::dropIfExists('apps');
-        Schema::dropIfExists('key_history');
-        Schema::dropIfExists('key_codes');
+        Schema::dropIfExists('licenses_history');
+        Schema::dropIfExists('licenses');
     }
 };

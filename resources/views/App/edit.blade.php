@@ -49,20 +49,20 @@
 
                         <button type="button" class="btn btn-outline-secondary mt-2" id="deleteBtn">Delete</button>
 
-                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteKeysBtn">Delete Keys</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteLicensesBtn">Delete Licenses</button>
                         
-                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteKeysMeBtn">Delete User Keys</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteLicensesMeBtn">Delete User Licenses</button>
                     </div>
                 </form>
                 <form action={{ route('apps.delete') }} method="post" id="deleteForm">
                     @csrf
                     <input type="hidden" name="edit_id" id="edit_id" required value="{{ $app->edit_id }}">
                 </form>
-                <form action={{ route('apps.delete.keys') }} method="post" id="deleteKeysForm">
+                <form action={{ route('apps.delete.licenses') }} method="post" id="deleteLicensesForm">
                     @csrf
                     <input type="hidden" name="edit_id" id="edit_id" required value="{{ $app->edit_id }}">
                 </form>
-                <form action={{ route('apps.delete.keys.me') }} method="post" id="deleteKeysMeForm">
+                <form action={{ route('apps.delete.licenses.me') }} method="post" id="deleteLicensesMeForm">
                     @csrf
                     <input type="hidden" name="edit_id" id="edit_id" required value="{{ $app->edit_id }}">
                 </form>
@@ -116,10 +116,10 @@
             });
         });
 
-        document.getElementById('deleteKeysBtn').addEventListener('click', function() {
+        document.getElementById('deleteLicensesBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Are you sure you want to delete all the keys from the app?",
+                text: "Are you sure you want to delete all the licenses from the app?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -132,15 +132,15 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('deleteKeysForm').submit();
+                    document.getElementById('deleteLicensesForm').submit();
                 }
             });
         });
 
-        document.getElementById('deleteKeysMeBtn').addEventListener('click', function() {
+        document.getElementById('deleteLicensesMeBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Are you sure you want to delete all your keys from the app?",
+                text: "Are you sure you want to delete all your licenses from the app?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -153,7 +153,7 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('deleteKeysMeForm').submit();
+                    document.getElementById('deleteLicensesMeForm').submit();
                 }
             });
         });

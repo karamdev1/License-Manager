@@ -1,6 +1,6 @@
 @extends('Layout.app')
 
-@section('title', 'Keys')
+@section('title', 'Licenses')
 
 @php
     use App\Http\Controllers\Controller;
@@ -11,25 +11,25 @@
         @include('Layout.msgStatus')
         <div class="card mb-5">
             <div class="card-header text-center text-white bg-dark">
-                Key Editing · {{ $key->key }}
+                License Editing · {{ $license->license }}
             </div>
             <div class="card-body">
-                <form action={{ route('keys.edit.post') }} method="post" id="updateForm">
+                <form action={{ route('licenses.edit.post') }} method="post" id="updateForm">
                     @csrf
-                    <input type="hidden" name="edit_id" id="edit_id" value="{{ $key->edit_id }}" required>
+                    <input type="hidden" name="edit_id" id="edit_id" value="{{ $license->edit_id }}" required>
 
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
-                                <label for="key" class="form-label">Key (Leave Empty For Random Key)</label>
-                                <input type="text" name="key" id="key" class="form-control" placeholder="Key" value="{{ $key->key }}">
+                                <label for="license" class="form-label">License (Leave Empty For Random)</label>
+                                <input type="text" name="license" id="license" class="form-control" placeholder="license" value="{{ $license->license }}">
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="devices" class="form-label">Max Devices</label>
-                                <input type="number" name="devices" id="devices" class="form-control" required placeholder="Max Devices" value="{{ $key->max_devices }}">
+                                <input type="number" name="devices" id="devices" class="form-control" required placeholder="Max Devices" value="{{ $license->max_devices }}">
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                                     <option value="">-- Select App --</option>
                                     @if ($apps)
                                         @foreach ($apps as $app)
-                                            <option value="{{ $app->app_id }}" @if ($app->app_id == $key->app_id) selected @endif>{{ $app->name }} - {{ number_format($app->price) . $currency }}</option>
+                                            <option value="{{ $app->app_id }}" @if ($app->app_id == $license->app_id) selected @endif>{{ $app->name }} - {{ number_format($app->price) . $currency }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -52,7 +52,7 @@
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="owner" class="form-label">Owner's Full Name</label>
-                                <input type="text" name="owner" id="owner" class="form-control" required placeholder="Owner's Full Name" value="{{ $key->owner }}">
+                                <input type="text" name="owner" id="owner" class="form-control" required placeholder="Owner's Full Name" value="{{ $license->owner }}">
                             </div>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                                 <label for="status" class="form-label">Status</label>
                                 <select name="status" id="status" class="form-control">
                                     <option value="">-- Select Status --</option>
-                                    <option value="Active" class="text-success" @if ($key->status == "Active") selected @endif>Active</option>
-                                    <option value="Inactive" class="text-danger" @if ($key->status == "Inactive") selected @endif>Inactive</option>
+                                    <option value="Active" class="text-success" @if ($license->status == "Active") selected @endif>Active</option>
+                                    <option value="Inactive" class="text-danger" @if ($license->status == "Inactive") selected @endif>Inactive</option>
                                 </select>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                                     <option value="">-- Select Duration --</option>
                                     @if(!empty($duration_list))
                                         @foreach($duration_list as $duration)
-                                            <option value="{{ $duration*30 }}" @if ($duration*30 == $key->duration) selected @endif>{{ $duration*30 }} Days, {{ $duration }} Months</option>
+                                            <option value="{{ $duration*30 }}" @if ($duration*30 == $license->duration) selected @endif>{{ $duration*30 }} Days, {{ $duration }} Months</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -104,14 +104,14 @@
                         <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete</button>
                     </div>
                 </form>
-                <form action="{{ route('keys.delete') }}" method="post" id="deleteForm">
+                <form action="{{ route('licenses.delete') }}" method="post" id="deleteForm">
                     @csrf
-                    <input type="hidden" name="edit_id" id="edit_id" value="{{ $key->edit_id }}">
+                    <input type="hidden" name="edit_id" id="edit_id" value="{{ $license->edit_id }}">
                 </form>
             </div>
         </div>
         <p class="text-muted text-center">
-            <a href="{{ route('keys') }}" class="py-1 px-2 bg-white text-muted"><small><i class="bi bi-arrow-left"></i> Back to Keys</small></a>
+            <a href="{{ route('licenses') }}" class="py-1 px-2 bg-white text-muted"><small><i class="bi bi-arrow-left"></i> Back to Licenses</small></a>
         </p>
     </div>
 
@@ -119,7 +119,7 @@
         document.getElementById('updateBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Are you sure you want to edit the key?",
+                text: "Are you sure you want to edit the license?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -140,7 +140,7 @@
         document.getElementById('deleteBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Are you sure you want to delete the key?",
+                text: "Are you sure you want to delete the license?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -173,7 +173,7 @@
             @endforeach
         };
 
-        function updateKeyGenerateEstimation() {
+        function updatelicenseGenerateEstimation() {
             const estimationElem = document.getElementById('estimation');
             if (!estimationElem) return;
 
@@ -199,10 +199,10 @@
             estimationElem.value = `${totalFormatted}{{ $currency }}`;
         }
 
-        document.getElementById('app').addEventListener('change', updateKeyGenerateEstimation);
-        document.getElementById('duration').addEventListener('change', updateKeyGenerateEstimation);
-        document.getElementById('devices').addEventListener('input', updateKeyGenerateEstimation);
+        document.getElementById('app').addEventListener('change', updatelicenseGenerateEstimation);
+        document.getElementById('duration').addEventListener('change', updatelicenseGenerateEstimation);
+        document.getElementById('devices').addEventListener('input', updatelicenseGenerateEstimation);
 
-        updateKeyGenerateEstimation();
+        updatelicenseGenerateEstimation();
     </script>
 @endsection

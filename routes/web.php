@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AppController;
-use App\Http\Controllers\KeyController;
+use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\UserController;
 
@@ -57,20 +57,18 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/apps/generate', [AppController::class, 'appgenerate'])->name('apps.generate');
     Route::post('/apps/update', [AppController::class, 'appedit_action'])->name('apps.edit.post');
     Route::post('/apps/delete', [AppController::class, 'appdelete'])->name('apps.delete');
-    Route::post('/apps/delete/keys', [AppController::class, 'appdeletekeys'])->name('apps.delete.keys');
-    Route::post('/apps/delete/keys/me', [AppController::class, 'appdeletekeysme'])->name('apps.delete.keys.me');
+    Route::post('/apps/delete/licenses', [AppController::class, 'appdeletelicenses'])->name('apps.delete.licenses');
+    Route::post('/apps/delete/licenses/me', [AppController::class, 'appdeletelicensesme'])->name('apps.delete.licenses.me');
     Route::post('/apps/generate', [AppController::class, 'appgenerate_action'])->name('apps.generate.post');
 
-    // * Keys
-    Route::get('/keys', [KeyController::class, 'keylist'])->name('keys');
-    Route::get('/keys/{id}', [KeyController::class, 'keyedit'])->where('id', '[0-9a-fA-F-]{36}')->name('keys.edit');
-    Route::get('/keys/resetApiKey/{id}', [KeyController::class, 'keyresetapi'])->where('id', '[0-9a-fA-F-]{36}')->name('keys.resetApiKey');
-    Route::get('/keys/generate', [KeyController::class, 'keygenerate'])->name('keys.generate');
-    Route::post('/keys/update', [KeyController::class, 'keyedit_action'])->name('keys.edit.post');
-    Route::post('/keys/delete', [KeyController::class, 'keydelete'])->name('keys.delete');
-    Route::post('/keys/history/delete', [KeyController::class, 'keyhistorydelete'])->name('keys.history.delete');
-    Route::post('/keys/history/delete/all', [KeyController::class, 'keyhistorydeleteall'])->name('keys.history.delete.all');
-    Route::post('/keys/generate', [KeyController::class, 'keygenerate_action'])->name('keys.generate.post');
+    // * Licenses
+    Route::get('/licenses', [LicenseController::class, 'licenselist'])->name('licenses');
+    Route::get('/licenses/{id}', [LicenseController::class, 'licenseedit'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.edit');
+    Route::get('/licenses/resetApiKey/{id}', [LicenseController::class, 'licenseresetapi'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.resetApiKey');
+    Route::get('/licenses/generate', [LicenseController::class, 'licensegenerate'])->name('licenses.generate');
+    Route::post('/licenses/update', [LicenseController::class, 'licenseedit_action'])->name('licenses.edit.post');
+    Route::post('/licenses/delete', [LicenseController::class, 'licensedelete'])->name('licenses.delete');
+    Route::post('/licenses/generate', [LicenseController::class, 'licensegenerate_action'])->name('licenses.generate.post');
 });
 
 // ! Fallback

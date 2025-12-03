@@ -1,15 +1,19 @@
 @auth
-    @if (Route::currentRouteName() === 'keys')
+    @if (Route::currentRouteName() === 'licenses')
         <div class="alert alert-primary fade show" role="alert">
-            <B>INFO</B> · Search specify key by their (id, owner, app, key, duration, devices, registrar or price).
+            <B>INFO</B> · Search specify licenses by their info.
         </div>
     @elseif (Route::currentRouteName() === 'apps')
         <div class="alert alert-primary fade show" role="alert">
-            <B>INFO</B> · Search specify app by their (id, name, price or registrar).
+            <B>INFO</B> · Search specify apps by their info.
         </div>
     @elseif (Route::currentRouteName() === 'admin.users')
         <div class="alert alert-primary fade show" role="alert">
-            <B>INFO</B> · Search specify users by their (id, name, username, role, reff or registrar).
+            <B>INFO</B> · Search specify users by their info.
+        </div>
+    @elseif (Route::currentRouteName() === 'admin.referrable')
+        <div class="alert alert-primary fade show" role="alert">
+            <B>INFO</B> · Search specify reffs by their info.
         </div>
     @else
         <div class="alert alert-secondary fade show" role="alert">

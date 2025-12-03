@@ -147,7 +147,7 @@ class AppController extends Controller
         }
     }
 
-    public function appdeletekeys(Request $request) {
+    public function appdeletelicenses(Request $request) {
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
@@ -160,15 +160,15 @@ class AppController extends Controller
         try {
             $app = App::where('edit_id', $request->input('edit_id'))->firstOrFail();
             $name = $app->name;
-            $app->keys()->delete();
+            $app->licenses()->delete();
 
-            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name . "<b>'s Keys</b>", $successMessage));
+            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name . "<b>'s Licenses</b>", $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }
     }
 
-    public function appdeletekeysme(Request $request) {
+    public function appdeletelicensesme(Request $request) {
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
@@ -179,9 +179,9 @@ class AppController extends Controller
         try {
             $app = App::where('edit_id', $request->input('edit_id'))->firstOrFail();
             $name = $app->name;
-            $app->keys()->where('registrar', auth()->user()->user_id)->delete();
+            $app->licenses()->where('registrar', auth()->user()->user_id)->delete();
 
-            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name . "<b>'s Keys</b>", $successMessage));
+            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name . "<b>'s Licenses</b>", $successMessage));
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
         }
