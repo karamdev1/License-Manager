@@ -13,74 +13,28 @@
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 Users Registered
                 <div class="d-flex align-items-center gap-2">
-                    <a class="btn btn-outline-light btn-sm" href={{ route('admin.users.history') }}><i class="bi bi-person"></i> HISTORY</a>
+                    <button class="btn btn-outline-light btn-sm ms-1" id="reloadBtn"><i class="bi bi-arrow-clockwise"></i> REFRESH</button>
                     <a class="btn btn-outline-light btn-sm" href={{ route('admin.users.generate') }}><i class="bi bi-person"></i> USER</a>
                     <button class="btn btn-secondary btn-sm ms-1" id="blur-out" data-bs-toggle="tooltip" data-bs-placement="top" title="Eye Protect"><i class="bi bi-eye-slash"></i></button>
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    @if ($users->isNotEmpty())
-                        <table id="datatable" class="table table-bordered table-hover text-center dataTable no-footer" style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Username</th>
-                                    <th>Saldo</th>
-                                    <th>Role</th>
-                                    <th>Reff</th>
-                                    <th>Registrar</th>
-                                    <th>Created</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            @foreach ($users as $item)
-                                @php
-                                    if ($item->referrable != NULL) {
-                                        $reff_status = Controller::statusColor($item->referrable->status);
-                                        $reff_code = Controller::censorText($item->referrable->code);
-                                    } else {
-                                        $reff_status = 'dark';
-                                        $reff_code = "N/A";
-                                    }
-
-                                    $saldo = Controller::saldoData($item->saldo, $item->role);
-                                @endphp
-                                <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td class="text-{{ Controller::statusColor($item->status) }}">{{ $item->name }}</td>
-                                    <td><span class="align-middle badge fw-normal text-{{ Controller::statusColor($item->status) }} fs-6 blur Blur copy-trigger" data-copy="{{ $item->username }}">{{ $item->username }}</span></td>
-                                    <td class="text-{{ $saldo[1] }}">{{ $saldo[0] }}</td>
-                                    <td class="text-{{ Controller::permissionColor($item->role) }}">{{ $item->role }}</td>
-                                    <td class="text-{{ $reff_status }}">{{ $reff_code }}</td>
-                                    <td>{{ Controller::userUsername($item->registrar) }}</td>
-                                    <td><i class="align-middle badge fw-normal text-dark fs-6">{{ Controller::timeElapsed($item->created_at) }}</i></td>
-                                    <td>
-                                        <a href={{ route('admin.users.wallet', ['id' => $item->user_id]) }} class="btn btn-outline-dark btn-sm">
-                                            <i class="bi bi-wallet"></i>
-                                        </a>
-
-                                        <a href={{ route('admin.users.history.user', ['id' => $item->user_id]) }} class="btn btn-outline-dark btn-sm">
-                                            <i class="bi bi-person"></i>
-                                        </a>
-
-                                        <a href={{ route('admin.users.edit', ['id' => $item->user_id]) }} class="btn btn-outline-dark btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    @else
-                        <table class="table table-sm table-bordered table-hover text-center">
-                            <thead>
-                                <tr>
-                                    <th colspan="9"><span class="align-middle badge text-dark fs-6 fw-normal">There are no <strong>users</strong> to show</span></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    @endif
+                    <table id="datatable" class="table table-bordered table-hover text-center dataTable no-footer" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Saldo</th>
+                                <th>Role</th>
+                                <th>Reff</th>
+                                <th>Registrar</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -119,17 +73,59 @@
         }
 
         $(document).ready(function() {
-            $('#datatable').DataTable({
+            const table = $('#datatable').DataTable({
+                processing: true,
+                responsive: true,
                 pageLength: 10,
                 lengthChange: true,
                 ordering: true,
                 order: [[0,'desc']],
+                ajax: {
+                    url: '{{ route('admin.users.data') }}',
+                    type: 'GET',
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'name' },
+                    { data: 'username' },
+                    { data: 'saldo' },
+                    { data: 'role' },
+                    { data: 'reff' },
+                    { data: 'registrar' },
+                    { data: 'created' },
+                    {
+                        data: 'user_id',
+                        render: function(data, type, row) {
+                            let editUrl = `{{ route('admin.users.edit') }}/${data}`;
+                            let walletUrl = `{{ route('admin.users.wallet') }}/${data}`;
+                            let historyUrl = `{{ route('admin.users.history.user') }}/${data}`;
+                            return `
+                            <a href="${walletUrl}" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-wallet"></i>
+                            </a>
+
+                            <a href="${historyUrl}" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-person"></i>
+                            </a>
+
+                            <a href="${editUrl}" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            `;
+                        }
+                    },
+                ],
                 columnDefs: [
                     { targets: [7, 8], searchable: false },
                     { targets: [0, 1, 2, 4], searchable: true },
                     { targets: [5, 6], visible: false, searchable: true },
                     { orderable: false, targets: -1 }
                 ]
+            });
+
+            $('#reloadBtn').on('click', function () {
+                table.ajax.reload(null, false);
             });
 
             $("#blur-out").click(function() {

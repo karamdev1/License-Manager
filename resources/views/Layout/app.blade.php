@@ -66,7 +66,7 @@
             });
 
             @if($errors->any())
-                showMessage('Error', @json($errors-first()));
+                showMessage('Error', @json($errors->first()));
             @endif
 
             @if(session()->has('msgSuccess'))
@@ -83,7 +83,7 @@
         });
 
         function showMessage(type, message) {
-            Swal.fire({
+            return Swal.fire({
                 title: type,
                 html: message,
                 icon: type.toLowerCase(),

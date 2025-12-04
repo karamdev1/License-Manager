@@ -11,11 +11,49 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     public function manageusers(Request $request) {
-        $users = User::get();
-
         parent::require_ownership(1);
 
-        return view('Home.manage_users', compact('users'));
+        return view('Home.manage_users');
+    }
+
+    public function manageusersdata() {
+        parent::require_ownership(1);
+        
+        $users = User::get();
+
+        $data = $users->map(function ($user) {
+            $created = Controller::timeElapsed($user->created_at);
+            $userStatus = Controller::statusColor($user->status);
+            $saldo = Controller::saldoData($user->saldo, $user->role);
+            $saldoS = $saldo[0];
+            $saldoC = $saldo[1];
+            $roleC = Controller::permissionColor($user->role);
+
+            if ($user->referrable != NULL) {
+                $reff_status = Controller::statusColor($user->referrable->status);
+                $reff_code = Controller::censorText($user->referrable->code);
+            } else {
+                $reff_status = 'dark';
+                $reff_code = "N/A";
+            }
+
+            return [
+                'id'        => $user->id,
+                'user_id'   => $user->user_id,
+                'name'      => $user->name,
+                'username'  => "<span class='align-middle badge fw-normal text-$userStatus fs-6 blur Blur px-3 copy-trigger' data-copy='$user->username'>$user->username</span>",
+                'created'   => "<i class='align-middle badge fw-normal text-dark fs-6'>$created</i>",
+                'saldo'     => "<span class='align-middle badge fw-normal text-$saldoC fs-6'>$saldoS</span>",
+                'role'      => "<span class='align-middle badge fw-normal text-$roleC fs-6'>$user->role</span>",
+                'registrar' => Controller::userUsername($user->registrar),
+                'reff'      => "<span class='align-middle badge fw-normal text-$reff_status fs-6'>$reff_code</span>",
+            ];
+        });
+
+        return response()->json([
+            'status' => 0,
+            'data'   => $data
+        ]);
     }
 
     public function manageusersgenerate() {
@@ -235,19 +273,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
-    }
-    
-    public function manageusershistory() {
-        $errorMessage = Config::get('messages.error.validation');
-        $histories = UserHistory::get();
-
-        parent::require_ownership(1);
-
-        if (empty($histories)) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
-        }
-
-        return view('Home.history_user', compact('histories'));
     }
 
     public function manageusershistoryuser($id) {

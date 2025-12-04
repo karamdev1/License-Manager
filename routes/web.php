@@ -25,13 +25,17 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/', [DashController::class, 'dashboard']);
     Route::get('/dashboard', [DashController::class, 'dashboard'])->name('dashboard');
 
-    // * Manage Users
+    // * Manage Users View
     Route::get('/admin/users', [UserController::class, 'manageusers'])->name('admin.users');
-    Route::get('/admin/users/{id}', [UserController::class, 'manageusersedit'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.edit');
-    Route::get('/admin/users/wallet/{id}', [UserController::class, 'manageuserssaldoedit'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.wallet');
+    Route::get('/admin/users/{id?}', [UserController::class, 'manageusersedit'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.edit');
     Route::get('/admin/users/generate', [UserController::class, 'manageusersgenerate'])->name('admin.users.generate');
-    Route::get('/admin/users/history', [UserController::class, 'manageusershistory'])->name('admin.users.history');
-    Route::get('/admin/users/history/{id}', [UserController::class, 'manageusershistoryuser'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.history.user');
+    Route::get('/admin/users/history/{id?}', [UserController::class, 'manageusershistoryuser'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.history.user');
+    Route::get('/admin/users/wallet/{id?}', [UserController::class, 'manageuserssaldoedit'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.wallet');
+
+    // * Manage Users AJAX
+    Route::get('/admin/users/data', [UserController::class, 'manageusersdata'])->name('admin.users.data');
+
+    // * Manage Users Manage
     Route::post('/admin/users', [UserController::class, 'manageusersedit_action'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.edit.post');
     Route::post('/admin/users/generate', [UserController::class, 'manageusersgenerate_action'])->name('admin.users.generate.post');
     Route::post('/admin/users/delete', [UserController::class, 'manageusersdelete'])->name('admin.users.delete');

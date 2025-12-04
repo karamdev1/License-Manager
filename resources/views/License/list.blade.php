@@ -14,6 +14,7 @@
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 Licenses Registered
                 <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-light btn-sm ms-1" id="reloadBtn"><i class="bi bi-arrow-clockwise"></i> REFRESH</button>
                     <a href="{{ route('licenses.generate') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-key"></i> LICENSE</a>
                     <button class="btn btn-secondary btn-sm ms-1" id="blur-out" data-bs-toggle="tooltip" data-bs-placement="top" title="Eye Protect"><i class="bi bi-eye-slash"></i></button>
                 </div>
@@ -74,8 +75,9 @@
         }
 
         $(document).ready(function() {
-            $('#datatable').DataTable({
+            const table = $('#datatable').DataTable({
                 processing: true,
+                responsive: true,
                 pageLength: 10,
                 lengthChange: true,
                 ordering: true,
@@ -114,6 +116,10 @@
                 ]
             });
 
+            $('#reloadBtn').on('click', function () {
+                table.ajax.reload(null, false);
+            });
+
             $("#blur-out").click(function() {
                 if ($(".Blur").hasClass("blur")) {
                     $(".Blur").removeClass("blur");
@@ -144,7 +150,18 @@
 
                         const url = "{{ route('licenses.resetApiKey') }}"
 
-                        window.location.href = `${url}/${id}`;
+                        $.ajax({
+                            url: `${url}/${id}`,
+                            type: "GET",
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                showMessage('Success', response.message);
+                            },
+                            error: function (xhr) {
+                                showMessage('Error', xhr.responseJSON.message);
+                            }
+                        });
                     }
                 });
             });

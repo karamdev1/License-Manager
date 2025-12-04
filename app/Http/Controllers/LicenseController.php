@@ -292,9 +292,15 @@ class LicenseController extends Controller
                 'type'       => 'Update',
             ]);
 
-            return redirect()->route('licenses')->with('msgSuccess', str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage));
+            return response()->json([
+                'status' => 0,
+                'message' => str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage),
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 203', $errorMessage),
+            ]);
         }
     }
 
@@ -325,9 +331,15 @@ class LicenseController extends Controller
         try {
             $license->delete();
 
-            return redirect()->route('licenses')->with('msgSuccess', str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage));
+            return response()->json([
+                'status' => 0,
+                'message' => str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage),
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
         }
     }
 
@@ -356,9 +368,15 @@ class LicenseController extends Controller
                 'devices' => "",
             ]);
 
-            return redirect()->route('licenses')->with('msgSuccess', str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage));
+            return response()->json([
+                'status' => 0,
+                'message' => str_replace(':flag', '<b>License</b> ' . $licenseName, $successMessage),
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
         }
     }
 }

@@ -13,6 +13,7 @@
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 Apps Registered
                 <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-light btn-sm ms-1" id="reloadBtn"><i class="bi bi-arrow-clockwise"></i> REFRESH</button>
                     <a href="{{ route('apps.generate') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-terminal"></i> APP</a>
                 </div>
             </div>
@@ -69,8 +70,9 @@
         }
 
         $(document).ready(function() {
-            $('#datatable').DataTable({
+            const table = $('#datatable').DataTable({
                 processing: true,
+                responsive: true,
                 pageLength: 10,
                 lengthChange: true,
                 ordering: true,
@@ -104,6 +106,10 @@
                     { targets: [5], visible: false, searchable: true },
                     { orderable: false, targets: -1 }
                 ]
+            });
+
+            $('#reloadBtn').on('click', function () {
+                table.ajax.reload(null, false);
             });
 
             $(document).on('click', '.copy-trigger', async function() {

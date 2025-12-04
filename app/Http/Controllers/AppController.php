@@ -187,9 +187,15 @@ class AppController extends Controller
             $name = $app->name;
             $app->delete();
 
-            return redirect()->route('apps')->with('msgSuccess', str_replace(':flag', "<b>App</b> " . $name, $successMessage));
+            return response()->json([
+                'status' => 0,
+                'message' => str_replace(':flag', "<b>App</b> " . $name, $successMessage),
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 201', $errorMessage),
+            ]);
         }
     }
 

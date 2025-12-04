@@ -135,7 +135,30 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('deleteForm').submit();
+                    $('#deleteForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#deleteForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('apps.delete') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    const msg = showMessage('Success', response.message);
+                    msg.then(() => {
+                        window.location.href = "{{ route('apps') }}"
+                    });
+                },
+                error: function (xhr) {
+                    showMessage('Error', xhr.responseJSON.message);
                 }
             });
         });
