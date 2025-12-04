@@ -176,14 +176,19 @@ class LicenseController extends Controller
             ]);
 
             $msg = str_replace(':flag', "<b>License</b> " . $license, $successMessage);
-            return redirect()->route('licenses.generate')->with('msgSuccess',
-                "
+            $msg = "
                 $msg <br>
                 <b>Saldo: $saldo_ext</b>
-                "
-            );
+            ";
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 201', $errorMessage),
+            ]);
         }
     }
 

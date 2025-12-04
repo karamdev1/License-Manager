@@ -132,7 +132,27 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('updateForm').submit();
+                    $('#updateForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#updateForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('licenses.edit.post') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    showMessage('Success', response.message);
+                },
+                error: function (xhr) {
+                    showMessage('Error', xhr.responseJSON.message);
                 }
             });
         });

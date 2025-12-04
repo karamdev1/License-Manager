@@ -149,18 +149,18 @@
                 });
             });
 
-            $('.copy-trigger').click(async function() {
+            $(document).on('click', '.copy-trigger', async function() {
                 const copy = $(this).data('copy');
 
                 const code = await copyToClipboard(copy);
 
                 let message = "";
-                let icon = "error";
+                let type = "Error";
 
                 switch (code) {
                     case 0:
                         message = `<b>License</b> ${copy} <b>Successfully Copied</b>`;
-                        icon = "success";
+                        type = "Success";
                         break;
                     case 1:
                         message = "Clipboard API failed.";
@@ -173,12 +173,7 @@
                         break;
                 }
 
-                Swal.fire({
-                    title: icon === "success" ? "Success" : "Failed",
-                    html: message,
-                    icon: icon,
-                    showConfirmButton: true,
-                });
+                showMessage(type, message);
             });
         });
     </script>

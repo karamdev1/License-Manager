@@ -14,7 +14,7 @@
                 License Registering
             </div>
             <div class="card-body">
-                <form action={{ route('licenses.generate.post') }} method="post" id="generateForm">
+                <form action="{{ route('licenses.generate.post') }}" method="POST" id="generateForm">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">
@@ -118,7 +118,27 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('generateForm').submit();
+                    $('#generateForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#generateForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('licenses.generate.post') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    showMessage('Success', response.message);
+                },
+                error: function (xhr) {
+                    showMessage('Error', xhr.responseJSON.message);
                 }
             });
         });

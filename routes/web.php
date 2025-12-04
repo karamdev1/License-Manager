@@ -61,12 +61,16 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::post('/apps/delete/licenses/me', [AppController::class, 'appdeletelicensesme'])->name('apps.delete.licenses.me');
     Route::post('/apps/generate', [AppController::class, 'appgenerate_action'])->name('apps.generate.post');
 
-    // * Licenses
+    // * Licenses View
     Route::get('/licenses', [LicenseController::class, 'licenselist'])->name('licenses');
-    Route::get('/licenses/data', [LicenseController::class, 'licensedata'])->name('licenses.data');
     Route::get('/licenses/{id?}', [LicenseController::class, 'licenseedit'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.edit');
-    Route::get('/licenses/resetApiKey/{id?}', [LicenseController::class, 'licenseresetapi'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.resetApiKey');
     Route::get('/licenses/generate', [LicenseController::class, 'licensegenerate'])->name('licenses.generate');
+
+    // * Licenses AJAX
+    Route::get('/licenses/data', [LicenseController::class, 'licensedata'])->name('licenses.data');
+
+    // * Licenses Manage
+    Route::get('/licenses/resetApiKey/{id?}', [LicenseController::class, 'licenseresetapi'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.resetApiKey');
     Route::post('/licenses/update', [LicenseController::class, 'licenseedit_action'])->name('licenses.edit.post');
     Route::post('/licenses/delete', [LicenseController::class, 'licensedelete'])->name('licenses.delete');
     Route::post('/licenses/generate', [LicenseController::class, 'licensegenerate_action'])->name('licenses.generate.post');
