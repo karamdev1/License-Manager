@@ -93,16 +93,21 @@ class UserController extends Controller
             ]);
 
             $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            return redirect()->route('admin.users.generate')->with('msgSuccess',
-                "
+            $msg = "
                 $msg <br>
                 <b>Name: $name</b> <br>
                 <b>Username: $username</b> <br>
                 <b>Role: $role</b>
-                "
-            );
+                ";
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
         }
     }
 
@@ -174,17 +179,22 @@ class UserController extends Controller
             }
 
             $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            return redirect()->route('admin.users.edit', $request->input('user_id'))->with('msgSuccess',
-                "
+            $msg = "
                 $msg <br>
                 <b>Name: $name</b> <br>
                 <b>Username: $username</b> <br>
-                <b>Role: $role</b> <br>
+                <b>Role: $role</b>
                 <b>Status: $status</b>
-                "
-            );
+                ";
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
         }
     }
 
@@ -228,17 +238,22 @@ class UserController extends Controller
             ]);
 
             $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            return redirect()->route('admin.users.wallet', $request->input('user_id'))->with('msgSuccess', 
-                "
+            $msg = "
                 $msg <br>
                 <b>Name: $name</b> <br>
                 <b>Username: $username</b> <br>
                 <b>Old Saldo: $old_saldo</b> <br>
                 <b>New Saldo: $new_saldo</b> <br>
-                "
-            );
+                ";
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
         }
     }
 
@@ -264,14 +279,19 @@ class UserController extends Controller
             $user->delete();
 
             $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            return redirect()->route('admin.users')->with('msgSuccess',
-                "
+            $msg = "
                 $msg <br>
-                <b>User Deleted: $username</b>
-                "
-            );
+                <b>User Deleted: $username</b> <br>
+                ";
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
         } catch (\Exception $e) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
         }
     }
 

@@ -149,7 +149,11 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    showMessage('Success', response.message);
+                    if (response.status == 0) {
+                        showMessage('Success', response.message);
+                    } else {
+                        showMessage('Error', response.message);
+                    }
                 },
                 error: function (xhr) {
                     showMessage('Error', xhr.responseJSON.message);
@@ -186,10 +190,14 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    const msg = showMessage('Success', response.message);
-                    msg.then(() => {
-                        window.location.href = "{{ route('licenses') }}"
-                    });
+                    if (response.status == 0) {
+                        const msg = showMessage('Success', response.message);
+                        msg.then(() => {
+                            window.location.href = "{{ route('licenses') }}"
+                        });
+                    } else {
+                        showMessage('Error', response.message);
+                    }
                 },
                 error: function (xhr) {
                     showMessage('Error', xhr.responseJSON.message);

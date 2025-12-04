@@ -107,7 +107,27 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('editForm').submit();
+                    $('#editForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#editForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('admin.users.edit.post') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    showMessage('Success', response.message);
+                },
+                error: function (xhr) {
+                    showMessage('Error', xhr.responseJSON.message);
                 }
             });
         });
@@ -128,7 +148,34 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('deleteForm').submit();
+                    $('#deleteForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#deleteForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('admin.users.delete') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.status == 0) {
+                        const msg = showMessage('Success', response.message);
+                        msg.then(() => {
+                            window.location.href = "{{ route('admin.users') }}"
+                        });
+                    } else {
+                        showMessage('Error', response.message);
+                    }
+                },
+                error: function (xhr) {
+                    showMessage('Error', xhr.responseJSON.message);
                 }
             });
         });

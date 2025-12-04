@@ -52,7 +52,31 @@
                         title: 'Please wait...'
                     })
 
-                    document.getElementById('changeForm').submit();
+                    $('#changeForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#changeForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('admin.users.wallet.post') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.status == 0) {
+                        showMessage('Success', response.message);
+                    } else {
+                        showMessage('Error', response.message);
+                    }
+                },
+                error: function (xhr) {
+                    showMessage('Error', xhr.responseJSON.message);
                 }
             });
         });

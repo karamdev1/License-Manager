@@ -135,7 +135,11 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    showMessage('Success', response.message);
+                    if (response.status == 0) {
+                        showMessage('Success', response.message);
+                    } else {
+                        showMessage('Error', response.message);
+                    }
                 },
                 error: function (xhr) {
                     showMessage('Error', xhr.responseJSON.message);
