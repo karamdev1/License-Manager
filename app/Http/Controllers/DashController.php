@@ -102,7 +102,7 @@ class DashController extends Controller
         $successMessage = Config::get('messages.success.created');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership();
+        parent::require_ownership(0, 1, 1);
 
         $request->validate([
             'status'   => 'required|in:Active,Inactive',
@@ -163,7 +163,7 @@ class DashController extends Controller
         $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership();
+        parent::require_ownership(0, 1, 1);
 
         $request->validate([
             'edit_id'  => 'required|string|min:4|max:36|exists:referrable_codes,edit_id',
@@ -217,7 +217,7 @@ class DashController extends Controller
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership();
+        parent::require_ownership(0, 1, 1);
 
         $request->validate([
             'edit_id'  => 'required|string|min:4|max:36|exists:referrable_codes,edit_id',
