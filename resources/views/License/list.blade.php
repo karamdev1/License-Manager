@@ -166,6 +166,8 @@
                                 showMessage('Error', xhr.responseJSON.message);
                             }
                         });
+
+                        table.ajax.reload(null, false);
                     }
                 });
             });

@@ -19,7 +19,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'register_action'])->name('register.post')->middleware('throttle:10,5');
 
 // * Authenticate
-Route::get('/API/connect', [ApiController::class, 'ApiConnect'])->name('api.connect')->middleware('throttle:10,5');
+Route::get('/API/connect', [ApiController::class, 'Authenticate'])->name('api.connect')->middleware('throttle:10,5');
 
 Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     // * Dashboard
