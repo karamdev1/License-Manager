@@ -86,7 +86,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/licenses/generate', [LicenseController::class, 'licensegenerate'])->name('licenses.generate');
 
     // * Licenses AJAX
-    Route::get('/ajax/user_keys/data', [LicenseController::class, 'licensedata'])->name('licenses.data');
+    Route::get('/ajax/licenses/data', [LicenseController::class, 'licensedata'])->name('licenses.data');
 
     // * Licenses Manage
     Route::get('/licenses/resetApiKey/{id?}', [LicenseController::class, 'licenseresetapi'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.resetApiKey');

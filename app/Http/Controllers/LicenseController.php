@@ -414,7 +414,7 @@ class LicenseController extends Controller
 
         try {
             $license->update([
-                'devices' => "",
+                'devices' => NULL,
             ]);
 
             return response()->json([
