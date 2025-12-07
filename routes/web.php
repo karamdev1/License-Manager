@@ -27,7 +27,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/dashboard', [DashController::class, 'dashboard'])->name('dashboard');
 
     // * Dashboard AJAX
-    Route::get('/dashboard/licenses/data', [DashController::class, 'licensedata_10'])->name('dashboard.licenses.data');
+    Route::get('/ajax/licenses/data/dashboard', [DashController::class, 'licensedata_10'])->name('dashboard.licenses.data');
 
     // * Manage Users View
     Route::get('/admin/users', [UserController::class, 'manageusers'])->name('admin.users');
@@ -37,8 +37,8 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/admin/users/wallet/{id?}', [UserController::class, 'manageuserssaldoedit'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.wallet');
 
     // * Manage Users AJAX
-    Route::get('/admin/users/data', [UserController::class, 'manageusersdata'])->name('admin.users.data');
-    Route::get('/admin/users/history/data/{id?}', [UserController::class, 'manageusershistorydata'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.history.data');
+    Route::get('/ajax/admin/users/data', [UserController::class, 'manageusersdata'])->name('admin.users.data');
+    Route::get('/ajax/admin/users/history/data/{id?}', [UserController::class, 'manageusershistorydata'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.history.data');
 
     // * Manage Users Manage
     Route::post('/admin/users', [UserController::class, 'manageusersedit_action'])->where('id', '[0-9a-fA-F-]{36}')->name('admin.users.edit.post');
@@ -52,7 +52,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/admin/referrables/generate', [DashController::class, 'managereferrablegenerate'])->name('admin.referrable.generate');
     
     // * Manage Referrable AJAX
-    Route::get('/admin/referrables/data', [DashController::class, 'managereferrabledata'])->name('admin.referrable.data');
+    Route::get('/ajax/admin/referrables/data', [DashController::class, 'managereferrabledata'])->name('admin.referrable.data');
 
     // * Manage Referrable Manage
     Route::post('/admin/referrables/update', [DashController::class, 'managereferrableedit_action'])->name('admin.referrable.edit.post');
@@ -71,7 +71,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/apps/generate', [AppController::class, 'appgenerate'])->name('apps.generate');
 
     // * Apps AJAX
-    Route::get('/apps/data', [AppController::class, 'appdata'])->name('apps.data');
+    Route::get('/ajax/apps/data', [AppController::class, 'appdata'])->name('apps.data');
 
     // * Apps Manage
     Route::post('/apps/update', [AppController::class, 'appedit_action'])->name('apps.edit.post');
@@ -86,7 +86,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/licenses/generate', [LicenseController::class, 'licensegenerate'])->name('licenses.generate');
 
     // * Licenses AJAX
-    Route::get('/licenses/data', [LicenseController::class, 'licensedata'])->name('licenses.data');
+    Route::get('/ajax/licenses/data', [LicenseController::class, 'licensedata'])->name('licenses.data');
 
     // * Licenses Manage
     Route::get('/licenses/resetApiKey/{id?}', [LicenseController::class, 'licenseresetapi'])->where('id', '[0-9a-fA-F-]{36}')->name('licenses.resetApiKey');
