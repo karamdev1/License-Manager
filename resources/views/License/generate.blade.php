@@ -26,7 +26,8 @@
                                     @if ($apps)
                                         @foreach ($apps as $app)
                                             @php $count += 1; @endphp
-                                            <option value="{{ $app->app_id }}" @if ($count == 1) selected @endif>{{ $app->name }} - {{ number_format($app->price) . $currency }}</option>
+                                            @php if ($currencyPlace == 0) $price = number_format($app->price) . $currency; else $price = $currency . number_format($app->price); @endphp
+                                            <option value="{{ $app->app_id }}" @if ($count == 1) selected @endif>{{ $app->name }} - {{ $price }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -96,7 +97,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-secondary" id="generateBtn">Generate</button>
+                        <button type="button" class="btn btn-outline-secondary" id="generateBtn">Register License</button>
                     </div>
                 </form>
             </div>
@@ -141,7 +142,7 @@
                 processData: false,
                 success: function (response) {
                     if (response.status == 0) {
-                        showMessage('Success', response.message);
+                        showPopup('Success', response.message);
                     } else {
                         showPopup('Error', response.message);
                     }
@@ -194,8 +195,14 @@
             const multiplier = duration / 30;
             const total = basePrice * multiplier * devices;
             const totalFormatted = numberFormat(total)
+            let totalC = 0;
+            if ({{ $currencyPlace }} == 0) {
+                totalC = `${totalFormatted}{{ $currency }}`;
+            } else {
+                totalC = `{{ $currency }}${totalFormatted}`;
+            }
 
-            estimationElem.value = `${totalFormatted}{{ $currency }}`;
+            estimationElem.value = totalC;
         }
 
         function updateSaldoCutEstimation() {
@@ -214,8 +221,14 @@
             const multiplier = duration / 30;
             const total = basePrice * multiplier * devices;
             const totalFormatted = numberFormat(total)
+            let totalC = 0;
+            if ({{ $currencyPlace }} == 0) {
+                totalC = `${totalFormatted}{{ $currency }}`;
+            } else {
+                totalC = `{{ $currency }}${totalFormatted}`;
+            }
 
-            estimationElem.value = `${totalFormatted}{{ $currency }}`;
+            estimationElem.value = totalC;
         }
 
         document.getElementById('app').addEventListener('change', updateLicenseGenerateEstimation);

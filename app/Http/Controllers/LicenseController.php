@@ -95,6 +95,7 @@ class LicenseController extends Controller
             if ($license->owner == "") $owner = "N/A"; else $owner = $license->owner;
 
             $currency = Config::get('messages.settings.currency');
+            $cplace = Config::get('messages.settings.currency_place');
             $devices = $this->DevicesHooked($license->devices) . '/' . $license->max_devices;
             $durationC = $this->RemainingDaysColor($this->RemainingDays($license->expire_date));
             $duration = $this->RemainingDays($license->expire_date) . '/' . $license->duration . " Days";
@@ -102,6 +103,11 @@ class LicenseController extends Controller
             $licenseStatus = Controller::statusColor($license->status);
 
             $price = number_format(LicenseController::licensePriceCalculator($license->app->price, $license->max_devices, $license->duration));
+            if ($cplace == 0) {
+                $price = $price . $currency;
+            } else {
+                $price = $currency . $price;
+            }
 
             return [
                 'id'        => $license->id,
@@ -113,7 +119,7 @@ class LicenseController extends Controller
                 'duration'  => "<span class='align-middle badge fw-normal text-$durationC fs-6'>$duration</span>",
                 'registrar' => Controller::userUsername($license->registrar),
                 'created'   => "<i class='align-middle badge fw-normal text-dark fs-6'>$created</i>",
-                'price'     => "$price$currency",
+                'price'     => "$price",
             ];
         });
 
@@ -126,8 +132,9 @@ class LicenseController extends Controller
     public function licensegenerate() {
         $apps = App::where('status', 'Active')->orderBy('created_at', 'desc')->get();
         $currency = Config::get('messages.settings.currency');
+        $currencyPlace = Config::get('messages.settings.currency_place');
 
-        return view('License.generate', compact('apps', 'currency'));
+        return view('License.generate', compact('apps', 'currency', 'currencyPlace'));
     }
 
     public function licensegenerate_action(Request $request) {
@@ -230,8 +237,9 @@ class LicenseController extends Controller
 
         $apps = App::orderBy('created_at', 'desc')->get();
         $currency = Config::get('messages.settings.currency');
+        $currencyPlace = Config::get('messages.settings.currency_place');
 
-        return view('License.edit', compact('license', 'apps', 'currency'));
+        return view('License.edit', compact('license', 'apps', 'currency', 'currencyPlace'));
     }
 
     public function licenseedit_action(Request $request) {
@@ -285,27 +293,6 @@ class LicenseController extends Controller
 
         $now = Carbon::now();
         $expire_date = $now->addDays((int) $request->input('duration'));
-        $currency = Config::get('messages.settings.currency');
-        if ($request->has('duration-update')) {
-            $saldo_price = $this->saldoPriceCut($request->input('duration'), $request->input('devices'));
-        } else {
-            $saldo_price = $this->saldoPriceCut($license->duration, $request->input('devices'));
-        }
-        $saldo = parent::saldoData(auth()->user()->saldo, auth()->user()->role, 1);
-        if (is_int($saldo[0]) && $saldo_price[0] > $saldo[0]) {
-            return response()->json([
-                'status' => 1,
-                'message' => "You don't have <b>enough</b> Saldo to edit this license.",
-            ]);
-        }
-        auth()->user()->deductSaldo($saldo_price[0]);
-
-        if (is_int($saldo[0])) {
-            $saldo_ext = number_format($saldo[0] - $saldo_price[0]);
-            $saldo_ext = $saldo_ext . $currency . " Left";
-        } else {
-            $saldo_ext = $saldo[0];
-        }
 
         try {
             if ($request->has('duration-update')) {
@@ -335,12 +322,6 @@ class LicenseController extends Controller
             ]);
 
             $msg = str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage);
-            $saldo_cut = $saldo_price[1];
-            $msg = "
-                $msg <br>
-                <b>Saldo Cut: $saldo_cut$currency</b> <br>
-                <b>Saldo: $saldo_ext</b>
-            ";
             return response()->json([
                 'status' => 0,
                 'message' => $msg,

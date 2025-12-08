@@ -68,6 +68,7 @@ abstract class Controller
 
     static function saldoData($userSaldo, $userRole, $raw = 0) {
         $currency = Config::get('messages.settings.currency');
+        $cplace = Config::get('messages.settings.currency_place');
         if ($userSaldo >= 2000000000 || $userRole == "Owner") {
             if ($raw === 1) {
                 $saldo = "Unlimited";
@@ -79,7 +80,12 @@ abstract class Controller
             if ($raw === 1) {
                 $saldo = $userSaldo;
             } else {
-                $saldo = number_format($userSaldo) . $currency;
+                if ($cplace == 0) {
+                    $saldo = number_format($userSaldo) . $currency;
+                } else {
+                    $saldo = $currency . number_format($userSaldo);
+                }
+                
             }
             if ($userSaldo <= 100) {
                 $saldo_color = "danger";

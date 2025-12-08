@@ -65,6 +65,9 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::post('/settings/name-change', [SettingController::class, 'settingsname'])->name('settings.name');
     Route::post('/settings/password-change', [SettingController::class, 'settingspassword'])->name('settings.password');
 
+    // * Web UI Settings
+    Route::get('/settings/webui', [SettingController::class, 'settings22'])->name('webui.settings');
+
     // * Apps View
     Route::get('/apps', [AppController::class, 'applist'])->name('apps');
     Route::get('/apps/{id?}', [AppController::class, 'appedit'])->where('id', '[0-9a-fA-F-]{36}')->name('apps.edit');

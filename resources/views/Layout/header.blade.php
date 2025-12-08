@@ -21,9 +21,15 @@
                                 <i class="bi bi-person-circle pe-2"></i>{{ auth()->user()->name }}</a>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" aria-labelledby="navbarDropdown">
                                 <li>
+                                    <a class="dropdown-item" href="">
+                                        <i class="bi bi-discord"></i> DISCORD
+                                    </a>
+                                </li>
+                                <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                    <li class="dropdown-item text-muted">{{ auth()->user()->name }} ({{ auth()->user()->username }})</li>
+                                <li class="dropdown-item text-muted">{{ auth()->user()->name }} ({{ auth()->user()->username }})</li>
+                                @if (auth()->user()->role != "Reseller")
                                     <li>
                                         <a class="dropdown-item" href={{ route('admin.users') }}>
                                             <i class="bi bi-person"></i> Manage Users
@@ -34,17 +40,24 @@
                                             <i class="bi bi-person-add"></i> Manage Referrable Code
                                         </a>
                                     </li>
+                                @endif
+                                <li>
+                                    <a class="dropdown-item" href={{ route('settings') }}>
+                                        <i class="bi bi-gear"></i> Settings
+                                    </a>
+                                </li>
+                                @if (auth()->user()->role != "Reseller")
                                     <li>
-                                        <a class="dropdown-item" href={{ route('settings') }}>
-                                            <i class="bi bi-gear"></i> Settings
+                                        <a class="dropdown-item" href={{ route('webui.settings') }}>
+                                            <i class="bi bi-gear"></i> Web UI Settings
                                         </a>
                                     </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <button type="button" class="dropdown-item text-danger" id="logoutBtn"><i class="bi bi-box-arrow-in-left"></i> Logout</button>
-                                    </li>
+                                @endif
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item text-danger" id="logoutBtn"><i class="bi bi-box-arrow-in-left"></i> Logout</button>
                                 </li>
                             </ul>
                         </li>

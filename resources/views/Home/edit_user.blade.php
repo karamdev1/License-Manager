@@ -125,7 +125,7 @@
                 processData: false,
                 success: function (response) {
                     if (response.status == 0) {
-                        showMessage('Success', response.message);
+                        showPopup('Success', response.message);
                     } else {
                         showPopup('Error', response.message);
                     }

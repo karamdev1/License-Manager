@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-secondary" id="generateBtn">Generate</button>
+                        <button type="button" class="btn btn-outline-secondary" id="generateBtn">Register App</button>
                     </div>
                 </form>
             </div>

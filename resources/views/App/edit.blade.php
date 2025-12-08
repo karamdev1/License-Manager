@@ -45,11 +45,11 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-secondary mt-2" id="updateBtn">Update</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="updateBtn">Edit App</button>
 
-                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteBtn">Delete</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteBtn">Delete App</button>
 
-                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteLicensesBtn">Delete Licenses</button>
+                        <button type="button" class="btn btn-outline-secondary mt-2" id="deleteLicensesBtn">Delete App's Licenses</button>
                         
                         <button type="button" class="btn btn-outline-secondary mt-2" id="deleteLicensesMeBtn">Delete User Licenses</button>
                     </div>

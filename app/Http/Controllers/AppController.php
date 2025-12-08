@@ -19,10 +19,17 @@ class AppController extends Controller
 
         $data = $apps->map(function ($app) {
             $currency = Config::get('messages.settings.currency');
+            $cplace = Config::get('messages.settings.currency_place');
             $created = Controller::timeElapsed($app->created_at);
             $price = number_format($app->price);
             $appStatus = Controller::statusColor($app->status);
             $licenses = 0;
+
+            if ($cplace == 0) {
+                $price = $price . $currency;
+            } else {
+                $price = $currency . $price;
+            }
 
             $ids = [$app->edit_id, $app->app_id, $app->name];
 
@@ -37,7 +44,7 @@ class AppController extends Controller
                 'licenses'  => "$licenses License",
                 'registrar' => Controller::userUsername($app->registrar),
                 'created'   => "<i class='align-middle badge fw-normal text-dark fs-6'>$created</i>",
-                'price'     => "$price$currency",
+                'price'     => "$price",
             ];
         });
 

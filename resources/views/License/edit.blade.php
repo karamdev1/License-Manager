@@ -42,7 +42,8 @@
                                     <option value="">-- Select App --</option>
                                     @if ($apps)
                                         @foreach ($apps as $app)
-                                            <option value="{{ $app->app_id }}" @if ($app->app_id == $license->app_id) selected @endif>{{ $app->name }} - {{ number_format($app->price) . $currency }}</option>
+                                            @php if ($currencyPlace == 0) $price = number_format($app->price) . $currency; else $price = $currency . number_format($app->price); @endphp
+                                            <option value="{{ $app->app_id }}" @if ($app->app_id == $license->app_id) selected @endif>{{ $app->name }} - {{ $price }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -93,26 +94,15 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label for="price" class="form-label">License Price</label>
-                                <input type="text" id="price" class="form-control" style="background-color: rgb(233, 236, 239); opacity: 1;" placeholder="The license will cost" readonly>
-                            </div>
-                        </div>
-                    
-                        <div class="col-lg-6">
-                            <div class="form-group mb-3">
-                                <label for="saldo" class="form-label">Saldo Cut</label>
-                                <input type="text" id="saldo" class="form-control" style="background-color: rgb(233, 236, 239); opacity: 1;" placeholder="Your order will total" readonly>
-                            </div>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label for="price" class="form-label">License Price</label>
+                        <input type="text" id="price" class="form-control" style="background-color: rgb(233, 236, 239); opacity: 1;" placeholder="The license will cost" readonly>
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-secondary" id="updateBtn">Update</button>
+                        <button type="button" class="btn btn-outline-secondary" id="updateBtn">Edit License</button>
 
-                        <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete</button>
+                        <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete License</button>
                     </div>
                 </form>
                 <form action="{{ route('licenses.delete') }}" method="post" id="deleteForm">
@@ -161,7 +151,7 @@
                 processData: false,
                 success: function (response) {
                     if (response.status == 0) {
-                        showMessage('Success', response.message);
+                        showPopup('Success', response.message);
                     } else {
                         showPopup('Error', response.message);
                     }
@@ -258,35 +248,19 @@
             const multiplier = duration / 30;
             const total = basePrice * multiplier * devices;
             const totalFormatted = numberFormat(total)
-
-            estimationElem.value = `${totalFormatted}{{ $currency }}`;
-        }
-
-        function updateSaldoCutEstimation() {
-            const estimationElem = document.getElementById('saldo');
-            if (!estimationElem) return;
-
-            const duration = parseInt(document.getElementById('duration').value, 10);
-            const devices = parseInt(document.getElementById('devices').value, 10);
-
-            if (isNaN(duration) || isNaN(devices)) {
-                estimationElem.value = "Fill all fields";
-                return;
+            let totalC = 0;
+            if ({{ $currencyPlace }} == 0) {
+                totalC = `${totalFormatted}{{ $currency }}`;
+            } else {
+                totalC = `{{ $currency }}${totalFormatted}`;
             }
 
-            const basePrice = 10;
-            const multiplier = duration / 30;
-            const total = basePrice * multiplier * devices;
-            const totalFormatted = numberFormat(total)
-
-            estimationElem.value = `${totalFormatted}{{ $currency }}`;
+            estimationElem.value = totalC;
         }
 
         document.getElementById('app').addEventListener('change', updateLicenseGenerateEstimation);
         document.getElementById('duration').addEventListener('change', updateLicenseGenerateEstimation);
         document.getElementById('devices').addEventListener('input', updateLicenseGenerateEstimation);
-        document.getElementById('duration').addEventListener('change', updateSaldoCutEstimation);
-        document.getElementById('devices').addEventListener('input', updateSaldoCutEstimation);
 
         updateLicenseGenerateEstimation();
         updateSaldoCutEstimation();

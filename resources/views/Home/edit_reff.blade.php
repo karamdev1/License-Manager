@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-secondary" id="updateBtn">Update Reff</button>
+                        <button type="button" class="btn btn-outline-secondary" id="updateBtn">Edit Reff</button>
                     
                         <button type="button" class="btn btn-outline-secondary" id="deleteBtn"><i class="bi bi-trash3"></i> Delete Reff</button>
                     </div>

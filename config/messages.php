@@ -21,6 +21,7 @@ return [
     ],
 
     'settings' => [
-        'currency' => ' IQD',
+        'currency' => env('MESSAGES_CURRENCY', '$'),
+        'currency_place' => env('MESSAGES_CURRENCY_PLACE', '0'),
     ],
 ];

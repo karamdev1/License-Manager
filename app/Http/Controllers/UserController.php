@@ -92,13 +92,7 @@ class UserController extends Controller
                 'registrar'   => auth()->user()->user_id,
             ]);
 
-            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            $msg = "
-                $msg <br>
-                <b>Name: $name</b> <br>
-                <b>Username: $username</b> <br>
-                <b>Role: $role</b>
-                ";
+            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
             return response()->json([
                 'status' => 0,
                 'message' => $msg,
@@ -140,9 +134,6 @@ class UserController extends Controller
         ]);
 
         $username = $request->input('username');
-        $name = $request->input('name');
-        $role = $request->input('role');
-        $status = $request->input('status');
         $user = User::where('user_id', $request->input('user_id'))->first();
 
         $request->validate([
@@ -178,14 +169,7 @@ class UserController extends Controller
                 ]);
             }
 
-            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            $msg = "
-                $msg <br>
-                <b>Name: $name</b> <br>
-                <b>Username: $username</b> <br>
-                <b>Role: $role</b> <br>
-                <b>Status: $status</b>
-                ";
+            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
             return response()->json([
                 'status' => 0,
                 'message' => $msg,
@@ -229,7 +213,6 @@ class UserController extends Controller
         }
 
         $old_saldo = $user->saldo;
-        $name = $user->name;
         $username = $user->username;
 
         try {
@@ -237,11 +220,9 @@ class UserController extends Controller
                 'saldo' => $request->input('saldo'),
             ]);
 
-            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
+            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
             $msg = "
                 $msg <br>
-                <b>Name: $name</b> <br>
-                <b>Username: $username</b> <br>
                 <b>Old Saldo: $old_saldo</b> <br>
                 <b>New Saldo: $new_saldo</b> <br>
                 ";
@@ -278,11 +259,7 @@ class UserController extends Controller
         try {
             $user->delete();
 
-            $msg = str_replace(':flag', "<strong>User</strong>", $successMessage);
-            $msg = "
-                $msg <br>
-                <b>User Deleted: $username</b> <br>
-                ";
+            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
             return response()->json([
                 'status' => 0,
                 'message' => $msg,
