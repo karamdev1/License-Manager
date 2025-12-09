@@ -27,8 +27,10 @@ class AppController extends Controller
 
             if ($cplace == 0) {
                 $price = $price . $currency;
-            } else {
+            } else if ($cplace == 1) {
                 $price = $currency . $price;
+            } else {
+                $price = $price . ' ' . $currency;
             }
 
             $ids = [$app->edit_id, $app->app_id, $app->name];

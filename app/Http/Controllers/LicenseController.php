@@ -105,8 +105,10 @@ class LicenseController extends Controller
             $price = number_format(LicenseController::licensePriceCalculator($license->app->price, $license->max_devices, $license->duration));
             if ($cplace == 0) {
                 $price = $price . $currency;
-            } else {
+            } else if ($cplace == 1) {
                 $price = $currency . $price;
+            } else {
+                $price = $price . ' ' . $currency;
             }
 
             return [

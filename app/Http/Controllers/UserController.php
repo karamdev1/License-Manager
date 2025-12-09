@@ -11,20 +11,20 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     public function manageusers(Request $request) {
-        parent::require_ownership(1);
+        require_ownership(1);
 
         return view('Home.manage_users');
     }
 
     public function manageusersdata() {
-        parent::require_ownership(1);
+        require_ownership(1);
         
         $users = User::get();
 
         $data = $users->map(function ($user) {
             $created = Controller::timeElapsed($user->created_at);
             $userStatus = Controller::statusColor($user->status);
-            $saldo = Controller::saldoData($user->saldo, $user->role);
+            $saldo = saldoData($user->saldo, $user->role);
             $saldoS = $saldo[0];
             $saldoC = $saldo[1];
             $roleC = Controller::permissionColor($user->role);
@@ -57,7 +57,7 @@ class UserController extends Controller
     }
 
     public function manageusersgenerate() {
-        parent::require_ownership(1);
+        require_ownership(1);
 
         return view('Home.generate_user');
     }
@@ -66,7 +66,7 @@ class UserController extends Controller
         $successMessage = Config::get('messages.success.created');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership(1, 1, 1);
+        require_ownership(1, 1, 1);
 
         $request->validate([
             'name'     => 'required|string|min:4|max:100',
@@ -76,7 +76,7 @@ class UserController extends Controller
             'role'     => 'required|in:Owner,Manager,Reseller',
         ]);
 
-        parent::manager_limit($request->input('role'));
+        manager_limit($request->input('role'));
 
         $username = $request->input('username');
         $name = $request->input('name');
@@ -112,10 +112,10 @@ class UserController extends Controller
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
 
-        parent::require_ownership(1);
+        require_ownership(1);
 
-        parent::manager_limit($user->role);
-        parent::psueAction($user);
+        manager_limit($user->role);
+        psueAction($user);
 
         return view('Home.edit_user', compact('user'));
     }
@@ -124,7 +124,7 @@ class UserController extends Controller
         $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership(1, 1, 1);
+        require_ownership(1, 1, 1);
 
         $request->validate([
             'user_id'  => 'required|string|min:4|max:100|exists:users,user_id',
@@ -144,8 +144,8 @@ class UserController extends Controller
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
         }
 
-        parent::manager_limit($user->role);
-        parent::psueAction($user);
+        manager_limit($user->role);
+        psueAction($user);
 
         try {
             if ($request->has('new_password')) {
@@ -189,7 +189,7 @@ class UserController extends Controller
             return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
         }
 
-        parent::require_ownership();
+        require_ownership();
 
         return view('Home.wallet_user', compact('user'));
     }
@@ -198,7 +198,7 @@ class UserController extends Controller
         $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership(0, 1, 1);
+        require_ownership(0, 1, 1);
 
         $request->validate([
             'user_id'  => 'required|string|min:4|max:100|exists:users,user_id',
@@ -242,7 +242,7 @@ class UserController extends Controller
         $successMessage = Config::get('messages.success.deleted');
         $errorMessage = Config::get('messages.error.validation');
 
-        parent::require_ownership(1, 1, 1);
+        require_ownership(1, 1, 1);
 
         $request->validate([
             'user_id'  => 'required|string|min:4|max:100|exists:users,user_id',
@@ -277,7 +277,7 @@ class UserController extends Controller
     }
 
     public function manageusershistorydata($id) {
-        parent::require_ownership(1);
+        require_ownership(1);
         
         $histories = UserHistory::where('user_id', $id)->get();
 

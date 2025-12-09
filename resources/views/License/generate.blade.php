@@ -198,8 +198,10 @@
             let totalC = 0;
             if ({{ $currencyPlace }} == 0) {
                 totalC = `${totalFormatted}{{ $currency }}`;
-            } else {
+            } else if ({{ $currencyPlace }} == 1) {
                 totalC = `{{ $currency }}${totalFormatted}`;
+            } else {
+                totalC = `${totalFormatted} {{ $currency }}`;
             }
 
             estimationElem.value = totalC;
@@ -224,8 +226,10 @@
             let totalC = 0;
             if ({{ $currencyPlace }} == 0) {
                 totalC = `${totalFormatted}{{ $currency }}`;
-            } else {
+            } else if ({{ $currencyPlace }} == 1) {
                 totalC = `{{ $currency }}${totalFormatted}`;
+            } else {
+                totalC = `${totalFormatted} {{ $currency }}`;
             }
 
             estimationElem.value = totalC;
