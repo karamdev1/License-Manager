@@ -10,7 +10,7 @@
                 Web UI Settings
             </div>
             <div class="card-body">
-                <form action="#" method="post" id="updateForm">
+                <form action="{{ route('settings.webui.update') }}" method="post" id="updateForm">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">
@@ -68,7 +68,31 @@
                 confirmButtonText: 'Yes, edit'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('updateForm').submit();
+                    $('#updateForm').trigger('submit');
+                }
+            });
+        });
+
+        $('#updateForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: this.action,
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.status == 0) {
+                        showPopup('Success', response.message);
+                    } else {
+                        showPopup('Error', response.message);
+                    }
+                },
+                error: function (xhr) {
+                    showPopup('Error', xhr.responseJSON.message);
                 }
             });
         });

@@ -64,6 +64,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
 
         Route::prefix('webui')->name('webui.')->group(function () {
             Route::get('/', [WebuiController::class, 'webui_settings'])->name('index');
+            Route::post('/', [WebuiController::class, 'webui_action'])->name('update');
         });
     });
 
