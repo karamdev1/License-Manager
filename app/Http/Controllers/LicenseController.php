@@ -85,7 +85,7 @@ class LicenseController extends Controller
     }
 
     public function licensedata() {
-        if (parent::require_ownership(1, 0)) {
+        if (require_ownership(1, 0)) {
             $licenses = License::get();
         } else {
             $licenses = License::where('registrar', auth()->user()->user_id)->get();
@@ -99,8 +99,8 @@ class LicenseController extends Controller
             $devices = $this->DevicesHooked($license->devices) . '/' . $license->max_devices;
             $durationC = $this->RemainingDaysColor($this->RemainingDays($license->expire_date));
             $duration = $this->RemainingDays($license->expire_date) . '/' . $license->duration . " Days";
-            $created = Controller::timeElapsed($license->created_at);
-            $licenseStatus = Controller::statusColor($license->status);
+            $created = timeElapsed($license->created_at);
+            $licenseStatus = statusColor($license->status);
 
             $price = number_format(LicenseController::licensePriceCalculator($license->app->price, $license->max_devices, $license->duration));
             if ($cplace == 0) {
@@ -119,7 +119,7 @@ class LicenseController extends Controller
                 'user_key'  => "<span class='align-middle badge fw-normal text-$licenseStatus fs-6 blur Blur px-3 copy-trigger' data-copy='$license->license'>$license->license</span>",
                 'devices'   => "<span class='align-middle badge fw-normal text-white bg-dark fs-6'>$devices</span>",
                 'duration'  => "<span class='align-middle badge fw-normal text-$durationC fs-6'>$duration</span>",
-                'registrar' => Controller::userUsername($license->registrar),
+                'registrar' => userUsername($license->registrar),
                 'created'   => "<i class='align-middle badge fw-normal text-dark fs-6'>$created</i>",
                 'price'     => "$price",
             ];
@@ -152,20 +152,21 @@ class LicenseController extends Controller
         ]);
 
         do {
-            $license = parent::randomString();
+            $license = randomString();
             $licenseExists = License::where('license', $license)->exists();
         } while ($licenseExists);
 
         $now = Carbon::now();
         $expire_date = $now->addDays((int) $request->input('duration'));
         $currency = Config::get('messages.settings.currency');
+        $cplace = Config::get('messages.settings.currency_place');
         $owner = $request->input('owner') ?? "";
         $duration = $request->input('duration');
         $status = $request->input('status');
         $devices = $request->input('devices');
         $appName = App::where('app_id', $request->input('app'))->first()->name;
         $saldo_price = $this->saldoPriceCut($duration, $devices);
-        $saldo = parent::saldoData(auth()->user()->saldo, auth()->user()->role, 1);
+        $saldo = saldoData(auth()->user()->saldo, auth()->user()->role, 1);
         if ($saldo_price[0] > $saldo[0]) {
             return response()->json([
                 'status' => 1,
@@ -176,9 +177,25 @@ class LicenseController extends Controller
 
         if (is_int($saldo[0])) {
             $saldo_ext = number_format($saldo[0] - $saldo_price[0]);
-            $saldo_ext = $saldo_ext . $currency . " Left";
+            if ($cplace == 0) {
+                $saldo_ext = $saldo_ext . $currency . " Left";
+            } else if ($cplace == 1) {
+                $saldo_ext = $currency . $saldo_ext . " Left";
+            } else {
+                $saldo_ext = $saldo_ext . ' ' . $currency . " Left";
+            }
         } else {
             $saldo_ext = $saldo[0];
+        }
+
+        $saldo_cut = $saldo_price[1];
+
+        if ($cplace == 0) {
+            $saldo_cut = $saldo_cut . $currency;
+        } else if ($cplace == 1) {
+            $saldo_cut = $currency . $saldo_cut;
+        } else {
+            $saldo_cut = $saldo_cut . ' ' . $currency;
         }
 
         try {
@@ -202,10 +219,9 @@ class LicenseController extends Controller
             ]);
 
             $msg = str_replace(':flag', "<b>License</b> " . $license, $successMessage);
-            $saldo_cut = $saldo_price[1];
             $msg = "
                 $msg <br>
-                <b>Saldo Cut: $saldo_cut$currency</b> <br>
+                <b>Saldo Cut: $saldo_cut</b> <br>
                 <b>Saldo: $saldo_ext</b>
             ";
             return response()->json([
@@ -223,7 +239,7 @@ class LicenseController extends Controller
     public function licenseedit($id) {
         $errorMessage = Config::get('messages.error.validation');
 
-        if (parent::require_ownership(1, 0)) {
+        if (require_ownership(1, 0)) {
             $license = License::where('edit_id', $id)->first();
 
             if (empty($license)) {
@@ -260,7 +276,7 @@ class LicenseController extends Controller
 
         $id = $request->input('edit_id');
 
-        if (parent::require_ownership(1, 0)) {
+        if (require_ownership(1, 0)) {
             $license = License::where('edit_id', $request->input('edit_id'))->first();
 
             if (empty($license)) {
@@ -344,7 +360,7 @@ class LicenseController extends Controller
             'edit_id'  => 'required|string|min:6|max:36',
         ]);
 
-        if (parent::require_ownership(1, 0)) {
+        if (require_ownership(1, 0)) {
             $license = License::where('edit_id', $request->input('edit_id'))->first();
 
             if (empty($license)) {
@@ -379,7 +395,7 @@ class LicenseController extends Controller
         $successMessage = Config::get('messages.success.reseted');
         $errorMessage = Config::get('messages.error.validation');
 
-        if (parent::require_ownership(1, 0)) {
+        if (require_ownership(1, 0)) {
             $license = License::where('edit_id', $id)->first();
 
             if (empty($license)) {

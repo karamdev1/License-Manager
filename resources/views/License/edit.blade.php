@@ -11,7 +11,7 @@
         @include('Layout.msgStatus')
         <div class="card mb-5">
             <div class="card-header text-center text-white bg-dark">
-                License Editing · {{ $license->license }} · {{ Controller::userUsername($license->registrar) }}
+                License Editing · {{ $license->license }} · {{ userUsername($license->registrar) }}
             </div>
             <div class="card-body">
                 <form action={{ route('licenses.edit.post') }} method="post" id="updateForm">

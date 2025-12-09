@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Config;
+use App\Models\User;
 
 function require_ownership($allow_manager = 0, $fail = 1, $json_response = 0) {
     $user = auth()->user();
@@ -101,4 +103,9 @@ function saldoData($userSaldo, $userRole, $raw = 0) {
     $data = [$saldo, $saldo_color];
 
     return $data;
+}
+
+function userUsername($user_id) {
+    $user = User::where('user_id', $user_id)->first();
+    return $user?->username ?? 'N/A';
 }
