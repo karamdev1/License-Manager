@@ -25,8 +25,7 @@ Route::prefix('API')->name('api.')->withoutMiddleware(VerifyCsrfToken::class)->g
 });
 
 Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
-    Route::get('/', [DashController::class, 'dashboard']);
-    Route::get('/dashboard', [DashController::class, 'dashboard'])->name('dashboard');
+    Route::get('/', [DashController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard/data', [DashController::class, 'licensedata_10'])->name('dashboard.data');
 
     Route::prefix('admin')->name('admin.')->group(function () {
