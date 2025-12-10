@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\SettingController;
@@ -19,7 +20,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register_action'])->name('register.post')->middleware('throttle:10,5');
 });
 
-Route::prefix('API')->name('api.')->middleware('disable.csrf')->group(function () {
+Route::prefix('API')->name('api.')->withoutMiddleware(VerifyCsrfToken::class)->group(function () {
     Route::post('/connect', [ApiController::class, 'Authenticate'])->name('connect')->middleware('throttle:50,5');
 });
 
