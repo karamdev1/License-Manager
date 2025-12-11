@@ -40,16 +40,23 @@ class UserHelper
     }
 
     static function userEdit($request) {
-        $successMessage = Config::get('messages.success.created');
+        $successMessage = Config::get('messages.success.updated');
         $errorMessage = Config::get('messages.error.validation');
+
+        $user = User::where('user_id', $request->input('user_id'))->first();
+
+        $request->validate([
+            'username' => 'required|string|min:8|max:50',Rule::unique('users', 'username')->ignore($user->user_id, 'user_id'),
+        ]);
+
+        if ($request->has('new_password')) {
+            $request->validate([
+                'password' => 'required|string|confirmed|min:8|max:50',
+            ]);
+        }
 
         try {
             $username = $request->input('username');
-            $user = User::where('user_id', $request->input('user_id'))->first();
-
-            $request->validate([
-                'username' => 'required|string|min:8|max:50',Rule::unique('users', 'username')->ignore($user->user_id, 'user_id'),
-            ]);
 
             if (empty($user)) {
                 return back()->withErrors(['name' => str_replace(':info', 'Error Code 202', $errorMessage),])->onlyInput('name');
@@ -59,10 +66,6 @@ class UserHelper
             psueAction($user);
 
             if ($request->has('new_password')) {
-                $request->validate([
-                    'password' => 'required|string|confirmed|min:8|max:50',
-                ]);
-
                 $user->update([
                     'name'        => $request->input('name'),
                     'username'    => $request->input('username'),
@@ -88,6 +91,71 @@ class UserHelper
             return response()->json([
                 'status' => 1,
                 'message' => str_replace(':info', 'Error Code 201', $errorMessage),
+            ]);
+        }
+    }
+
+    static function userSaldoEdit($request) {
+        $successMessage = Config::get('messages.success.updated');
+        $errorMessage = Config::get('messages.error.validation');
+
+        try {
+            $new_saldo = $request->input('saldo');
+            $user = User::where('user_id', $request->input('user_id'))->first();
+
+            if (empty($user)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
+            }
+
+            $old_saldo = $user->saldo;
+            $username = $user->username;
+
+            $user->update([
+                'saldo' => $request->input('saldo'),
+            ]);
+
+            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
+            $msg = "
+                $msg <br>
+                <b>Old Saldo: $old_saldo</b> <br>
+                <b>New Saldo: $new_saldo</b> <br>
+                ";
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
+            ]);
+        }
+    }
+
+    static function userDelete($request) {
+        $successMessage = Config::get('messages.success.deleted');
+        $errorMessage = Config::get('messages.error.validation');
+
+        try {
+            $user = User::where('user_id', $request->input('user_id'))->first();
+
+            if (empty($user)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
+            }
+
+            $username = $user->username;
+
+            $user->delete();
+
+            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
             ]);
         }
     }

@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Config;
 use App\Models\User;
 use App\Models\UserHistory;
 use App\Http\Requests\UserGenerateRequest;
+use App\Http\Requests\UserSaldoUpdateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UserDeleteRequest;
 use App\Helpers\UserHelper;
 
 class UserController extends Controller
@@ -103,82 +105,16 @@ class UserController extends Controller
         return view('Home.wallet_user', compact('user'));
     }
 
-    public function manageuserssaldoedit_action(Request $request) {
-        $successMessage = Config::get('messages.success.updated');
-        $errorMessage = Config::get('messages.error.validation');
+    public function manageuserssaldoedit_action(UserSaldoUpdateRequest $request) {
+        $request->validated();
 
-        require_ownership(0, 1, 1);
-
-        $request->validate([
-            'user_id'  => 'required|string|min:4|max:100|exists:users,user_id',
-            'saldo'    => 'required|integer|min:1|max:2000000000',
-        ]);
-
-        $new_saldo = $request->input('saldo');
-        $user = User::where('user_id', $request->input('user_id'))->first();
-
-        if (empty($user)) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
-        }
-
-        $old_saldo = $user->saldo;
-        $username = $user->username;
-
-        try {
-            $user->update([
-                'saldo' => $request->input('saldo'),
-            ]);
-
-            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
-            $msg = "
-                $msg <br>
-                <b>Old Saldo: $old_saldo</b> <br>
-                <b>New Saldo: $new_saldo</b> <br>
-                ";
-            return response()->json([
-                'status' => 0,
-                'message' => $msg,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 1,
-                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
-            ]);
-        }
+        return UserHelper::userSaldoEdit($request);
     }
 
-    public function manageusersdelete(Request $request) {
-        $successMessage = Config::get('messages.success.deleted');
-        $errorMessage = Config::get('messages.error.validation');
+    public function manageusersdelete(UserDeleteRequest $request) {
+        $request->validated();
 
-        require_ownership(1, 1, 1);
-
-        $request->validate([
-            'user_id'  => 'required|string|min:4|max:100|exists:users,user_id',
-        ]);
-
-        $user = User::where('user_id', $request->input('user_id'))->first();
-
-        if (empty($user)) {
-            return back()->withErrors(['name' => str_replace(':info', 'Error Code 203', $errorMessage),])->onlyInput('name');
-        }
-
-        $username = $user->username;
-
-        try {
-            $user->delete();
-
-            $msg = str_replace(':flag', "<strong>User</strong> $username", $successMessage);
-            return response()->json([
-                'status' => 0,
-                'message' => $msg,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 1,
-                'message' => str_replace(':info', 'Error Code 202', $errorMessage),
-            ]);
-        }
+        return UserHelper::userDelete($request);
     }
 
     public function manageusershistoryuser() {

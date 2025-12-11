@@ -4,20 +4,18 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserUpdateRequest extends FormRequest
+class UserSaldoUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return require_ownership(1, 1, 1);;
+        return require_ownership(0, 1, 1);
     }
 
     public function rules(): array
     {
         return [
             'user_id'  => 'required|string|min:36|max:36|exists:users,user_id',
-            'name'     => 'required|string|min:8|max:100',
-            'status'   => 'required|in:Active,Inactive',
-            'role'     => 'required|in:Owner,Manager,Reseller',
+            'saldo'    => 'required|integer|min:1|max:2000000000',
         ];
     }
 }
