@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use App\Models\UserHistory;
 use App\Models\Reff;
@@ -16,15 +18,11 @@ class AuthController extends Controller
         return view('Auth.login');
     }
     
-    public function login_action(Request $request) {
+    public function login_action(LoginRequest $request) {
         $successMessage = Config::get('messages.success.logged_in');
         $errorMessage = Config::get('messages.error.wrong_creds');
 
-        $request->validate([
-            'username' => 'required|string|max:50',
-            'password' => 'required|string|min:8|max:50',
-            'stay_log' => 'in:1,0',
-        ]);
+        $request->validated();
 
         $credentials = $request->only('username', 'password');
 
@@ -89,16 +87,11 @@ class AuthController extends Controller
         return view('Auth.register');
     }
 
-    public function register_action(Request $request) {
+    public function register_action(RegisterRequest $request) {
         $successMessage = Config::get('messages.success.register_success');
         $errorMessage = Config::get('messages.error.register_fail');
 
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'username' => 'required|string|unique:users,username|max:50',
-            'password' => 'required|string|confirmed|min:8|max:50',
-            'reff' => 'required|string|max:50',
-        ]);
+        $request->validated();
 
         $referrable = $request->input('reff');
 
