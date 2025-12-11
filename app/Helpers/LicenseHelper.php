@@ -8,6 +8,7 @@ use App\Models\LicenseHistory;
 use App\Helpers\LicenseInfo;
 use App\Helpers\LicenseHelper;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class LicenseHelper
 {
@@ -97,6 +98,88 @@ class LicenseHelper
             return response()->json([
                 'status' => 1,
                 'message' => str_replace(':info', 'Error Code 201', $errorMessage),
+            ]);
+        }
+    }
+
+    static function licenseEdit($request) {
+        $successMessage = Config::get('messages.success.updated');
+        $errorMessage = Config::get('messages.error.validation');
+
+        try {
+            $id = $request->input('edit_id');
+
+            if (require_ownership(1, 0)) {
+                $license = License::where('edit_id', $request->input('edit_id'))->first();
+
+                if (empty($license)) {
+                    return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
+                }
+            } else {
+                $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
+
+                if (empty($license)) {
+                    return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
+                }
+            }
+
+            if ($request->input('license') == '') {
+                do {
+                    $licenseName = randomString();
+                    $licenseExists = License::where('license', $keyName)->exists();
+                } while ($licenseExists);
+            } else {
+                $licenseName = $request->input('license');
+
+                $request->validate([
+                    'license' => [
+                        'required',
+                        'string',
+                        'min:6',
+                        'max:50',
+                        Rule::unique('licenses', 'license')->ignore($license->edit_id, 'edit_id')
+                    ],
+                ]);
+            }
+
+            $now = Carbon::now();
+            $expire_date = $now->addDays((int) $request->input('duration'));
+
+            if ($request->has('duration-update')) {
+                $license->update([
+                    'app_id'      => $request->input('app'),
+                    'owner'       => $request->input('owner') ?? "",
+                    'duration'    => $request->input('duration'),
+                    'expire_date' => $expire_date,
+                    'license'     => $licenseName,
+                    'status'      => $request->input('status'),
+                    'max_devices' => $request->input('devices'),
+                ]);
+            } else {
+                $license->update([
+                    'app_id'      => $request->input('app'),
+                    'owner'       => $request->input('owner') ?? "",
+                    'license'     => $licenseName,
+                    'status'      => $request->input('status'),
+                    'max_devices' => $request->input('devices'),
+                ]);
+            }
+
+            LicenseHistory::create([
+                'license_id' => $license->edit_id,
+                'user'       => auth()->user()->user_id,
+                'type'       => 'Update',
+            ]);
+
+            $msg = str_replace(':flag', "<b>License</b> " . $licenseName, $successMessage);
+            return response()->json([
+                'status' => 0,
+                'message' => $msg,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => str_replace(':info', 'Error Code 203', $errorMessage),
             ]);
         }
     }
