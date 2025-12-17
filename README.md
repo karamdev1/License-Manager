@@ -10,10 +10,9 @@ While designed primarily for Android apps, it can also be used on **iOS, macOS, 
 
 ---
 
-## 🗝️ Default Credentials
-
-- Username: `admin`
-- Password: `admin111`
+## Notes
+**Important:** DOWNLOAD THE PROJECT FROM RELEASES SECTION THE BRANCH **_MAIN_** IS MEANT TO HANDLE THE LATEST COMMITS TO IT AND MOST OF THE TIME
+THEY ARE NOT PRODUCTION READY
 
 ---
 
@@ -45,5 +44,7 @@ However, you may NOT copy, modify, distribute, or republish this software itself
 
 ```bash
 composer install --no-dev --optimize-autoloader
+npm install
+npm run build
 php artisan key:generate
-php artisan migrate:fresh --seed
+php artisan migrate --seed
