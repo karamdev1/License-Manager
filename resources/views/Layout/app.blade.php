@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
-<body class="font-sans bg-smoke">
+<body class="min-h-screen flex flex-col font-sans bg-smoke dark:bg-dark-1 transition-colors duration-200">
     @include('Layout.header')
 
-    <main class="fixed inset-0 flex items-center justify-center">
+    <main class="flex-1 flex items-center justify-center">
         @yield('content')
     </main>
 

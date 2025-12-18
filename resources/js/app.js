@@ -1,8 +1,21 @@
 import './bootstrap';
+import './darkMode';
 
 $(".after-card").hide();
 $(document).ready(function () {
     document.addEventListener('contextmenu', event => event.preventDefault());
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+    });
 
     $(".after-card").fadeIn("slow");
     $("input").change(function (e) {
@@ -44,18 +57,6 @@ $(document).ready(function () {
             icon: type.toLowerCase(),
         });
     }
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-    });
 
     const logoutBtn = document.getElementById('logoutBtn');
 
