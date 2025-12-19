@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
   content: [
     './resources/views/**/*.blade.php',
   ],
@@ -13,7 +12,8 @@ module.exports = {
           DEFAULT: 'oklch(27.4% 0.006 286.033)',
           '1': 'oklch(21% 0.006 285.885)',
           '2': 'oklch(37% 0.013 285.805)',
-          '3': 'oklch(43.9% 0 0)',
+          '3': 'oklch(0.4347 0.006 286.033)',
+          '4': 'oklch(0.3071 0.006 286.033)',
         },
         smoke: 'whitesmoke',
       },

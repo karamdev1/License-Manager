@@ -94,5 +94,4 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     });
 });
 
-// ! Fallback
 Route::fallback(function () {return view('errors.fallback');});

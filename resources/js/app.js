@@ -1,7 +1,5 @@
 import './bootstrap';
-import './darkMode';
 
-$(".after-card").hide();
 $(document).ready(function () {
     document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -15,12 +13,6 @@ $(document).ready(function () {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
         },
-    });
-
-    $(".after-card").fadeIn("slow");
-    $("input").change(function (e) {
-        e.preventDefault();
-        $(".form-text, .alert-danger, .form-group .text-danger").hide();
     });
 
     if (window.APP?.errors?.length) {
