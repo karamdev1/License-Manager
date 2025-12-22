@@ -1,21 +1,21 @@
 @auth
-    @if (Route::currentRouteName() === 'licenses')
+    @if (Route::currentRouteName() === 'licenses.index')
         <div class="bg-secondary-light border border-gray-300 rounded-md shadow-md px-4 py-5">
             <B>INFO</B> · Search specify licenses by their info.
         </div>
-    @elseif (Route::currentRouteName() === 'apps')
+    @elseif (Route::currentRouteName() === 'apps.index')
         <div class="bg-secondary-light border border-gray-300 rounded-md shadow-md px-4 py-5">
             <B>INFO</B> · Search specify apps by their info.
         </div>
-    @elseif (Route::currentRouteName() === 'admin.users')
+    @elseif (Route::currentRouteName() === 'admin.users.index')
         <div class="bg-secondary-light border border-gray-300 rounded-md shadow-md px-4 py-5">
             <B>INFO</B> · Search specify users by their info.
         </div>
-    @elseif (Route::currentRouteName() === 'admin.referrable')
+    @elseif (Route::currentRouteName() === 'admin.referrable.index')
         <div class="bg-secondary-light border border-gray-300 rounded-md shadow-md px-4 py-5">
             <B>INFO</B> · Search specify reffs by their info.
         </div>
-    @elseif (Route::currentRouteName() === 'admin.users.history.user')
+    @elseif (Route::currentRouteName() === 'admin.users.history.user.index')
         <div class="bg-secondary-light border border-gray-300 rounded-md shadow-md px-4 py-5">
             <B>INFO</B> · Search specify users history by their info.
         </div>

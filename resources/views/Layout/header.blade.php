@@ -5,17 +5,6 @@
         <a href="/" class="flex items-center text-[20px]">
           <i class="bi bi-box px-3"></i> {{ config('app.name') }}
         </a>
-
-        @auth
-        <div class="hidden md:flex gap-4 items-center">
-          <a href="{{ route('licenses.index') }}" class="flex items-center gap-1 hover:text-gray-300">
-            <i class="bi bi-key"></i> Licenses
-          </a>
-          <a href="{{ route('apps.index') }}" class="flex items-center gap-1 hover:text-gray-300">
-            <i class="bi bi-terminal"></i> Apps
-          </a>
-        </div>
-        @endauth
       </div>
 
       @auth
@@ -35,8 +24,8 @@
           <a href="{{ config('messages.settings.source_link') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
             <i class="bi bi-{{ strtolower(config('messages.settings.source')) }}"></i> {{ config('messages.settings.source') }}
           </a>
-          <div class="border-t border-gray-300 my-1 w-full"></div>
-          <p class="px-4 py-1 hover:bg-gray-300 w-full">
+          <div class="border-t border-gray-200 my-1 w-full"></div>
+          <p class="px-4 py-1 hover:bg-gray-200 w-full">
             {{ auth()->user()->name }} ({{ auth()->user()->username }})
           </p>
           @if (auth()->user()->role != "Reseller")
@@ -55,7 +44,7 @@
             <i class="bi bi-gear"></i> Web UI Settings
           </a>
           @endif
-          <div class="border-t border-gray-300 my-1 w-full"></div>
+          <div class="border-t border-gray-200 my-1 w-full"></div>
           <button type="button" class="px-4 py-1 w-full text-red-600 hover:bg-gray-200 flex items-center gap-1.5 cursor-pointer justify-start" id="logoutBtn">
             <i class="bi bi-box-arrow-left w-4 text-center"></i> Logout
           </button>
@@ -74,14 +63,35 @@
              x-transition
              x-cloak
              @click.away="open = false"
-             class="absolute left-0 top-14 w-full bg-dark shadow-md flex flex-col">
+             class="absolute left-0 top-14 w-full bg-white text-dark-text shadow-md flex flex-col py-1">
 
-          <a href="{{ route('licenses.index') }}" class="px-4 py-3 hover:bg-dark-3 flex items-center gap-2">
-            <i class="bi bi-key"></i> Licenses
+          <a href="{{ config('messages.settings.source_link') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
+            <i class="bi bi-{{ strtolower(config('messages.settings.source')) }}"></i> {{ config('messages.settings.source') }}
           </a>
-          <a href="{{ route('apps.index') }}" class="px-4 py-3 hover:bg-dark-3 flex items-center gap-2">
-            <i class="bi bi-terminal"></i> Apps
+          <div class="border-t border-gray-200 my-1 w-full"></div>
+          <p class="px-4 py-1 hover:bg-gray-200 w-full">
+            {{ auth()->user()->name }} ({{ auth()->user()->username }})
+          </p>
+          @if (auth()->user()->role != "Reseller")
+          <a href="{{ route('admin.users.index')}}" class="px-4 py-1 hover:bg-gray-200 w-full">
+            <i class="bi bi-person"></i> Manage Users
           </a>
+          <a href="{{ route('admin.referrable.index') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
+            <i class="bi bi-person-add"></i> Manage Referrable Code
+          </a>
+          @endif
+          <a href="{{ route('settings.index') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
+            <i class="bi bi-gear"></i> Settings
+          </a>
+          @if (auth()->user()->role != "Reseller")
+          <a href="{{ route('settings.webui.index') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
+            <i class="bi bi-gear"></i> Web UI Settings
+          </a>
+          @endif
+          <div class="border-t border-gray-200 my-1 w-full"></div>
+          <button type="button" class="px-4 py-1 w-full text-red-600 hover:bg-gray-200 flex items-center gap-1.5 cursor-pointer justify-start" id="logoutBtn">
+            <i class="bi bi-box-arrow-left w-4 text-center"></i> Logout
+          </button>
         </div>
         @endauth
       </div>

@@ -50,20 +50,22 @@ $(document).ready(function () {
         });
     }
 
-    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtns = document.querySelectorAll('#logoutBtn');
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function () {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'Are you sure you want to logout',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, logout',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('logoutForm').submit();
-                }
+    if (logoutBtns) {
+        logoutBtns.forEach((btn) => {
+            btn.addEventListener('click', function () {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Are you sure you want to logout',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, logout',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('logoutForm').submit();
+                    }
+                });
             });
         });
     };
