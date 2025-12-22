@@ -21,7 +21,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('API')->name('api.')->withoutMiddleware(VerifyCsrfToken::class)->group(function () {
-    Route::post('/connect', [ApiController::class, 'Authenticate'])->name('connect')->middleware('throttle:50,5');
+    Route::post('/connect', [ApiController::class, 'Authenticate'])->name('connect')->middleware('throttle:25,5');
 });
 
 Route::middleware('auth', 'session.timeout', 'no.cache', 'verified')->group(function () {

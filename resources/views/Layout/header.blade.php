@@ -53,47 +53,10 @@
       </div>
       @endauth
 
-      <div class="md:hidden" x-data="{ open: false }">
-        <button @click="open = !open" class="p-2 rounded hover:bg-dark-3">
-          <i class="bi text-2xl" :class="open ? 'bi-x-lg' : 'bi-list'"></i>
+      <div class="md:hidden">
+        <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded hover:bg-dark-3">
+            <i class="bi text-2xl" :class="sidebarOpen ? 'bi-x-lg' : 'bi-list'"></i>
         </button>
-
-        @auth
-        <div x-show="open"
-             x-transition
-             x-cloak
-             @click.away="open = false"
-             class="absolute left-0 top-14 w-full bg-white text-dark-text shadow-md flex flex-col py-1">
-
-          <a href="{{ config('messages.settings.source_link') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
-            <i class="bi bi-{{ strtolower(config('messages.settings.source')) }}"></i> {{ config('messages.settings.source') }}
-          </a>
-          <div class="border-t border-gray-200 my-1 w-full"></div>
-          <p class="px-4 py-1 hover:bg-gray-200 w-full">
-            {{ auth()->user()->name }} ({{ auth()->user()->username }})
-          </p>
-          @if (auth()->user()->role != "Reseller")
-          <a href="{{ route('admin.users.index')}}" class="px-4 py-1 hover:bg-gray-200 w-full">
-            <i class="bi bi-person"></i> Manage Users
-          </a>
-          <a href="{{ route('admin.referrable.index') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
-            <i class="bi bi-person-add"></i> Manage Referrable Code
-          </a>
-          @endif
-          <a href="{{ route('settings.index') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
-            <i class="bi bi-gear"></i> Settings
-          </a>
-          @if (auth()->user()->role != "Reseller")
-          <a href="{{ route('settings.webui.index') }}" class="px-4 py-1 hover:bg-gray-200 w-full">
-            <i class="bi bi-gear"></i> Web UI Settings
-          </a>
-          @endif
-          <div class="border-t border-gray-200 my-1 w-full"></div>
-          <button type="button" class="px-4 py-1 w-full text-red-600 hover:bg-gray-200 flex items-center gap-1.5 cursor-pointer justify-start" id="logoutBtn">
-            <i class="bi bi-box-arrow-left w-4 text-center"></i> Logout
-          </button>
-        </div>
-        @endauth
       </div>
     </div>
   </nav>

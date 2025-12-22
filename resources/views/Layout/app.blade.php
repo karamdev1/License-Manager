@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
-<body class="min-h-screen flex flex-col font-sans bg-light">
+<body class="min-h-screen flex flex-col font-sans bg-light" @auth x-data="{ sidebarOpen: false, activePage: 'home' }" @endauth>
     @include('Layout.header')
 
     @yield('content')
