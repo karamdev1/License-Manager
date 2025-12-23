@@ -24,7 +24,7 @@ Route::prefix('API')->name('api.')->withoutMiddleware(VerifyCsrfToken::class)->g
     Route::post('/connect', [ApiController::class, 'Authenticate'])->name('connect')->middleware('throttle:25,5');
 });
 
-Route::middleware('session.timeout', 'no.cache', 'verified')->group(function () {
+Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
     Route::get('/', [DashController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard/data', [DashController::class, 'licensedata_10'])->name('dashboard.data');
 

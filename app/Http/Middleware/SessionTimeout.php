@@ -19,7 +19,7 @@ class SessionTimeout
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-                return redirect('/login')->with('msgError', '<strong>Session</strong> expired.');
+                return redirect(route('login'))->with('msgError', '<strong>Session</strong> expired.');
             }
 
             $expiryTime = $loginTime->copy()->addMinutes($lifetime);
@@ -29,7 +29,7 @@ class SessionTimeout
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return redirect('/login')->with('msgError', '<strong>Session</strong> expired.');
+                return redirect(route('login'))->with('msgError', '<strong>Session</strong> expired.');
             }
         }
 

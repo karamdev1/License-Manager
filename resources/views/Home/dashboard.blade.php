@@ -26,7 +26,7 @@
             </aside>
         </div>
 
-        <main class="flex-1 p-6">
+        <main class="flex-1 flex flex-col md:flex-row md:justify-center items-center mt-15 gap-4">
             <div x-show="activePage==='home'" x-cloak>
                 @include('Home.home')
             </div>

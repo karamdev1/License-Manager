@@ -4,86 +4,89 @@
 
 @section('content')
     <main class="flex-1 flex flex-col items-center mt-15 gap-4">
-        <div class="w-full max-w-xs bg-white rounded-md shadow-lg p-5">
-            <h1 class="text-2xl font-semibold text-dark-text mb-6 text-center">
-                Login
-            </h1>
-
-            <div class="border-t border-dark-border min-w-max -mx-5 mb-5"></div>
-
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
-                @csrf
-                <div class="mb-4">
-                    <label class="block text-md text-dark-text mb-1">Username</label>
-                    <input 
-                        type="username" 
-                        id="username" 
-                        name="username" 
-                        class="w-full px-4 py-2 pr-10 border border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-dark-text"
-                        placeholder="Enter your username"
-                    />
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-md text-dark-text mb-1">Password</label>
-                    <div class="relative w-full">
+        <div>
+            <div class="w-full max-w-xs bg-dark rounded-t-md shadow-lg px-5 py-3">
+                <h1 class="text-[20px] font-semibold text-white">
+                    Login
+                </h1>
+            </div>
+            <div class="w-full max-w-xs bg-white rounded-b-md shadow-lg p-5">
+                <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="block text-md text-dark-text mb-1">Username</label>
                         <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
+                            type="username" 
+                            id="username" 
+                            name="username" 
                             class="w-full px-4 py-2 pr-10 border border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-dark-text"
-                            placeholder="Enter your password"
+                            placeholder="Enter your username"
                         />
+                    </div>
 
-                        <button 
-                            type="button" 
-                            id="togglePassword"
-                            class="absolute inset-y-0 right-2 flex items-center text-dark-text hover:text-gray-400"
-                        >
-                            <i class="bi bi-eye"></i>
+                    <div class="mb-4">
+                        <label class="block text-md text-dark-text mb-1">Password</label>
+                        <div class="relative w-full">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                class="w-full px-4 py-2 pr-10 border border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-dark-text"
+                                placeholder="Enter your password"
+                            />
+
+                            <button 
+                                type="button" 
+                                id="togglePassword"
+                                class="absolute inset-y-0 right-2 flex items-center text-dark-text hover:text-gray-400"
+                            >
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 flex items-center">
+                        <input
+                            id="stay_log"
+                            name="stay_log"
+                            type="checkbox"
+                            value="1"
+                            class="
+                                w-4 h-4 appearance-none rounded border border-dark-border bg-white cursor-pointer checked:bg-primary checked:before:w-full
+                                checked:before:h-full checked:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2
+                                focus:ring-offset-light checked:before:content-['✔'] checked:before:text-white checked:before:text-xs 
+                                checked:before:flex checked:before:items-center checked:before:justify-center before:pointer-events-none
+                                "
+                        />
+                        <label for="stay_log" class="ml-2 text-md text-dark-text cursor-pointer">
+                            Remember me?
+                        </label>
+                    </div>
+
+                    <div class="mb-4">
+                        <button type="submit" 
+                            class="w-auto p-3 bg-transparent border border-dark-border hover:bg-primary hover:border-transparent
+                                text-dark-text hover:text-white rounded-lg transition-colors duration-150">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
                         </button>
                     </div>
-                </div>
 
-                <div class="mb-4 flex items-center">
-                    <input
-                        id="stay_log"
-                        name="stay_log"
-                        type="checkbox"
-                        value="1"
-                        class="
-                            w-4 h-4 appearance-none rounded border border-dark-border bg-white cursor-pointer checked:bg-primary checked:before:w-full
-                            checked:before:h-full checked:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2
-                            focus:ring-offset-light checked:before:content-['✔'] checked:before:text-white checked:before:text-xs 
-                            checked:before:flex checked:before:items-center checked:before:justify-center before:pointer-events-none
-                            "
-                    />
-                    <label for="stay_log" class="ml-2 text-md text-dark-text cursor-pointer">
-                        Remember me?
-                    </label>
-                </div>
-
-                <div class="mb-4">
-                    <button type="submit" 
-                        class="w-auto p-3 bg-transparent border border-dark-border hover:bg-primary hover:border-transparent
-                            text-dark-text hover:text-white rounded-lg transition-colors duration-150">
-                        <i class="bi bi-box-arrow-in-right"></i> Login
-                    </button>
-                </div>
-
-                <div class="text-center">
-                    <p class="text-dark-text">
-                        Forgot your password? <a href="" class="text-primary underline">Click here</a>.
-                    </p>
-                </div>
-            </form>
+                    <div class="text-center">
+                        <p class="text-dark-text">
+                            Forgot your password? <a href="" class="text-primary underline">Click here</a>.
+                        </p>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <div class="w-full max-w-xs bg-white rounded-md shadow-md p-2">
-            <div class="text-center">
-                <p class="text-dark-text text-[14px]">
-                    Don't have an account yet? <a href="{{ route('register') }}" class="text-primary underline">Register here</a>.
-                </p>
+        <div>
+            <div class="w-full max-w-xs bg-white rounded-md shadow-md p-2">
+                <div class="text-center">
+                    <p class="text-dark-text text-[14px]">
+                        Don't have an account yet? <a href="{{ route('register') }}" class="text-primary underline">Register here</a>.
+                    </p>
+                </div>
             </div>
         </div>
     </main>
