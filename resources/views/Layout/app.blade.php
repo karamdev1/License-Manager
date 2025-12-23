@@ -15,7 +15,14 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
-<body class="min-h-screen flex flex-col font-sans bg-light" @auth x-data="{ sidebarOpen: false, activePage: 'home' }" @endauth>
+<body class="min-h-screen flex flex-col font-sans bg-light" 
+      @auth 
+      x-data="{ 
+          activePage: sessionStorage.getItem('activePage') || 'home',
+          sidebarOpen: false
+      }" 
+      x-init="$watch('activePage', value => sessionStorage.setItem('activePage', value))"
+      @endauth>
     @include('Layout.header')
 
     @yield('content')
@@ -25,6 +32,8 @@
     @auth
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     @endauth
+    
+    <form action="{{ route('logout') }}" method="post" id="logoutForm"></form>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.0/sweetalert2.all.min.js" integrity="sha512-0UUEaq/z58JSHpPgPv8bvdhHFRswZzxJUT9y+Kld5janc9EWgGEVGfWV1hXvIvAJ8MmsR5d4XV9lsuA90xXqUQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>

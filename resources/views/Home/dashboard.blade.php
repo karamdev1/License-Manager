@@ -8,7 +8,15 @@
             @include('Layout.sidebar')
         </aside>
 
-        <div x-show="sidebarOpen" x-transition x-cloak class="fixed inset-0 z-50 flex md:hidden">
+        <div x-show="sidebarOpen" 
+            x-transition:enter="transition transform ease-out duration-300"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition transform ease-in duration-300"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            x-cloak
+            class="fixed inset-0 z-50 flex md:hidden">
             <aside class="relative bg-white h-full w-full shadow-md p-4 flex flex-col">
                 <button @click="sidebarOpen = false" class="mb-4 p-2 rounded hover:bg-gray-100 self-end">
                     <i class="bi bi-x-lg text-lg"></i>
@@ -19,19 +27,31 @@
         </div>
 
         <main class="flex-1 p-6">
-            <div x-show="activePage==='home'">
+            <div x-show="activePage==='home'" x-cloak>
                 home
             </div>
 
-            <div x-show="activePage==='licenses'">
+            <div x-show="activePage==='apps'" x-cloak>
+                apps
+            </div>
+
+            <div x-show="activePage==='licenses'" x-cloak>
                 licenses
             </div>
 
-            <div x-show="activePage==='users'">
+            <div x-show="activePage==='users'" x-cloak>
                 users
             </div>
 
-            <div x-show="activePage==='settings'">
+            <div x-show="activePage==='reff'" x-cloak>
+                referrables
+            </div>
+
+            <div x-show="activePage==='webui_settings'" x-cloak>
+                webui
+            </div>
+
+            <div x-show="activePage==='settings'" x-cloak>
                 settings
             </div>
         </main>
