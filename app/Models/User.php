@@ -8,9 +8,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use App\Models\Reff;
 use App\Models\UserHistory;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use App\Notifications\ResetPassword;
 
 class User extends Authenticatable
 {
+    use CanResetPassword;
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -66,5 +69,9 @@ class User extends Authenticatable
         $updated = $this->where('id', $this->id)->where('saldo', '>=', $amount)->decrement('saldo', $amount);
 
         return (bool)$updated;
+    }
+
+    public function sendPasswordResetNotification($token) {
+        $this->notify(new \App\Notifications\ResetPassword($token));
     }
 }

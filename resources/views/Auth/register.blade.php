@@ -13,6 +13,7 @@
             <div class="w-full max-w-xs bg-white rounded-b-md shadow-lg p-5">
                 <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
                     @csrf
+                    @honeypot
                     <div class="mb-4">
                         <label class="block text-md text-dark-text mb-1">Username</label>
                         <input 

@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Password;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\sendResetLinkRequest;
 use App\Models\User;
 use App\Models\UserHistory;
 use App\Models\Reff;
@@ -60,6 +62,26 @@ class AuthController extends Controller
         ]);
 
         return back()->withErrors(['username' => $errorMessage])->onlyInput('username');
+    }
+
+    public function sendResetLink(sendResetLinkRequest $request) {
+        $request->validated();
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Password Reset request <b>sent</b> successfully",
+            ]);
+        } else {
+            return response()->json([
+                'status' => 1,
+                'message' => __($status),
+            ]);
+        }
     }
     
     public function logout(Request $request) {

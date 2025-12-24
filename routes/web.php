@@ -14,7 +14,11 @@ use App\Http\Controllers\WebuiController;
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'login_action'])->name('login.post')->middleware('throttle:10,5');
+    Route::post('/login/forgot', [AuthController::class, 'sendResetLink'])->name('login.forgot')->middleware('throttle:10,5');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->withoutMiddleware(VerifyCsrfToken::class);
+
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
     Route::get('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/register', [AuthController::class, 'register_action'])->name('register.post')->middleware('throttle:10,5');

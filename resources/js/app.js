@@ -3,7 +3,7 @@ import './bootstrap';
 $(document).ready(function () {
     document.addEventListener('contextmenu', event => event.preventDefault());
 
-    const Toast = Swal.mixin({
+    window.Toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -33,7 +33,7 @@ $(document).ready(function () {
         showPopup('Info', window.APP.info);
     }
 
-    function showMessage(type, message) {
+    window.showMessage = function(type, message) {
         return Swal.fire({
             title: type,
             html: message,
@@ -43,7 +43,7 @@ $(document).ready(function () {
         });
     };
 
-    function showPopup(type, message) {
+    window.showPopup = function(type, message) {
         Toast.fire({
             html: message,
             icon: type.toLowerCase(),
