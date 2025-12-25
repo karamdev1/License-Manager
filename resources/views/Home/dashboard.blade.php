@@ -25,8 +25,8 @@
         </aside>
     </div>
 
-    <main class="flex-1 flex flex-col items-center mt-15 gap-4 overflow-hidden">
-        <div x-show="activePage==='home'" x-cloak>
+    <main class="flex-1 flex flex-col items-center mt-15 overflow-hidden">
+        <div class="w-[70%]" x-show="activePage==='home'" x-cloak>
             @include('Home.home')
         </div>
 

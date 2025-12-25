@@ -2,22 +2,22 @@
 
 function statusColor($status) {
     if ($status == 'Active') {
-        return 'success';
+        return 'green-500';
     } elseif ($status == 'Inactive') {
-        return 'danger';
+        return 'red-600';
     } else {
-        return 'warning';
+        return 'yellow-300';
     }
 }
 
 function permissionColor($perm) {
     if ($perm == 'Owner') {
-        return 'danger';
+        return 'red-600';
     } elseif ($perm == 'Manager') {
-        return 'warning';
+        return 'yellow-300';
     } elseif ($perm == 'Reseller') {
         return 'primary';
     } else {
-        return 'dark';
+        return 'dark-text';
     }
 }
