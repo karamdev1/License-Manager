@@ -25,13 +25,13 @@
         </aside>
     </div>
 
-    <main class="flex-1 flex flex-col items-center mt-15 overflow-hidden">
+    <main class="flex-1 flex flex-col items-center mt-15 overflow-y-hidden overflow-x-auto">
         <div class="w-[70%]" x-show="activePage==='home'" x-cloak>
             @include('Home.home')
         </div>
 
-        <div x-show="activePage==='apps'" x-cloak>
-            apps
+        <div class="w-[70%]" x-show="activePage==='apps'" x-cloak>
+            @include('Controllers.apps')
         </div>
 
         <div x-show="activePage==='licenses'" x-cloak>

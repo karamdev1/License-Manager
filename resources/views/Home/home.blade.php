@@ -1,7 +1,7 @@
-<section class="flex flex-col lg:flex-row gap-4 w-full justify-center items-center lg:items-start">
-    <div class="w-[90%] lg:w-full flex flex-col min-w-0">
+<section class="flex flex-col lg:flex-row gap-4 w-full items-stretch">
+    <div class="flex flex-col min-w-0 lg:flex-3">
         <div class="bg-dark rounded-t shadow px-5 py-2 flex justify-between items-center">
-            <h1 class="text-lg text-white mb-0">
+            <h1 class="text-sm lg:text-md text-white mb-0">
                 Licenses Registrations History
             </h1>
             <button id="reloadBtn" 
@@ -40,9 +40,9 @@
         </div>
     </div>
 
-    <div class="w-3/5 flex flex-col min-w-0">
+    <div class="flex flex-col min-w-0 lg:flex-2 xl:flex-1">
         <div class="bg-dark rounded-t shadow px-5 py-2.75 flex justify-between items-center">
-            <h1 class="text-center text-lg text-white mb-0">
+            <h1 class="text-center text-sm lg:text-md text-white mb-0">
                 Information
             </h1>
         </div>
