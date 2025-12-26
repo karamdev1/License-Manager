@@ -4,7 +4,7 @@
             <h1 class="text-sm lg:text-md text-white mb-0">
                 Licenses Registrations History
             </h1>
-            <button id="reloadBtn" 
+            <button id="reloadBtnDashboard" 
                     class="bg-transparent text-white border border-white hover:border-transparent hover:bg-primary uppercase px-2 py-1 
                     rounded shadow transition duration-200 flex items-center gap-2">
                 <i class="bi bi-arrow-clockwise"></i>
@@ -13,25 +13,25 @@
         </div>
 
         <div class="overflow-auto relative scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 bg-white rounded-b shadow p-5">
-            <table class="w-full min-w-full divide-y divide-gray-200 " id="licenses_table">
+            <table class="w-full min-w-full divide-y divide-gray-200" id="licenses_table">
                 <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider border border-gray-200">
-                            ID
+                    <tr class="border border-gray-200">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider">
+                            #
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider border border-gray-200">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider">
                             User License
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider border border-gray-200">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider">
                             Duration
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider border border-gray-200">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider">
                             Registrar
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider border border-gray-200">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider">
                             Devices
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider border border-gray-200">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-dark-text uppercase tracking-wider">
                             Created
                         </th>
                     </tr>
@@ -77,19 +77,20 @@
 </section>
 
 <script>
-    $(document).ready(function () {
-        const license_table = $('#licenses_table').DataTable({
+    let dashboard_table = null;
+
+    function initDashboardTable() {
+        if (dashboard_table) return;
+
+        dashboard_table = $('#licenses_table').DataTable({
             processing: true,
             responsive: true,
             paging: false,
             info: false,
             searching: false,
             lengthChange: false,
-            ordering: false,
-            ajax: {
-                url: "{{ route('api.private.home.registrations') }}",
-                type: 'GET'
-            },
+            deferLoading: 0,
+            ajax: "{{ route('api.private.home.registrations') }}",
             columns: [
                 { data: 'id' },
                 { data: 'user_key' },
@@ -100,7 +101,7 @@
             ],
             scrollX: true,
             stripeClasses: [],
-            createdRow: function (row, data, dataIndex) {
+            createdRow: function (row, data) {
                 $(row).find('td').removeClass('p-3').addClass('px-6 py-3 text-center text-xs font-semibold text-dark-text border border-gray-200');
             },
             language: {
@@ -112,9 +113,17 @@
                 `
             }
         });
+    }
 
-        $('#reloadBtn').on('click', function () {
-            license_table.ajax.reload(null, false);
+    function DashboardTableReload() {
+        if (dashboard_table) {
+            dashboard_table.ajax.reload(null, false);
+        }
+    }
+
+    $(document).ready(function () {
+        $('#reloadBtnDashboard').on('click', () => {
+            DashboardTableReload();
         });
     });
 

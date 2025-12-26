@@ -43,10 +43,10 @@ class AppController extends Controller
             return [
                 'id'        => $app->id,
                 'ids'       => $ids,
-                'name'      => "<span class='align-middle badge fw-normal text-$appStatus fs-6 px-3'>$app->name</span>",
+                'name'      => "<span class='text-$appStatus px-3'>$app->name</span>",
                 'licenses'  => "$licenses License",
                 'registrar' => userUsername($app->registrar),
-                'created'   => "<i class='align-middle badge fw-normal text-dark fs-6'>$created</i>",
+                'created'   => "<i class='text-dark-text'>$created</i>",
                 'price'     => "$price",
             ];
         });

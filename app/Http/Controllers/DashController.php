@@ -34,12 +34,12 @@ class DashController extends Controller
             $licenseName = censorText($license->license);
 
             return [
-                'id'        => "<span class='align-middle badge text-dark'>#$license->id</span>",
-                'user_key'  => "<span class='align-middle badge text-dark'>$licenseName</span>",
-                'duration'  => "<span class='align-middle badge text-dark'>$license->duration Days</span>",
-                'devices'   => "<span class='align-middle badge text-primary'>$license->max_devices Devices</span>",
-                'registrar' => "<span class='align-middle badge text-primary'>$registrar</span>",
-                'created'   => "<i class='align-middle badge fw-normal text-muted'>$created</span>",
+                'id'        => "<span class='text-dark-text'>#$license->id</span>",
+                'user_key'  => "<span class='text-dark-text'>$licenseName</span>",
+                'duration'  => "<span class='text-dark-text'>$license->duration Days</span>",
+                'devices'   => "<span class='text-primary'>$license->max_devices Devices</span>",
+                'registrar' => "<span class='text-primary'>$registrar</span>",
+                'created'   => "<i class='text-gray-400'>$created</span>",
             ];
         });
 

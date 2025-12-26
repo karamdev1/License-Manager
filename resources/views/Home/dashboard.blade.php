@@ -56,4 +56,22 @@
             settings
         </div>
     </main>
+
+    <script>
+        function LoadTable(page) {
+            if (page === 'home') {
+                initDashboardTable();
+            }
+
+            if (page === 'apps') {
+                initAppsTable();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const activePage = sessionStorage.getItem('activePage') || 'home';
+
+            LoadTable(activePage);
+        });
+    </script>
 @endsection

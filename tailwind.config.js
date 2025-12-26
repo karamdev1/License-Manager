@@ -20,6 +20,11 @@ module.exports = {
         light: {
           DEFAULT: 'whitesmoke',
         },
+        colors: {
+          green: 'oklch(76.8% 0.233 130.85)',
+          red: 'oklch(57.7% 0.245 27.325)',
+          yellow: 'oklch(90.5% 0.182 98.111)',
+        }
       },
       blur: {
         DEFAULT: '3px',

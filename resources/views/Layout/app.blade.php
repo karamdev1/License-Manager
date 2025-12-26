@@ -25,7 +25,10 @@
           activePage: sessionStorage.getItem('activePage') || 'home',
           sidebarOpen: false
       }" 
-      x-init="$watch('activePage', value => sessionStorage.setItem('activePage', value))"
+      x-init="$watch('activePage', value => {
+        sessionStorage.setItem('activePage', value)
+        LoadTable(sessionStorage.getItem('activePage', value));
+        })"
       @endauth>
     <script>
         window.APP = {
