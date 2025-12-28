@@ -1,4 +1,6 @@
 import './bootstrap';
+import './home';
+import './apps';
 
 $(document).ready(function () {
     document.addEventListener('contextmenu', event => event.preventDefault());

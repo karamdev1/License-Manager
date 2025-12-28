@@ -58,6 +58,17 @@
     </main>
 
     <script>
+        window.APP = {
+            routes: {
+                homeRegistrations: "{{ route('api.home.registrations') }}",
+                appRegistrations: "{{ route('api.apps.registrations') }}",
+                appData: "{{ route('api.apps.data') }}",
+                appRegister: "{{ route('api.apps.data') }}",
+                appUpdate: "{{ route('api.apps.update') }}",
+            },
+            csrf: "{{ csrf_token() }}"
+        };
+
         function LoadTable(page) {
             if (page === 'home') {
                 initDashboardTable();

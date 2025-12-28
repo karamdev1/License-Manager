@@ -99,7 +99,7 @@
             deferLoading: 0,
             order: [[0,'desc']],
             ajax: {
-                url: "{{ route('api.private.licenses.registrations') }}",
+                url: "{{ route('api.licenses.registrations') }}",
                 method: "POST",
             },
             columns: [
@@ -115,7 +115,7 @@
                 {
                     data: 'edit_id',
                     render: function(data, type, row) {
-                        let url = `{{ route('api.private.licenses.registrations') }}/${data}`;
+                        let url = `{{ route('api.licenses.registrations') }}/${data}`;
                         return `
                         <button type="button" class="btn btn-outline-danger btn-sm resetApiKey" data-id="${data}"><i class="bi bi-bootstrap-reboot"></i></button>
                         <a href='${url}' class="btn btn-outline-dark btn-sm"><i class="bi bi-pencil-square"></i></a>
