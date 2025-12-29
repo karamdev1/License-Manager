@@ -17,8 +17,8 @@ window.initAppsTable = function () {
             { data: 'name' },
             { data: 'price' },
             { data: 'licenses' },
-            { data: 'registrar' },
             { data: 'created' },
+            { data: 'registrar' },
             {
                 data: 'ids',
                 render: function(data, type, row) {

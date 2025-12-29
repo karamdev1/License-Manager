@@ -34,25 +34,25 @@
             @include('Controllers.apps')
         </div>
 
-        <div x-show="activePage==='licenses'" x-cloak>
+        <div class="w-[80%]" x-show="activePage==='licenses'" x-cloak>
             @include('Controllers.licenses')
         </div>
 
         @if (auth()->user()->role != "Reseller")
-        <div x-show="activePage==='users'" x-cloak>
+        <div class="w-[70%]" x-show="activePage==='users'" x-cloak>
             users
         </div>
 
-        <div x-show="activePage==='reff'" x-cloak>
+        <div class="w-[70%]" x-show="activePage==='reff'" x-cloak>
             referrables
         </div>
 
-        <div x-show="activePage==='webui_settings'" x-cloak>
+        <div class="w-[70%]" x-show="activePage==='webui_settings'" x-cloak>
             webui
         </div>
         @endif
 
-        <div x-show="activePage==='settings'" x-cloak>
+        <div class="w-[70%]" x-show="activePage==='settings'" x-cloak>
             settings
         </div>
     </main>
@@ -86,13 +86,32 @@
                         res.data.forEach((app, index) => {
                             const price = app.price;
                             $select.append(`
-                                <option value="${app.app_id}" ${index === 0 ? 'selected' : ''}>
-                                    ${app.name} - ${price}
+                                <option value="${app.ids[1]}" ${index === 0 ? 'selected' : ''}>
+                                    ${app.ids[2]} - ${price}
                                 </option>
                             `);
                         });
                     });
                 }
+            });
+        }
+        
+        function loadDurationList() {
+            const durations = [];
+
+            for (let i = 1; i <= 48; i++) {
+                durations.push(i);
+            }
+
+            $('.durationSelect').each(function () {
+                const select = $(this);
+                select.empty();
+                select.append(`<option value="">-- Select Duration --</option>`);
+
+                durations.forEach(function (duration, idx) {
+                    duration = duration * 30;
+                    select.append(`<option value="${duration}" ${idx === 0 ? 'selected' : ''}>${duration} Days, ${duration/30} Months</option>`);
+                });
             });
         }
 

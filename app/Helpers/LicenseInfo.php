@@ -46,25 +46,25 @@ class LicenseInfo
 
     static function RemainingDaysColor($remainingDays) {
         if ($remainingDays == "N/A") {
-            return "danger";
+            return "red-600";
         } elseif ($remainingDays <= 10) {
-            return 'danger';
+            return 'red-600';
         } elseif ($remainingDays <= 20) {
-            return 'warning';
+            return 'yellow-300';
         } elseif ($remainingDays <= 30) {
-            return 'success';
+            return 'green-600';
         } else {
-            return 'success';
+            return 'green-600';
         }
     }
 
     static function RankColor($rank) {
         if ($rank == "Basic" || $rank == "basic") {
-            return "success";
+            return "green-600";
         } elseif ($rank == "Premium" || $rank == "premium") {
-            return "warning";
+            return "yellow-300";
         } else {
-            return "danger";
+            return "red-600";
         }
     }
 

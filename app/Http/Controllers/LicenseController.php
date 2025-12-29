@@ -47,12 +47,12 @@ class LicenseController extends Controller
                 'edit_id'   => $license->edit_id,
                 'owner'     => $owner,
                 'app'       => $license->app->name,
-                'user_key'  => "<span class='text-$licenseStatus blur Blur copy-license' data-copy='$license->license'>$license->license</span>",
-                'devices'   => "<span class='text-white bg-dark'>$devices</span>",
-                'duration'  => "<span class='text-$durationC'>$duration</span>",
+                'user_key'  => "<span class='text-[18px] text-$licenseStatus blur hover:blur-none Blur copy-license p-3 rounded transition-all duration-200' data-copy='$license->license'>$license->license</span>",
+                'devices'   => "<span class='text-[16px] font-normal text-white bg-dark px-3 py-1 rounded'>$devices</span>",
+                'duration'  => "<span class='text-[16px] text-$durationC'>$duration</span>",
                 'registrar' => userUsername($license->registrar),
-                'created'   => "<i class='text-gray-400'>$created</i>",
-                'price'     => "$price",
+                'created'   => "<i class='text-md text-gray-500'>$created</i>",
+                'price'     => "<span class='text-md'>$price</span>",
             ];
         });
 
@@ -62,45 +62,13 @@ class LicenseController extends Controller
         ]);
     }
 
-    public function licensegenerate() {
-        $apps = App::where('status', 'Active')->orderBy('created_at', 'desc')->get();
-        $currency = Config::get('messages.settings.currency');
-        $currencyPlace = Config::get('messages.settings.currency_place');
-
-        return view('License.generate', compact('apps', 'currency', 'currencyPlace'));
-    }
-
-    public function licensegenerate_action(LicenseGenerateRequest $request) {
+    public function licenseregister(LicenseGenerateRequest $request) {
         $request->validated();
 
         return LicenseHelper::licenseGenerate($request);
     }
 
-    public function licenseedit($id) {
-        $errorMessage = Config::get('messages.error.validation');
-
-        if (require_ownership(1, 0)) {
-            $license = License::where('edit_id', $id)->first();
-
-            if (empty($license)) {
-                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
-            }
-        } else {
-            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
-
-            if (empty($license)) {
-                return back()->withErrors(['name' => str_replace(':info', 'Error Code 202, Access Forbidden', $errorMessage),])->onlyInput('name');
-            }
-        }
-
-        $apps = App::orderBy('created_at', 'desc')->get();
-        $currency = Config::get('messages.settings.currency');
-        $currencyPlace = Config::get('messages.settings.currency_place');
-
-        return view('License.edit', compact('license', 'apps', 'currency', 'currencyPlace'));
-    }
-
-    public function licenseedit_action(LicenseUpdateRequest $request) {
+    public function licenseupdate(LicenseUpdateRequest $request) {
         $request->validated();
 
         return LicenseHelper::licenseEdit($request);

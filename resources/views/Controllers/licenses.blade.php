@@ -36,6 +36,12 @@
                                 #
                             </th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
+                                Owner
+                            </th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
+                                App
+                            </th>
+                            <th class="px-9 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
                                 User Licenses
                             </th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
@@ -46,6 +52,9 @@
                             </th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
                                 Created
+                            </th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
+                                Registrar
                             </th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
                                 Price

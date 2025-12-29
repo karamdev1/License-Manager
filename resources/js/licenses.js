@@ -26,8 +26,8 @@ window.initLicensesTable = function () {
                 data: 'edit_id',
                 render: function(data) {
                     return `
-                    <button type="button" class="btn btn-outline-danger btn-sm resetApiKey" data-id="${data}"><i class="bi bi-bootstrap-reboot"></i></button>
-                    <a href='#' class="btn btn-outline-dark btn-sm"><i class="bi bi-pencil-square"></i></a>
+                    <button type="button" class="px-2 py-1 border border-red-600 text-red-600 rounded hover:bg-red-600 hover:text-white transition-colors duration-200 cursor-pointer resetApiKey" data-id="${data}"><i class="bi bi-bootstrap-reboot"></i></button>
+                    <button type="button" class="px-2 py-1 border border-dark rounded hover:bg-dark hover:text-white transition-colors duration-200 cursor-pointer" id="updateBtnLicenses" data-id="${data}"><i class="bi bi-pencil-square"></i></button>
                     `;
                 }
             }
@@ -71,7 +71,8 @@ window.createLicense = function () {
                 <option value="Active" selected>Active</option>
                 <option value="Inactive">Inactive</option>
             </select>
-            <input type="number" id="devices" class="swal2-input" placeholder="Max Devices">
+            <select id="duration" class="swal2-input durationSelect"></select>
+            <input type="number" id="devices" class="swal2-input" placeholder="Max Devices" value='1'>
         `,
         confirmButtonText: 'Create',
         showCancelButton: true,
@@ -79,26 +80,33 @@ window.createLicense = function () {
         focusConfirm: false,
         didOpen: () => {
             loadAppList();
+            loadDurationList();
         },
         preConfirm: () => {
-            const name = document.getElementById('appName').value.trim();
-            const status = document.getElementById('appStatus').value;
-            const price = document.getElementById('appPrice').value;
+            const app = document.getElementById('app').value.trim();
+            const owner = document.getElementById('owner').value.trim();
+            const status = document.getElementById('status').value;
+            const duration = document.getElementById('duration').value;
+            const devices = document.getElementById('devices').value;
 
-            if (!name) {
-                Swal.showValidationMessage('App Name is required');
+            if (!app) {
+                Swal.showValidationMessage('App is required');
                 return false;
             }
             if (!status) {
                 Swal.showValidationMessage('Status must be selected');
                 return false;
             }
-            if (!price) {
-                Swal.showValidationMessage('Price is required');
+            if (!duration) {
+                Swal.showValidationMessage('Duration must be selected');
+                return false;
+            }
+            if (!devices) {
+                Swal.showValidationMessage('Devices are required');
                 return false;
             }
 
-            return { name, status, price };
+            return { app, owner, status, duration, devices };
         }
     }).then((result) => {
         if (!result.isConfirmed) return;
@@ -117,7 +125,7 @@ window.createLicense = function () {
             success: function(res) {
                 if (res.status == 0) {
                     window.showPopup('Success', res.message);
-                    AppsTableReload();
+                    LicensesTableReload();
                 } else {
                     window.showPopup('Error', res.message);
                 }

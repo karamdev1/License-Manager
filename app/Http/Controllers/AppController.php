@@ -44,7 +44,7 @@ class AppController extends Controller
                 'name'      => "<span class='text-$appStatus text-[16px]'>$app->name</span>",
                 'licenses'  => "$licenses License",
                 'registrar' => userUsername($app->registrar),
-                'created'   => "<i class='text-gray-400'>$created</span>",
+                'created'   => "<i class='text-gray-500'>$created</span>",
                 'price'     => "$price",
             ];
         });
