@@ -213,6 +213,7 @@ window.updateLicenseForm = function (id, owner, app, license, status, duration, 
                 if (res.status == 0) {
                     window.showPopup('Success', res.message);
                     LicensesTableReload();
+                    DashboardTableReload();
                 } else {
                     window.showPopup('Error', res.message);
                 }
@@ -271,6 +272,7 @@ window.deleteLicense = function (id, name) {
                 if (res.status == 0) {
                     window.showPopup('Success', res.message);
                     LicensesTableReload();
+                    DashboardTableReload();
                 } else {
                     window.showPopup('Error', res.message);
                 }

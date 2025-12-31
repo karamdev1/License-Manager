@@ -40,6 +40,8 @@ function require_ownership($allow_manager = 0, $fail = 1, $json_response = 0) {
             ])->onlyInput('name')
         );
     }
+
+    return false;
 }
 
 function manager_limit($role) {

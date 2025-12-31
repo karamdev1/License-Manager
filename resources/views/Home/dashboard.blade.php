@@ -40,20 +40,20 @@
 
         @if (auth()->user()->role != "Reseller")
         <div class="w-[70%]" x-show="activePage==='users'" x-cloak>
-            users
+            @include('Admin.users')
         </div>
 
         <div class="w-[70%]" x-show="activePage==='reff'" x-cloak>
-            referrables
+            @include('Admin.reff')
         </div>
 
         <div class="w-[70%]" x-show="activePage==='webui_settings'" x-cloak>
-            webui
+            @include('Admin.webui')
         </div>
         @endif
 
         <div class="w-[70%]" x-show="activePage==='settings'" x-cloak>
-            settings
+            @include('Home.settings')
         </div>
     </main>
 
