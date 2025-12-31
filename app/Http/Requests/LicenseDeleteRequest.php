@@ -14,7 +14,7 @@ class LicenseDeleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'edit_id'  => 'required|string|min:36|max:36',
+            'edit_id' => 'required|string|min:36|max:36|exists:licenses,edit_id',
         ];
     }
 }

@@ -71,6 +71,7 @@
                 licenseRegister: "{{ route('api.licenses.register') }}",
                 licenseUpdate: "{{ route('api.licenses.update') }}",
                 licenseDelete: "{{ route('api.licenses.delete') }}",
+                licenseReset: "{{ route('api.licenses.reset') }}",
             },
             csrf: "{{ csrf_token() }}"
         };

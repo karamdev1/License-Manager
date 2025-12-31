@@ -26,7 +26,8 @@ window.initLicensesTable = function () {
                 data: 'edit_id',
                 render: function(data) {
                     return `
-                    <button type="button" class="px-2 py-1 border border-red-600 text-red-600 rounded hover:bg-red-600 hover:text-white transition-colors duration-200 cursor-pointer resetApiKey" data-id="${data}"><i class="bi bi-bootstrap-reboot"></i></button>
+                    <button type="button" class="px-2 py-1 border border-red-600 text-red-600 rounded hover:bg-red-600 hover:text-white transition-colors duration-200 cursor-pointer" id="resetBtnLicenses" data-id="${data}"><i class="bi bi-bootstrap-reboot"></i></button>
+                    <button type="button" class="px-2 py-1 border border-red-600 text-red-600 rounded hover:bg-red-600 hover:text-white transition-colors duration-200 cursor-pointer" id="deleteBtnLicenses" data-id="${data}"><i class="bi bi-trash"></i></button>
                     <button type="button" class="px-2 py-1 border border-dark rounded hover:bg-dark hover:text-white transition-colors duration-200 cursor-pointer" id="updateBtnLicenses" data-id="${data}"><i class="bi bi-pencil-square"></i></button>
                     `;
                 }
@@ -149,7 +150,7 @@ window.updateLicenseForm = function (id, owner, app, license, status, duration, 
             <select id="status" class="swal2-input">
                 <option value="">-- Select Status --</option>
                 <option value="Active" ${status === 'Active' ? 'selected' : ''}>Active</option>
-                <option value="Inactive" ${status === 'Active' ? 'selected' : ''}>Inactive</option>
+                <option value="Inactive" ${status === 'Inactive' ? 'selected' : ''}>Inactive</option>
             </select>
             <select id="duration" class="swal2-input durationSelect" data-filled="${duration}"></select>
             <input type="number" id="devices" class="swal2-input" placeholder="Max Devices" value='${devices}'>
@@ -243,6 +244,84 @@ window.updateLicense = function (id) {
     });
 };
 
+window.deleteLicense = function (id, name) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Delete App',
+        html: `Are you sure you want to delete license <b>${name}</b>?`,
+        confirmButtonText: 'Delete',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        focusConfirm: false,
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+        Toast.fire({
+            icon: 'info',
+            html: 'Processing...',
+        });
+
+        $.ajax({
+            url: window.APP.routes.licenseDelete,
+            method: 'POST',
+            data: { edit_id: id },
+            headers: {
+                'X-CSRF-TOKEN': window.APP.csrf
+            },
+            success: function(res) {
+                if (res.status == 0) {
+                    window.showPopup('Success', res.message);
+                    LicensesTableReload();
+                } else {
+                    window.showPopup('Error', res.message);
+                }
+            },
+            error: function(err) {
+                const message = err.responseJSON?.message || 'Something went wrong';
+                window.showPopup('Error', message);
+            }
+        });
+    });
+};
+
+window.resetLicense = function (id, name) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Delete App',
+        html: `Are you sure you want to reset license <b>${name}</b>?`,
+        confirmButtonText: 'Reset',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        focusConfirm: false,
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+        Toast.fire({
+            icon: 'info',
+            html: 'Processing...',
+        });
+
+        $.ajax({
+            url: window.APP.routes.licenseReset,
+            method: 'POST',
+            data: { edit_id: id },
+            headers: {
+                'X-CSRF-TOKEN': window.APP.csrf
+            },
+            success: function(res) {
+                if (res.status == 0) {
+                    window.showPopup('Success', res.message);
+                    LicensesTableReload();
+                } else {
+                    window.showPopup('Error', res.message);
+                }
+            },
+            error: function(err) {
+                const message = err.responseJSON?.message || 'Something went wrong';
+                window.showPopup('Error', message);
+            }
+        });
+    });
+};
+
 $(document).ready(function () {
     $('#reloadBtnLicenses').on('click', function () {
         LicensesTableReload();
@@ -255,6 +334,18 @@ $(document).ready(function () {
     $(document).on('click', '#updateBtnLicenses', async function() {
         const id = $(this).data('id');
         updateLicense(id);
+    });
+
+    $(document).on('click', '#deleteBtnLicenses', async function() {
+        const id = $(this).data('id');
+        const name = $(this).data('name');
+        deleteLicense(id, name);
+    });
+
+    $(document).on('click', '#resetBtnLicenses', async function() {
+        const id = $(this).data('id');
+        const name = $(this).data('name');
+        resetLicense(id, name);
     });
 
     $("#blur-out").click(function() {

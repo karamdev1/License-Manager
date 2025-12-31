@@ -40,6 +40,7 @@ Route::middleware('auth', 'session.timeout', 'no.cache')->group(function () {
             Route::post('/register', [LicenseController::class, 'licenseregister'])->name('register');
             Route::post('/update', [LicenseController::class, 'licenseupdate'])->name('update');
             Route::post('/delete', [LicenseController::class, 'licensedelete'])->name('delete');
+            Route::post('/reset', [LicenseController::class, 'licensereset'])->name('reset');
         });
 
         Route::prefix('apps')->name('apps.')->group(function () {

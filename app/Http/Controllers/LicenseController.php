@@ -114,21 +114,21 @@ class LicenseController extends Controller
 
         $request->validated();
 
-        try {
-            if (require_ownership(1, 0)) {
-                $license = License::where('edit_id', $request->input('edit_id'))->first();
+        if (require_ownership(1, 0)) {
+            $license = License::where('edit_id', $request->input('edit_id'))->first();
 
-                if (empty($license)) {
-                    return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
-                }
-            } else {
-                $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $request->input('edit_id'))->first();
-
-                if (empty($license)) {
-                    return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
-                }
+            if (empty($license)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
             }
+        } else {
+            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $request->input('edit_id'))->first();
 
+            if (empty($license)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
+            }
+        }
+
+        try {
             $licenseName = $license->license;
 
             $license->delete();
@@ -145,25 +145,27 @@ class LicenseController extends Controller
         }
     }
 
-    public function licenseresetapi($id = "") {
+    public function licensereset(LicenseDeleteRequest $request) {
         $successMessage = Config::get('messages.success.reseted');
         $errorMessage = Config::get('messages.error.validation');
 
-        try {
-            if (require_ownership(1, 0)) {
-                $license = License::where('edit_id', $id)->first();
+        $request->validated();
 
-                if (empty($license)) {
-                    return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
-                }
-            } else {
-                $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $id)->first();
+        if (require_ownership(1, 0)) {
+            $license = License::where('edit_id', $request->input('edit_id'))->first();
 
-                if (empty($license)) {
-                    return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
-                }
+            if (empty($license)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 201', $errorMessage),])->onlyInput('name');
             }
+        } else {
+            $license = License::where('registrar', auth()->user()->user_id)->where('edit_id', $request->input('edit_id'))->first();
 
+            if (empty($license)) {
+                return back()->withErrors(['name' => str_replace(':info', 'Error Code 403, <b>Access Forbidden</b>', $errorMessage),])->onlyInput('name');
+            }
+        }
+
+        try {
             $licenseName = $license->license;
 
             $license->update([

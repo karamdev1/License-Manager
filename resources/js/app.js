@@ -1,4 +1,3 @@
-import './bootstrap';
 import './home';
 import './apps';
 import './licenses';
