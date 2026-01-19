@@ -42,6 +42,9 @@
                                 Username
                             </th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
+                                Email
+                            </th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">
                                 Saldo
                             </th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-dark-text uppercase tracking-wider">

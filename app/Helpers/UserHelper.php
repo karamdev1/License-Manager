@@ -20,6 +20,7 @@ class UserHelper
             
             User::create([
                 'name'        => $request->input('name'),
+                'email'       => $request->input('email'),
                 'username'    => $request->input('username'),
                 'password'    => $request->input('password'),
                 'status'      => $request->input('status'),

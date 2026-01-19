@@ -39,6 +39,7 @@ class UserController extends Controller
                 'id'        => $user->id,
                 'user_id'   => $user->user_id,
                 'name'      => $user->name,
+                'email'     => "<span class='text-$userStatus blur hover:blur-none transition-all duration-200 p-2 Blur-User'>$user->email</span>",
                 'username'  => "<span class='text-$userStatus blur hover:blur-none transition-all duration-200 p-2 Blur-User copy-user' data-copy='$user->username'>$user->username</span>",
                 'created'   => "<i class='text-gray-500'>$created</i>",
                 'saldo'     => "<span class='text-$saldoC'>$saldoS</span>",

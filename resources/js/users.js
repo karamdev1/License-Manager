@@ -16,6 +16,7 @@ window.initUsersTable = function () {
             { data: 'id' },
             { data: 'name' },
             { data: 'username' },
+            { data: 'email' },
             { data: 'saldo' },
             { data: 'role' },
             { data: 'reff' },
@@ -65,6 +66,7 @@ window.createUser = function () {
         html: `
             <input type="text" id="name" class="swal2-input" placeholder="Name">
             <input type="text" id="username" class="swal2-input" placeholder="Username">
+            <input type="email" id="email" class="swal2-input" placeholder="Email">
             <input type="text" id="password" class="swal2-input" placeholder="Password">
             <select id="status" class="swal2-input">
                 <option value="">-- Select Status --</option>
@@ -85,6 +87,7 @@ window.createUser = function () {
         preConfirm: () => {
             const name = document.getElementById('name').value.trim();
             const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const status = document.getElementById('status').value;
             const role = document.getElementById('role').value;
@@ -95,6 +98,10 @@ window.createUser = function () {
             }
             if (!username) {
                 Swal.showValidationMessage('Username is required');
+                return false;
+            }
+            if (!email) {
+                Swal.showValidationMessage('Email is required');
                 return false;
             }
             if (!password) {
@@ -110,7 +117,7 @@ window.createUser = function () {
                 return false;
             }
 
-            return { name, username, password, status, role };
+            return { name, username, email, password, status, role };
         }
     }).then((result) => {
         if (!result.isConfirmed) return;
